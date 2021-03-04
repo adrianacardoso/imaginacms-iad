@@ -16,13 +16,15 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     $query = $this->model->query();
 
     /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
-    } else {//Especific relationships
-      $includeDefault = [];//Default relationships
-      if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include);
-      $query->with($includeDefault);//Add Relationships to query
+    if (isset($params->include)) {
+      if (in_array('*', $params->include)) {//If Request all relationships
+        $query->with([]);
+      } else {//Especific relationships
+        $includeDefault = [];//Default relationships
+        if (isset($params->include))//merge relations with default relationships
+          $includeDefault = array_merge($includeDefault, $params->include);
+        $query->with($includeDefault);//Add Relationships to query
+      }
     }
 
     /*== FILTERS ==*/
@@ -60,8 +62,8 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-  
-      
+
+
       //Filter by parent ID
       if (isset($filter->parentId)) {
         if ($filter->parentId == 0) {
@@ -80,7 +82,7 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     if (isset($params->page) && $params->page) {
       return $query->paginate($params->take);
     } else {
-      $params->take ? $query->take($params->take) : false;//Take
+      (isset($params->take) && $params->take) ? $query->take($params->take) : false;//Take
       return $query->get();
     }
   }
@@ -115,14 +117,14 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     /*== REQUEST ==*/
     return $query->where($field ?? 'id', $criteria)->first();
   }
-  
+
   public function create($data)
   {
     $category = $this->model->create($data);
-  
+
     //Event to ADD media
     event(new CreateMedia($category, $data));
-  
+
     return $category;
   }
 
@@ -130,19 +132,19 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
   {
     /*== initialize query ==*/
     $query = $this->model->query();
-  
+
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-    
+
       //Update by field
       if (isset($filter->field))
         $field = $filter->field;
     }
-  
+
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
-  
+
     event(new UpdateMedia($model, $data));//Event to Update media
     return $model ? $model->update((array)$data) : false;
   }
@@ -151,15 +153,15 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
   {
     /*== initialize query ==*/
     $query = $this->model->query();
-  
+
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-    
+
       if (isset($filter->field))//Where field
         $field = $filter->field;
     }
-  
+
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
     event(new DeleteMedia($model->id, get_class($model)));//Event to Delete media
