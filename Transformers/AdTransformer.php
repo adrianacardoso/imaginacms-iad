@@ -30,6 +30,8 @@ class AdTransformer extends JsonResource
       'countryId' => $this->when(isset($this->country_id), $this->country_id),
       'provinceId' => $this->when(isset($this->province_id), $this->province_id),
       'cityId' => $this->when(isset($this->city_id), $this->city_id),
+      'lat' => $this->when(isset($this->lat), $this->lat),
+      'lng' => $this->when(isset($this->lng), $this->lng),
       'featured' => $this->when(isset($this->featured), $this->featured),
       'options' => $this->when(isset($this->options), $this->options),
       'user' => new UserTransformer($this->whenLoaded('user')),

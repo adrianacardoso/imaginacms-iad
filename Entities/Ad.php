@@ -27,6 +27,8 @@ class Ad extends Model
     'country_id',
     'province_id',
     'city_id',
+    'lat',
+    'lng',
     'featured',
     'options',
   ];

@@ -45,6 +45,40 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
+  
+      // add filter by Categories 1 or more than 1, in array/*
+      if (isset($filter->categories) && !empty($filter->categories)) {
+        is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
+        $query->where(function ($query) use ($filter) {
+          $query->whereHas('categories', function ($query) use ($filter) {
+            $query->whereIn('iad__ad_category.category_id', $filter->categories);
+          });
+        });
+    
+      }
+
+       // add filter by Price Range
+      if (isset($filter->priceRange) && !empty($filter->priceRange)) {
+       
+        $query->where("min_price", '>=', $filter->priceRange->from);
+        $query->where("max_price", '<=', $filter->priceRange->to);
+        
+      }
+
+       // add filter by Age Range
+      if (isset($filter->ageRange) && !empty($filter->ageRange)) {
+
+        $query->where(function ($query) use ($filter) {
+          $query->whereHas('fields', function ($query) use ($filter) {
+            $query->where('iad__fields.name','age',function ($query) use ($filter){
+             
+              //$query->whereBetween('age',[$filter->ageRange->from,$filter->ageRange->to]);
+
+            })->whereBetween('iad__fields.value',[(int)$filter->ageRange->from,(int)$filter->ageRange->to]);
+          });
+        });
+    
+      }
 
 
     }
@@ -180,13 +214,10 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     $query = $this->getItemsBy($params);
 
-
-    /*
     $query->select(
-      \DB::raw("MIN(icommerce__products.price) AS minPrice"),
-      \DB::raw("MAX(icommerce__products.price) AS maxPrice")
+      \DB::raw("MIN(iad__ads.min_price) AS minPrice"),
+      \DB::raw("MAX(iad__ads.max_price) AS maxPrice")
     );
-    */
 
     return $query->first();
   }
