@@ -7,6 +7,7 @@ use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Ihelpers\Events\CreateMedia;
 use Modules\Ihelpers\Events\DeleteMedia;
 use Modules\Ihelpers\Events\UpdateMedia;
+use Illuminate\Database\Eloquent\Builder;
 
 class EloquentAdRepository extends EloquentBaseRepository implements AdRepository
 {
@@ -91,6 +92,16 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       //Filter by status
       if (isset($filter->status)) {
         $query->where('status', $filter->status);
+      }
+
+      //Filter Search
+      if (isset($filter->search) && !empty($filter->search)) { 
+        $criterion = $filter->search;
+
+        $query->whereHas('translations', function (Builder $q) use ($criterion) {
+          $q->where('title', 'like', "%{$criterion}%");
+        });
+        
       }
 
 
