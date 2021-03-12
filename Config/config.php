@@ -138,25 +138,8 @@ return [
       'classes' => 'parent-ads-categories', // Main Class Filter (Not column to this case)
       'wrapperClasses' => 'card-columns', // Class to group the children (Filters)
       'childrenClasses' => 'card' // Class to each children (Filter)
-    ],
-    /*
-    'country' => [
-      'title' => 'Pais',
-      'name' => 'country',
-      'status' => true,
-      'isExpanded' => true,
-      'type' => 'select',
-      'repository' => 'Modules\Icommerce\Repositories\ProductRepository',
-      'emitTo' => 'itemsListGetData',
-      'repoAction' => 'filter',
-      'repoAttribute' => null,
-      'listener' => 'itemListRendered',
-      'repoMethod' => null,
-      'layout' => 'select-layout-1',
-      'classes' => 'card'
-    ],
-    */
-
+    ]
+    
   ],
   
   //Media Fillables
