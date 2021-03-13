@@ -113,7 +113,8 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     /*== REQUEST ==*/
     if (isset($params->page) && $params->page) {
-      return $query->paginate($params->take);
+      //return $query->paginate($params->take);
+      return $query->paginate($params->take,['*'], null, $params->page);
     } else {
       $params->take ? $query->take($params->take) : false;//Take
       return $query->get();

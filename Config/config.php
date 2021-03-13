@@ -51,10 +51,12 @@ return [
       ],
       'masonry' => [
         'name' => 'masonry',
-        'class' => 'card',
+        //'class' => 'item', //testing bricklayer
+        'class' => 'card', // testing boostrap
         'icon' => 'fa fa-align-justify',
         'status' => true,
-        'wrapperClass' => 'card-columns'
+        //'wrapperClass' => 'bricklayer' //testing bricklayer
+        'wrapperClass' => 'card-columns' //testing boostrap
       ]
     ]
   ],
