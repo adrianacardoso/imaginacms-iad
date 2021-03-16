@@ -51,12 +51,14 @@ return [
       ],
       'masonry' => [
         'name' => 'masonry',
-        //'class' => 'item', //testing bricklayer
-        'class' => 'card', // testing boostrap
+        'class' => 'item', //testing bricklayer
+        //'class' => 'card', // testing boostrap
+        //'class' => 'grid-item', // testing desandro
         'icon' => 'fa fa-align-justify',
         'status' => true,
-        //'wrapperClass' => 'bricklayer' //testing bricklayer
-        'wrapperClass' => 'card-columns' //testing boostrap
+        'wrapperClass' => 'bricklayer' //testing bricklayer
+        //'wrapperClass' => 'card-columns position-relative' //testing boostrap
+        //'wrapperClass' => 'grid-masonry' //testing desandro
       ]
     ]
   ],
