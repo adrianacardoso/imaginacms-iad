@@ -4,5 +4,5 @@ return [
   'disabled' => 'Deshabilitado',
   'pending' => 'Pendiente',
   'published' => 'Publicado',
-  'checked' => 'Verficado',
+  'checked' => 'Verificado',
 ];

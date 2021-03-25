@@ -151,7 +151,8 @@ return [
     'ad' => [
       'mainimage' => 'single',
       'secondaryimage' => 'single',
-      'gallery' => 'multiple'
+      'gallery' => 'multiple',
+      'videos' => 'multiple',
     ],
     'category' => [
       'mainimage' => 'single',
