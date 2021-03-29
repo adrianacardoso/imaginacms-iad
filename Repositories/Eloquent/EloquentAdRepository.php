@@ -129,29 +129,45 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     $query = $this->model->query();
 
     /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
+    if (in_array('*', $params->include ?? [])) {//If Request all relationships
       $query->with([]);
     } else {//Especific relationships
       $includeDefault = [];//Default relationships
       if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include);
+        $includeDefault = array_merge($includeDefault, $params->include ?? []);
       $query->with($includeDefault);//Add Relationships to query
     }
 
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-
-      if (isset($filter->field))//Filter by specific field
+  
+      // find translatable attributes
+      $translatedAttributes = $this->model->translatedAttributes;
+      
+      if (isset($filter->field))
         $field = $filter->field;
+      
+      if (isset($field) && in_array($field, $translatedAttributes))//Filter by slug
+        $query->whereHas('translations', function ($query) use ($criteria, $filter, $field) {
+          $query->where('locale', $filter->locale ?? \App::getLocale())
+            ->where($field, $criteria);
+        });
+      else
+        // find by specific attribute or by id
+        $query->where($field ?? 'id', $criteria);
     }
 
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-
+  
+    if (!isset($params->filter->field)) {
+      $query->where('id', $criteria);
+    }
+  
     /*== REQUEST ==*/
-    return $query->where($field ?? 'id', $criteria)->first();
+    return $query->first();
   }
 
   public function create($data)
