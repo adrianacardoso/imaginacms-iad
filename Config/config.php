@@ -63,6 +63,20 @@ return [
     ]
   ],
 
+  /*Layout Test - Test*/
+  'layoutTest' => [
+    'default' => 'carousel',
+    'options' => [
+      'carousel' => [
+        'name' => 'carousel',
+        'class' => 'item',
+        'icon' => 'fa fa-th-large',
+        'status' => true,
+        'wrapperClass' => 'carousel-items'
+      ]
+    ]
+  ],
+
   /*
   |--------------------------------------------------------------------------
   | Filter location range
