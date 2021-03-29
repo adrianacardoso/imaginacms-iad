@@ -84,10 +84,12 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       // add filter by nearby
       if(isset($filter->nearby) && $filter->nearby){
+        if(!empty($filter->nearby->lat) && !empty($filter->nearby->lng)){
           $query->select("*",\DB::raw("SQRT(
             POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
             POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
             ->having('radio','<', $filter->nearby->radio);
+        }
       }
 
       //Filter by status
