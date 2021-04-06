@@ -136,7 +136,109 @@ $router->group(['prefix' =>'/iad'], function (Router $router) {
         'uses' => 'ScheduleController@destroy',
         'middleware' => 'can:iad.schedules.destroy'
     ]);
+    $router->bind('ups', function ($id) {
+        return app('Modules\Iad\Repositories\UpRepository')->find($id);
+    });
+    $router->get('ups', [
+        'as' => 'admin.iad.ups.index',
+        'uses' => 'UpsController@index',
+        'middleware' => 'can:iad.ups.index'
+    ]);
+    $router->get('ups/create', [
+        'as' => 'admin.iad.ups.create',
+        'uses' => 'UpsController@create',
+        'middleware' => 'can:iad.ups.create'
+    ]);
+    $router->post('ups', [
+        'as' => 'admin.iad.ups.store',
+        'uses' => 'UpsController@store',
+        'middleware' => 'can:iad.ups.create'
+    ]);
+    $router->get('ups/{ups}/edit', [
+        'as' => 'admin.iad.ups.edit',
+        'uses' => 'UpsController@edit',
+        'middleware' => 'can:iad.ups.edit'
+    ]);
+    $router->put('ups/{ups}', [
+        'as' => 'admin.iad.ups.update',
+        'uses' => 'UpsController@update',
+        'middleware' => 'can:iad.ups.edit'
+    ]);
+    $router->delete('ups/{ups}', [
+        'as' => 'admin.iad.ups.destroy',
+        'uses' => 'UpsController@destroy',
+        'middleware' => 'can:iad.ups.destroy'
+    ]);
+    $router->bind('adup', function ($id) {
+        return app('Modules\Iad\Repositories\AdUpRepository')->find($id);
+    });
+    $router->get('adups', [
+        'as' => 'admin.iad.adup.index',
+        'uses' => 'AdUpController@index',
+        'middleware' => 'can:iad.adups.index'
+    ]);
+    $router->get('adups/create', [
+        'as' => 'admin.iad.adup.create',
+        'uses' => 'AdUpController@create',
+        'middleware' => 'can:iad.adups.create'
+    ]);
+    $router->post('adups', [
+        'as' => 'admin.iad.adup.store',
+        'uses' => 'AdUpController@store',
+        'middleware' => 'can:iad.adups.create'
+    ]);
+    $router->get('adups/{adup}/edit', [
+        'as' => 'admin.iad.adup.edit',
+        'uses' => 'AdUpController@edit',
+        'middleware' => 'can:iad.adups.edit'
+    ]);
+    $router->put('adups/{adup}', [
+        'as' => 'admin.iad.adup.update',
+        'uses' => 'AdUpController@update',
+        'middleware' => 'can:iad.adups.edit'
+    ]);
+    $router->delete('adups/{adup}', [
+        'as' => 'admin.iad.adup.destroy',
+        'uses' => 'AdUpController@destroy',
+        'middleware' => 'can:iad.adups.destroy'
+    ]);
+    $router->bind('uplog', function ($id) {
+        return app('Modules\Iad\Repositories\UpLogRepository')->find($id);
+    });
+    $router->get('uplogs', [
+        'as' => 'admin.iad.uplog.index',
+        'uses' => 'UpLogController@index',
+        'middleware' => 'can:iad.uplogs.index'
+    ]);
+    $router->get('uplogs/create', [
+        'as' => 'admin.iad.uplog.create',
+        'uses' => 'UpLogController@create',
+        'middleware' => 'can:iad.uplogs.create'
+    ]);
+    $router->post('uplogs', [
+        'as' => 'admin.iad.uplog.store',
+        'uses' => 'UpLogController@store',
+        'middleware' => 'can:iad.uplogs.create'
+    ]);
+    $router->get('uplogs/{uplog}/edit', [
+        'as' => 'admin.iad.uplog.edit',
+        'uses' => 'UpLogController@edit',
+        'middleware' => 'can:iad.uplogs.edit'
+    ]);
+    $router->put('uplogs/{uplog}', [
+        'as' => 'admin.iad.uplog.update',
+        'uses' => 'UpLogController@update',
+        'middleware' => 'can:iad.uplogs.edit'
+    ]);
+    $router->delete('uplogs/{uplog}', [
+        'as' => 'admin.iad.uplog.destroy',
+        'uses' => 'UpLogController@destroy',
+        'middleware' => 'can:iad.uplogs.destroy'
+    ]);
 // append
+
+
+
 
 
 

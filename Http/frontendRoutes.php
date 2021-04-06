@@ -27,14 +27,26 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
     'as' => $locale . '.iad.ad.show',
     'uses' => 'PublicController@show',
   ]);
-  $router->get(trans('iad::routes.ad.create.ad'), [
-    'as' => $locale . '.iad.ad.create',
-    'uses' => 'PublicController@createAd',
-    //'middleware' => 'can:iad.ads.create'
+
+});
+
+$router->group(['prefix' => '/pins'], function (Router $router) {
+  
+  
+  $router->get('{pinSlug}/buy-up', [
+    'as' => 'pins.ad.by-up',
+    'uses' => 'PublicController@buyUp',
+    'middleware' => 'logged.in'
   ]);
-  $router->get(trans('iad::routes.ad.edit.ad'), [
-    'as' => $locale . '.iad.ad.edit',
-    'uses' => 'PublicController@editAd',
-    'middleware' => 'can:iad.ads.edit'
+  
+  $router->post('{adId}/buy-up', [
+    'as' => 'pins.ad.by-up',
+    'uses' => 'PublicController@buyUpStore',
+    'middleware' => 'logged.in'
+  ]);
+  $router->get('/up-pins', [
+    'as' => 'pins.ad.up-pins',
+    'uses' => 'PublicController@upPins',
+    'middleware' => 'logged.in'
   ]);
 });

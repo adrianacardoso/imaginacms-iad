@@ -72,6 +72,13 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
           $query->where("parent_id", $filter->parentId);
         }
       }
+
+      //Filter by  IDs
+      if (isset($filter->ids)) {
+        is_array($filter->ids) ? true : $filter->ids = [$filter->ids];
+        $query->whereIn('iad__categories.id', $filter->ids);
+      }
+
     }
 
     /*== FIELDS ==*/

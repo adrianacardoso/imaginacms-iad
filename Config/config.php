@@ -14,6 +14,12 @@ return [
     "address",
     "mainImage",
   ],
+  
+  "featuredProductId" => null,
+  
+  
+  "everyUp" => 1,
+  
   //add: product relations like users relations style
   'relations' => [
     'ad' => [
@@ -63,6 +69,20 @@ return [
     ]
   ],
 
+  /*Layout Test - Test*/
+  'layoutTest' => [
+    'default' => 'carousel',
+    'options' => [
+      'carousel' => [
+        'name' => 'carousel',
+        'class' => 'item',
+        'icon' => 'fa fa-th-large',
+        'status' => true,
+        'wrapperClass' => 'carousel-items'
+      ]
+    ]
+  ],
+
   /*
   |--------------------------------------------------------------------------
   | Filter location range
@@ -84,8 +104,8 @@ return [
       'classes' => 'col-xs-12 col-md-6', // Main Class Filter (Columns and others classes)
       'radio' => [
           'measure' => 'km',
-          'values' => [0,1,3,5,10,25,50],
-          'defaultValue' => 0
+          'values' => [1,3,5,10,25,50],
+          'defaultValue' => 'all'
       ] 
   ],
 
