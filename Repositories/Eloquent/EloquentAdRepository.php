@@ -84,6 +84,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       // add filter by nearby
       if(isset($filter->nearby) && $filter->nearby){
+        if(!empty($filter->nearby->lat) && !empty($filter->nearby->lng)){
 
         if($filter->nearby->radio=="all"){
           
@@ -117,6 +118,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
             POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
             POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
             ->having('radio','<', $filter->nearby->radio);
+        }
       }
         }
       }
@@ -172,7 +174,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     } else {//Especific relationships
       $includeDefault = [];//Default relationships
       if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include ?? []);
+        $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
     }
 

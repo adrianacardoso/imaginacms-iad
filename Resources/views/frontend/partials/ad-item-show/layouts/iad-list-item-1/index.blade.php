@@ -107,7 +107,7 @@
             </div>
             @php($dataSlideTo++)
           @endforeach
-            
+          
         </div>
       
       </div>
@@ -143,6 +143,11 @@
           {{count($videos)}}</span>
       @endif
    
+      @php($videos = $item->mediaFiles()->videos)
+      @if(count($videos)>0)
+        <span class="badge info-badge videos">{{count($videos)}}</span>
+      @endif
+      @php($gallery = $item->mediaFiles()->gallery)
       @if(count($gallery)>0)
         <span class="badge info-badge photos">
           <i class="fa fa-camera" aria-hidden="true"></i>
