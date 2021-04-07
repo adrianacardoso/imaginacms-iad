@@ -49,6 +49,8 @@ class IadServiceProvider extends ServiceProvider
     $this->publishConfig('iad', 'permissions');
     $this->publishConfig('iad', 'config');
     $this->publishConfig('iad', 'crud-fields');
+    $this->publishConfig('iad', 'settings');
+    $this->publishConfig('iad', 'settings-fields');
 
     $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     $this->registerComponents();
