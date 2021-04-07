@@ -148,7 +148,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
 
     }
-
+    
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
@@ -261,6 +261,9 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     //Event to save media
     event(new UpdateMedia($model, $data));
 
+    if(isset($data["uploaded_at"]))
+      unset($data["uploaded_at"]);
+    
     return $model ? $model->update((array)$data) : false;
   }
 

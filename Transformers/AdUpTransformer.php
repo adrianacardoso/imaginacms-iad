@@ -23,6 +23,8 @@ class AdUpTransformer extends JsonResource
       'upId' => $this->when(isset($this->up_id), $this->up_id),
       'orderId' => $this->when(isset($this->order_id), $this->order_id),
       'status' => $this->when(isset($this->status), $this->status),
+      'rangeMinutes' => $this->range_minutes,
+      'nextUpload' => $this->next_upload,
       'daysLimit' => $this->days_limit,
       'upsDaily' => $this->ups_daily,
       'daysCounter' => $this->days_counter,

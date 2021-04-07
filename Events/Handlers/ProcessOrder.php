@@ -39,8 +39,8 @@ class ProcessOrder
                         'ups_counter' => 0,
                         'from_date' => date("Y-m-d",strtotime($item->options->fromDate)) ?? null,
                         'to_date' => date("Y-m-d",strtotime($item->options->toDate)) ?? null,
-                        'from_hour' => $item->options->fromHour ?? null,
-                        'to_hour' => $item->options->toHour ?? null
+                        'from_hour' => $item->options->fromHour ?? "00:00:00",
+                        'to_hour' => $item->options->toHour ?? "23:59:59"
                         ]
                     );
                     }

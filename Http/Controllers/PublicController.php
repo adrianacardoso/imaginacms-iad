@@ -8,6 +8,7 @@ use Modules\Iad\Entities\AdUp;
 use Modules\Iad\Repositories\CategoryRepository;
 use Modules\Iad\Repositories\UpRepository;
 use Modules\Iad\Transformers\AdUpTransformer;
+use mysql_xdevapi\Collection;
 use Route;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Http\Controllers\BasePublicController;
@@ -33,16 +34,17 @@ class PublicController extends BaseApiController
   
   public function __construct(
     AdRepository $ad,
-    UpRepository $up,
+
     CategoryRepository $categoryRepository,
     Category $category
   )
   {
     parent::__construct();
+
     $this->category = $category;
     $this->categoryRepository = $categoryRepository;
     $this->ad = $ad;
-    $this->up = $up;
+    $this->up = app("Modules\Iad\Repositories\UpRepository");
   }
   
   public function createAd()
@@ -211,7 +213,7 @@ class PublicController extends BaseApiController
     
   }
   
-  public function buyUpStore(Request $request, $adId)
+  public function buyUpStore(Request $request, $pinId)
   {
     $cartService = app("Modules\Icommerce\Services\CartService");
     
@@ -230,14 +232,14 @@ class PublicController extends BaseApiController
     $products =   [[
       "id" => $up->product->id,
       "quantity" => 1,
-      "options" => array_merge($data,["adId" => $adId])
+      "options" => array_merge($data,["adId" => $pinId])
     ]];
     
     if(isset($data["featured"])){
       array_push($products,[
         "id" => config("asgard.iad.config.featuredProductId"),
         "quantity" => 1,
-        "options" => ["adId" => $adId]
+        "options" => ["adId" => $pinId]
       ]);
     }
     $cartService->create([
@@ -246,68 +248,6 @@ class PublicController extends BaseApiController
     
     $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
     return redirect()->route($locale . '.icommerce.store.checkout');
-  }
-  
-  public function upPins(Request $request)
-  {
-    $nowDate = date('Y-m-d');
-    $nowHour = date('H:i:s');
-  
-    
-    
-    $result = AdUp::select(
-        \DB::raw("DATEDIFF(NOW(), from_date) as days_elapsed"),
-        \DB::raw("iad__ad_up.*")
-      )
-      ->where("status", 1)
-      ->where("from_date","<=","$nowDate")
-      ->where("to_date", ">=", "$nowDate")
-      ->where("from_hour", "<=", "$nowHour")
-      ->where("to_hour", ">=", "$nowHour")
-      ->whereRaw(\DB::raw("ups_counter/ups_daily <= days_limit"))
-      ->whereRaw(\DB::raw("DATEDIFF(NOW(), from_date) = TRUNCATE(ups_counter/ups_daily,0)"))
-    ->get();
-  
-    $everyUp = config("asgard.iad.config.everyUp");
-    
-    foreach ($result as $item){
-      $rangeMinutes = (strtotime($item->to_hour) - strtotime($item->from_hour))/60/$everyUp/$item->ups_daily;
-  
-      $start = strtotime($item->from_hour);
-      $end = strtotime(date("H:i:s"));
-  
-      $nowRange = ($end - $start)/60;
-      dd($nowRange,$item->ups_counter/$item->ups_daily,$rangeMinutes);
-      return $nowRange >= $item->ups_counter/$item->ups_daily * $rangeMinutes;
-    }
-    $upsToUpload = $result->filter(function ($item, $key) {
-      
-      $rangeMinutes = (strtotime($item->to_hour) - strtotime($item->from_hour))/60/$everyUp/$item->ups_daily;
-      
-      $start = strtotime($item->from_hour);
-      $end = strtotime(date("H:i:s"));
-      
-      $nowRange = ($end - $start)/60;
-      return $nowRange >= $item->ups_counter * $rangeMinutes;
-    });
-    
-    dd($upsToUpload, $everyUp);
-    //uploading ads
-    Ad::whereIn("id",$upsToUpload->pluck("ad_id")->toArray())->update(["uploaded_at" => \DB::raw('NOW()')]);
-  
-    //updating ups_counter
-    AdUp::whereIn("id",$upsToUpload->pluck("id")->toArray())->update(["ups_counter" => \DB::raw('ups_counter+1'),"days_counter" => \DB::raw('TRUNCATE((ups_counter+1)/ups_daily)')]);
- 
-  
-    $upsToDisabled = $result->filter(function ($item, $key) {
-      $realDaysElapsed = (int)(($item->ups_counter + 1)/$item->ups_daily);
-   
-      return $realDaysElapsed != $item->days_elapsed && $realDaysElapsed >= $item->days_limit;
-    });
-    
-    //disabling ad-ups
-    AdUp::whereIn("id",$upsToDisabled->pluck("id")->toArray())->update(["status" => 0]);
-    
   }
   
 }
