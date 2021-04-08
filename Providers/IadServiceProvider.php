@@ -36,7 +36,13 @@ class IadServiceProvider extends ServiceProvider
       $event->load('ads', Arr::dot(trans('iad::ads')));
       $event->load('fields', Arr::dot(trans('iad::fields')));
       $event->load('schedules', Arr::dot(trans('iad::schedules')));
-      // append translations
+      $event->load('ups', Arr::dot(trans('iad::ups')));
+            $event->load('adups', Arr::dot(trans('iad::adups')));
+            $event->load('uplogs', Arr::dot(trans('iad::uplogs')));
+            // append translations
+
+
+
 
 
     });
@@ -51,6 +57,9 @@ class IadServiceProvider extends ServiceProvider
     $this->publishConfig('iad', 'crud-fields');
     $this->publishConfig('iad', 'settings');
     $this->publishConfig('iad', 'settings-fields');
+
+    $this->mergeConfigFrom($this->getModuleConfigFilePath('iad', 'settings'), "asgard.iad.settings");
+    $this->mergeConfigFrom($this->getModuleConfigFilePath('iad', 'settings-fields'), "asgard.iad.settings-fields");
 
     $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     $this->registerComponents();
@@ -116,7 +125,46 @@ class IadServiceProvider extends ServiceProvider
         return new \Modules\Iad\Repositories\Cache\CacheScheduleDecorator($repository);
       }
     );
+        $this->app->bind(
+            'Modules\Iad\Repositories\UpRepository',
+            function () {
+                $repository = new \Modules\Iad\Repositories\Eloquent\EloquentUpRepository(new \Modules\Iad\Entities\Up());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iad\Repositories\Cache\CacheUpDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iad\Repositories\AdUpRepository',
+            function () {
+                $repository = new \Modules\Iad\Repositories\Eloquent\EloquentAdUpRepository(new \Modules\Iad\Entities\AdUp());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iad\Repositories\Cache\CacheAdUpDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iad\Repositories\UpLogRepository',
+            function () {
+                $repository = new \Modules\Iad\Repositories\Eloquent\EloquentUpLogRepository(new \Modules\Iad\Entities\UpLog());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iad\Repositories\Cache\CacheUpLogDecorator($repository);
+            }
+        );
 // add bindings
+
+
+
 
 
   }
@@ -126,7 +174,7 @@ class IadServiceProvider extends ServiceProvider
    */
   private function registerComponents()
   {
-    Blade::componentNamespace("Modules\Iads\View\Components", 'iads');
+    Blade::componentNamespace("Modules\Iad\View\Components", 'iad');
   }
 
 }

@@ -1,22 +1,35 @@
 <div class="girls">
-  <div class="card-girl">
+  <div class="card-girl {{$item->featured ? 'featured' : ''}}">
+   
     <figure class="figure" data-toggle="modal" data-target="#modalGirl{{$item->id}}">
+      @if($item->featured )
+        <a class="link-star">
+          <i class="fa fa-star text-white"></i>
+        </a>
+      @endif
       <x-media::single-image :alt="$item->title ?? $item->name"
                              :title="$item->title ?? $item->name"
-                             :url="$item->url ?? null" :isMedia="true"
+                             :url="!$embedded ? $item->url ?? null : null" :isMedia="true"
                              imgClasses=""
                              :mediaFiles="$item->mediaFiles()"/>
       <a class="link-like">
         <i class="fa fa-heart"></i>
       </a>
+    
     </figure>
     
     <div class="card-body p-0">
-      <h5 class="card-title" type="button" data-toggle="modal" data-target="#modalGirl{{$item->id}}">
-        
-        {{$item->title}}
-      
-      </h5>
+      @if(!$embedded)
+      <a href="{{$item->url ?? ''}}">
+  @endif
+        <h5 class="card-title" type="button">
+    
+          {{$item->title}}
+  
+        </h5>
+        @if(!$embedded)
+      </a>
+      @endif
       
       <div class="d-inline-block">
         <span class="badge info-badge">
@@ -38,53 +51,21 @@
           <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
         @endif
         @php($videos = $item->mediaFiles()->videos)
+        @php($gallery = $item->mediaFiles()->gallery)
         @if(count($videos)>0)
-          <span class="badge info-badge videos">{{count($videos)}}</span>
+          <span class="badge info-badge videos">
+            <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+            {{count($videos)}}</span>
         @endif
+          @if(count($gallery)>0)
+          <span class="badge info-badge photos">
+            <i class="fa fa-camera" aria-hidden="true"></i>
+            {{count($gallery)}}</span>
+        @endif
+        
       </div>
     
     </div>
   </div>
   
-  {{--
-  @include('iad::frontend.components.list-item.layout.iad-list-item-1.modal')
-  --}}
- 
-
 </div>
-
-
-
-@section('scripts-owl')
-  @parent
-  <script>
-    
-    $(document).ready(function () {
-      
-      $('.owl-image-mini').owlCarousel({
-        responsiveClass: true,
-        nav: false,
-        loop: false,
-        margin: 10,
-        dots: false,
-        lazyContent: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive: {
-          0: {
-            items: 4
-          },
-          768: {
-            items: 4
-          },
-          992: {
-            items: 4
-          }
-        }
-      });
-      
-      
-    });
-  
-  </script>
-@stop

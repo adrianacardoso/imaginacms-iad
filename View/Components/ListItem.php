@@ -8,20 +8,9 @@ class ListItem extends Component
 {
 
   public $view;
+  public $embedded;
   public $item;
   public $categories;
-
-  public $wishlist;
-
-  public $city;
-  public $years;
-
-  public $price;
-  public $pais;
-
-  public $likes;
-  public $numberComments;
-  public $videos;
 
   /**
    * Create a new component instance.
@@ -30,21 +19,16 @@ class ListItem extends Component
    */
   public function __construct( $item, $mediaImage = "mainimage", $layout = 'iad-list-item-1',
                               $wishlist = true, $city = true, $years = true,
-                              $price = true, $pais = true, $likes = true, $numberComments = true)
+                              $price = true, $pais = true, $likes = true, $numberComments = true, $embedded = false)
   {
 //    $this->item = $item;
     $this->mediaImage = $mediaImage;
     $this->item = $item;
+    $this->embedded = $embedded;
     $this->view = "iad::frontend.components.list-item.layout.". ( $layout ?? '.iad-list-item-1').".index";
   $this->initCategories();
   }
-
-
-function getParentAttributes($parentAttributes)
-{
-  isset($parentAttributes["mediaImage"]) ? $this->mediaImage = $parentAttributes["mediaImage"] : false;
-
-}
+  
   
   /**
    * @return mixed

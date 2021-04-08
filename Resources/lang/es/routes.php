@@ -10,15 +10,9 @@ return [
     ],
 
     'show' => [
-      'ad' => 'anuncio/{adSlug}',
+      'ad' => 'anuncios/{adSlug}',
     ],
 
-    'create' => [
-      'ad' => 'crear/anuncio',
-    ],
-    'edit' => [
-      'ad' => 'editar/anuncio/{adId}',
-    ],
 
   ],
 ];

@@ -37,6 +37,7 @@ class AdApiController extends BaseApiController
   public function index(Request $request)
   {
     try {
+ 
       //Get Parameters from URL.
       $params = $this->getParamsRequest($request);
 
