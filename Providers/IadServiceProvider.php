@@ -55,6 +55,8 @@ class IadServiceProvider extends ServiceProvider
     $this->publishConfig('iad', 'permissions');
     $this->publishConfig('iad', 'config');
     $this->publishConfig('iad', 'crud-fields');
+    $this->publishConfig('iad', 'settings');
+    $this->publishConfig('iad', 'settings-fields');
 
     $this->mergeConfigFrom($this->getModuleConfigFilePath('iad', 'settings'), "asgard.iad.settings");
     $this->mergeConfigFrom($this->getModuleConfigFilePath('iad', 'settings-fields'), "asgard.iad.settings-fields");
