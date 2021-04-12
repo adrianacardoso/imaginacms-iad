@@ -218,7 +218,7 @@ class PublicController extends BaseApiController
     $cartService = app("Modules\Icommerce\Services\CartService");
     
     $data = $request->all();
-
+    
     $params = json_decode(json_encode(
       [
         "include" => ["product"],

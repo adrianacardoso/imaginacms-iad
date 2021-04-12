@@ -51,7 +51,7 @@
                     <div class="col-md-4 col-lg-3">
                       <div class="custom-control custom-control-plan custom-radio mb-4 cursor-pointer">
                         <input type="radio" id="upPlanRadio{{$key}}" name="upId" class="custom-control-input"
-                               value="{{$up->id}}" required>
+                               value="{{$up->id}}" required/>
                         <label class="custom-control-label w-100" for="upPlanRadio{{$key}}">
                           <div class="card-plan">
                             <div class="card-plan-body">
@@ -91,8 +91,8 @@
                     <p>
                       
                       <label for="from">Día de inicio:</label>
-                      <input type="text" id="fromDate" class="form-control" name="fromDate" autocomplete="off" required>
-                      <input type="hidden" id="toDate" name="toDate" >
+                      <input type="text" id="fromDate" class="form-control" name="fromDate" autocomplete="off" required />
+                      <input type="hidden" id="toDate" name="toDate" />
                       <span id="endDateMessage"></span>
                     </p>
                   </div>
@@ -102,14 +102,14 @@
                   <div class="col-md-6 col-lg-3">
                     <p>
                       <label for="to">Primera subida:</label>
-                      <input type="time" id="fromHour" class="form-control" name="fromHour">
+                      <input type="time" id="fromHour" class="form-control" name="fromHour"/>
                     
                     </p>
                   </div>
                   <div class="col-md-6 col-lg-3">
                     <p>
                       <label for="to">Última subida:</label>
-                      <input type="time" id="toHour" class="form-control" name="toHour">
+                      <input type="time" id="toHour" class="form-control" name="toHour"/>
                     
                     </p>
                   </div>
@@ -117,7 +117,7 @@
                 <div class="row justify-content-center">
                   <div class="col-md-6 col-lg-3">
                     <div class="custom-control custom-switch">
-                      <input class="custom-control-input" type="checkbox" name="fullDay" id="to">
+                      <input class="custom-control-input" type="checkbox" name="fullDay" id="to"/>
                       <label class="custom-control-label" for="to">24 Horas</label>
                     </div>
                   </div>
@@ -133,7 +133,7 @@
                   además subirás a nuestro top prepagos premium por una semana
                   <hr>
                   <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="featured" name="featured">
+                    <input type="checkbox" class="form-check-input" id="featured" name="featured"/>
                     <label class="form-check-label" for="featured">¡Quiero destacarlo!</label>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
               
               <div class="py-4 text-center">
                 <input class="btn btn-submit btn-primary rounded-pill px-4 py-2" type="submit"
-                       value="Pagar">
+                       value="Pagar"/>
               
               </div>
               {!! Form::close() !!}
@@ -166,7 +166,8 @@
         $("#fromDate")
           .datepicker({
             dateFormat: "d MM, y",
-            changeMonth: true
+            changeMonth: true,
+            minDate: 0
           })
           .on("change", function () {
   
@@ -196,7 +197,7 @@
           var someFormattedDate = dd + '/'+ mm + '/'+ y;
   
           $("#endDateMessage").html("Tu Plan de subidas durará hasta: "+someFormattedDate);
-          $("#toDate").val(result);
+          $("#toDate").val(someFormattedDate);
           
         }
         

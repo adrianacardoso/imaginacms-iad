@@ -18,8 +18,8 @@ class UploadAds implements ShouldQueue
   {
     \Log::info("Running Ad Uploads");
     $nowDate = date('Y-m-d');
-    $nowHour = date('H:i:s');
-    
+    $nowHour = date('H:i:00');
+
     $result = AdUp::select(
       \DB::raw("DATEDIFF(NOW(), from_date) as days_elapsed"),
       \DB::raw("iad__ad_up.*")
@@ -44,10 +44,20 @@ class UploadAds implements ShouldQueue
       $nowRange = ($end - $start) / 60 / $everyUp;
       
       if ($nowRange >= (($item->ups_counter - ($item->days_counter * $item->ups_daily)) * $item->range_minutes)) {
-        \Log::info("AD ID: $item->ad_id uploaded | Ups Counter: " . ($item->ups_counter + 1) . " | Days Counter: " .
+        $item->ups_counter++;
+        \Log::info("AD ID: $item->ad_id uploaded | Ups Counter: " . ($item->ups_counter) . " | Days Counter: " .
           ($item->ups_counter % $item->ups_daily == 0 ? $item->days_counter + 1 : $item->days_counter) .
-          (($item->next_upload ? " | Next Upload: " . $item->next_upload : "")));
+          (($item->next_upload ? " | Next Upload: " . $item->next_upload : "")).
+          " Range minutes: ".$item->range_minutes. " | NOW Range: ". $nowRange.
+          " | Cumulative time.:".(($item->ups_counter - ($item->days_counter * $item->ups_daily)) * $item->range_minutes));
         array_push($upsToUpload, $item);
+      }else{
+        \Log::info("AD ID: $item->ad_id (NOT uploaded) | Ups Counter: " . ($item->ups_counter) . " | Days Counter: " .
+          ($item->ups_counter % $item->ups_daily == 0 ? $item->days_counter : $item->days_counter) .
+          (($item->next_upload ? " | Next Upload: " . $item->next_upload : "")).
+          " Range minutes: ".$item->range_minutes. " | NOW Range: ". $nowRange.
+          " | Cumulative time.:".(($item->ups_counter - ($item->days_counter * $item->ups_daily)) * $item->range_minutes));
+        
       }
     }
     

@@ -27,6 +27,17 @@ class ProcessOrder
                   case 'Modules\Iad\Entities\Up':
                
                     $up = Up::find($item->entity_id);
+                    
+                    $now = new \DateTime("now");
+                    $fromDate = \DateTime::createFromFormat('j F, y', $item->options->fromDate) ?? $now;
+                    
+                    $toDate = \DateTime::createFromFormat('d/m/Y', $item->options->toDate);
+                    
+                    if(!$toDate){
+                      $toDate = $fromDate;
+                      $toDate->add(new \DateInterval("P".$up->days_limit."D"));
+                    }
+                    
                     if(isset($up->id)){
                       AdUp::create([
                         'ad_id' => $item->options->adId ?? null,
@@ -37,8 +48,8 @@ class ProcessOrder
                         'order_id' => $order->id,
                         'days_counter' => 0,
                         'ups_counter' => 0,
-                        'from_date' => date("Y-m-d",strtotime($item->options->fromDate)) ?? null,
-                        'to_date' => date("Y-m-d",strtotime($item->options->toDate)) ?? null,
+                        'from_date' => $fromDate->format("Y-m-d"),
+                        'to_date' =>$toDate->format("Y-m-d"),
                         'from_hour' => $item->options->fromHour ?? "00:00:00",
                         'to_hour' => $item->options->toHour ?? "23:59:59"
                         ]
