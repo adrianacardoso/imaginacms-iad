@@ -191,20 +191,10 @@ class PublicController extends BaseApiController
     
     $item = $this->ad->getItem($adSlug, $params);
     
-    $params = json_decode(json_encode(
-      [
-        "include" => ["product"],
-        "filter" => [
-          "status" => 1
-        ]
-      ]
-    ));
-    
-    $ups = $this->up->getItemsBy($params);
     
     if (isset($item->id)) {
       
-      return view($tpl, compact('item', 'ups'));
+      return view($tpl, compact('item'));
       
     } else {
       return response()->view('errors.404', [], 404);

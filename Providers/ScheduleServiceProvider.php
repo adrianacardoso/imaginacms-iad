@@ -10,13 +10,16 @@ class ScheduleServiceProvider extends ServiceProvider
 {
   public function boot()
   {
-
-    $this->app->booted(function () {
-      $schedule = $this->app->make(Schedule::class);
-      $schedule->call(function () {
-        \Modules\Iad\Jobs\UploadAds::dispatch();
-      })->everyMinute();
-    });
+  
+    if(setting("iad::activateUploadsJob", null, false)){
+      $this->app->booted(function () {
+        $schedule = $this->app->make(Schedule::class);
+        $schedule->call(function () {
+          \Modules\Iad\Jobs\UploadAds::dispatch();
+        })->everyMinute();
+      });
+    }
+    
     
 
   }

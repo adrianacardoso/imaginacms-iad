@@ -29,13 +29,21 @@ class ProcessOrder
                     $up = Up::find($item->entity_id);
                     
                     $now = new \DateTime("now");
-                    $fromDate = \DateTime::createFromFormat('j F, y', $item->options->fromDate) ?? $now;
+                    $fromDate = \DateTime::createFromFormat('Y-m-d', $item->options->fromDate) ?? $now;
                     
-                    $toDate = \DateTime::createFromFormat('d/m/Y', $item->options->toDate);
+                    $toDate = \DateTime::createFromFormat('Y-m-d', $item->options->toDate);
                     
                     if(!$toDate){
                       $toDate = $fromDate;
                       $toDate->add(new \DateInterval("P".$up->days_limit."D"));
+                    }
+                    
+                    if(isset($item->options->fullDay) && $item->options->fullDay=="on"){
+                      $fromHour = "00:00:00";
+                      $toHour = "23:59:59";
+                    }else{
+                      $fromHour =$item->options->fromHour ?? "00:00:00";
+                      $toHour = $item->options->toHour ?? "23:59:59";
                     }
                     
                     if(isset($up->id)){
@@ -50,13 +58,11 @@ class ProcessOrder
                         'ups_counter' => 0,
                         'from_date' => $fromDate->format("Y-m-d"),
                         'to_date' =>$toDate->format("Y-m-d"),
-                        'from_hour' => $item->options->fromHour ?? "00:00:00",
-                        'to_hour' => $item->options->toHour ?? "23:59:59"
+                        'from_hour' => $fromHour,
+                        'to_hour' => $toHour
                         ]
                     );
                     }
-                    
-                    
                     break;
                     
                 }
