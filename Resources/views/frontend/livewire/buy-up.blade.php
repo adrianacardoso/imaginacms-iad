@@ -1,11 +1,10 @@
-  <div class="page buy-up-pin buy-up-pin-{{$item->id}}">
+  <div class="page buy-up-pin buy-up-pin-{{$item->id}} position-relative">
     <x-isite::breadcrumb>
       <li class="breadcrumb-item active" aria-current="page"> {{trans('iad::frontend.buy-up')}}</li>
     </x-isite::breadcrumb>
-    
+    @include('isite::frontend.partials.preloader')
     <section wire:ignore id="pin" class="py-2">
       <div class="container">
-        
         <div class="card shadow-sm mb-4">
           <div class="card-body">
             <div class="row">
@@ -47,35 +46,7 @@
          
                   @foreach($ups as $key => $up)
                     <div class="col-md-4 col-lg-3">
-                      <div class="custom-control custom-control-plan custom-radio mb-4 cursor-pointer">
-                        <input type="radio" id="upPlanRadio{{$key}}" name="upId" class="custom-control-input"
-                               wire:model="upId" value="{{$up->id}}" required/>
-                        <label class="custom-control-label w-100" for="upPlanRadio{{$key}}">
-                          <div class="card-plan">
-                            <div class="card-plan-body">
-                              
-                              
-                              <h4 class="title">{{$up->title}}</h4>
-                              <hr>
-                              @if(!empty($up->description))
-                                <div class="custom-html">
-                                  {!! $up->description !!}
-                                </div>
-                              @endif
-                              
-                              <h5 class="d-inline-block"><strong>{{$up->days_limit}}</strong></h5> Días <br>
-                              <h5 class="d-inline-block"><strong>{{$up->ups_daily}}</strong></h5> Subidas/Días
-                              <hr>
-                              @if(isset($up->product->price))
-                                <div class="price font-weight-bold">
-                                  ${{formatMoney($up->product->price)}}
-                                </div>
-                              @endif
-                            
-                            </div>
-                          </div>
-                        </label>
-                      </div>
+                     <x-iad::up-list-item :item="$up" />
                     </div>
                   @endforeach
                 </div>
