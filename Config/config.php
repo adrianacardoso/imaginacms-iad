@@ -14,12 +14,12 @@ return [
     "address",
     "mainImage",
   ],
-  
+
   "featuredProductId" => null,
-  
-  
+
+
   "everyUp" => 1,
-  
+
   //add: product relations like users relations style
   'relations' => [
     'ad' => [
@@ -89,24 +89,24 @@ return [
   |--------------------------------------------------------------------------
   */
   'location-range' => [
-      'title' => 'Location Rango',
-      'name' => 'location-range',
-      'status' => true,
-      'isExpanded' => true,
-      'type' => 'location',
-      'repository' => 'Modules\Iad\Repositories\AdRepository',
-      'emitTo' => 'filtersGetData',//Emit data selected (Parent Component to this case)
-      'repoAction' => 'filter', //Action in repo ('filter' in Ad Repository)
-      'repoAttribute' => 'nearby',
-      'listener' => null, // Listen to another component
-      'repoMethod' => null,
-      'layout' => 'location-layout-1', // geolocalization and range
-      'classes' => 'col-xs-12 col-md-6', // Main Class Filter (Columns and others classes)
-      'radio' => [
-          'measure' => 'km',
-          'values' => [1,3,5,10,25,50],
-          'defaultValue' => 'all'
-      ] 
+    'title' => 'Location Rango',
+    'name' => 'location-range',
+    'status' => true,
+    'isExpanded' => true,
+    'type' => 'location',
+    'repository' => 'Modules\Iad\Repositories\AdRepository',
+    'emitTo' => 'filtersGetData',//Emit data selected (Parent Component to this case)
+    'repoAction' => 'filter', //Action in repo ('filter' in Ad Repository)
+    'repoAttribute' => 'nearby',
+    'listener' => null, // Listen to another component
+    'repoMethod' => null,
+    'layout' => 'location-layout-1', // geolocalization and range
+    'classes' => 'col-xs-12 col-md-6', // Main Class Filter (Columns and others classes)
+    'radio' => [
+      'measure' => 'km',
+      'values' => [1, 3, 5, 10, 25, 50],
+      'defaultValue' => 'all'
+    ]
   ],
 
 
@@ -163,9 +163,9 @@ return [
       'wrapperClasses' => 'card-columns', // Class to group the children (Filters)
       'childrenClasses' => 'card' // Class to each children (Filter)
     ]
-    
+
   ],
-  
+
   //Media Fillables
   'mediaFillable' => [
     'ad' => [
@@ -178,6 +178,41 @@ return [
       'mainimage' => 'single',
       'secondaryimage' => 'single'
     ]
-  ]
+  ],
 
+  //DEfine entities allowed to limit with Iplan Module
+  'limitEntities' => [
+    [
+      'entity' => 'Modules\Iad\Entities\Ad',
+      'name' => 'Anuncio',
+      'status' => false,
+      'attributes' => [
+        [
+          'label' => 'Servicio',
+          'value' => 'category_id',
+          'options' => [
+            ['label' => 'No tiene', 'value' => '0'],
+            ['label' => 'Escorts2', 'value' => '1'],
+          ]
+        ],
+        [
+          'label' => 'Ciudad',
+          'value' => 'city_id',
+          'options' => [
+            ['label' => 'Ibagué', 'value' => '956'],
+            ['label' => 'Medellín', 'value' => '1'],
+            ['label' => 'Bogotá', 'value' => '149']
+          ]
+        ],
+        [
+          'label' => 'Estado',
+          'value' => 'status',
+          'options' => [
+            ['label' => 'Activo', 'value' => '1'],
+            ['label' => 'Inactivo', 'value' => '0']
+          ]
+        ]
+      ]
+    ],
+  ],
 ];

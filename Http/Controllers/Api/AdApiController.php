@@ -37,7 +37,7 @@ class AdApiController extends BaseApiController
   public function index(Request $request)
   {
     try {
- 
+
       //Get Parameters from URL.
       $params = $this->getParamsRequest($request);
 
@@ -145,12 +145,8 @@ class AdApiController extends BaseApiController
     } catch (\Exception $e) {
       \DB::rollback();//Rollback to Data Base
       $status = $this->getStatusError($e->getCode());
-      $response = [
-        "errors" => $e->getMessage(),
-        // "line" => $e->getLine(),
-        // "file" => $e->getFile(),
-        // "trace" => $e->getTrace(),
-      ];
+      $response = ($status != 403) ? ["errors" => $e->getMessage()] :
+        ["messages" => ["type" => 'error', "message" => $e->getMessage()]];
     }
     //Return response
     return response()->json($response, $status ?? 200);
