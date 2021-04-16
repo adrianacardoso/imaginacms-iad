@@ -23,6 +23,6 @@ class Up extends Model
   
   public function product()
   {
-    return $this->belongsTo(\Modules\Icommerce\Entities\Product::class,"id","entity_id");
+    return $this->morphOne(\Modules\Icommerce\Entities\Product::class,'entity');
   }
 }

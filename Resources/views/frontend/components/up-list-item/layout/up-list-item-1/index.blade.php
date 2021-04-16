@@ -1,28 +1,31 @@
-<div class="up">
-  <div class="card-up">
-    
-    <div class="card-body p-0">
-      <h5 class="card-title">
+<div class="custom-control custom-control-plan custom-radio mb-4 cursor-pointer">
+  <input type="radio" id="upPlanRadio{{$item->id}}" name="upId" class="custom-control-input"
+         wire:model="upId" value="{{$item->id}}" required/>
+  <label class="custom-control-label w-100" for="upPlanRadio{{$item->id}}">
+    <div class="card-plan">
+      <div class="card-plan-body">
         
-        {{$item->title}}
-      
-      </h5>
- 
-      <div class="d-block">
-        Daily Limit {{$item->ups_daily}}
-      </div>
-      
-      <div class="d-block">
-        Days {{$item->ups_daily}}
-      </div>
-      
-      @if(isset($item->product->price))
-      <div class="d-block">
-        Price {{formatMoney($item->product->price)}}
-      </div>
+        
+        <h4 class="title">{{$item->title}}</h4>
+        <hr>
+        @if(!empty($item->description))
+          <div class="custom-html">
+            {!! $item->description !!}
+          </div>
         @endif
-      <a class="btn btn-submit"> Contratar</a>
+        
+        <h5 class="d-inline-block"><strong>{{$item->days_limit}}</strong></h5> Días <br>
+        <h5 class="d-inline-block"><strong>{{$item->ups_daily}}</strong></h5> Subidas/Días
+        <hr>
+        @if(isset($item->product->price))
+          <div class="price font-weight-bold">
+            ${{formatMoney($item->product->discount->price ?? $item->product->price)}}
+            <br>
+            {!! isset($item->product->discount->price) ? "<del>$".formatMoney($item->product->price)."</del>" : "" !!}
+          </div>
+        @endif
+      
+      </div>
     </div>
-  </div>
-  
+  </label>
 </div>

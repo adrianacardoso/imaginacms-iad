@@ -19,23 +19,13 @@
       padding: 5%;
       width: 100%;
       @include media-breakpoint-down(sm) {
-        width: 90%
+        width: 95%
       }
     
       .title {
         color: $primary;
         font-weight: 600;
         position:relative;
-        margin-bottom: 40px;
-        &:before {
-          content: '';
-          position: absolute;
-          background-color: $primary;
-          width: 100%;
-          height: 1px;
-          display: block;
-          bottom: -22px;
-        }
       }
       .custom-html {
         color: #444444;
@@ -48,7 +38,29 @@
         @include responsive-font-size(25px);
         color: $primary;
         text-align: center;
+        del{
+          font-size: 18px;
+        }
       }
+     hr {
+       border-top: 1px solid $primary;
+     }
+    }
+
+    .custom-control-plan {
+      padding-left: 0;
+
+      .custom-control-label {
+        padding-top: 50px;
+        &:before {
+          border: $primary solid 1px;
+        }
+        &:before, &:after {
+          width: 27px;
+          height: 27px;
+          transform: translateX(-50%);
+          left: 50%;
+        }
     }
   
     .custom-control-input:checked ~ .custom-control-label .card-plan {
@@ -56,42 +68,49 @@
       color: $white;
       .title {
         color: $white;
-        &:before {
-          background-color: $white;
-        }
       }
       .price {
         color: $white;
       }
+        hr {
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
+      }
+
     .custom-control-input:checked ~ .custom-control-label .custom-html {
  
       color: $white;
    
     }
   
-    .custom-control-label::before, .custom-control-label::after {
-      top: 50%;
-      width: 27px;
-      height: 27px;
-    }
-    .custom-control-label::before {
-      border: $primary solid 1px;
-    }
-    .custom-radio .custom-control-input:checked~.custom-control-label::after {
+      .custom-control-input:checked~.custom-control-label::after {
       background-image: none;
-      left: -18px;
       font-family: 'FontAwesome';
       content: "\f00c";
       color: $white;
       display: flex;
       align-content: center;
       align-items: center;
+        font-size: 15px;
+        padding-left: 5px;
     }
     .custom-control-input:checked~.custom-control-label::before {
       color: $white;
       border-color: $primary;
       background-color: $primary;
     }
+
+    }
+
+    .featured  {
+      color: #155724;
+      background-color: #5FDDB5;
+      position: relative;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid #5FDDB5;
+      border-radius: 0.25rem;
+    }
+
   }
 }

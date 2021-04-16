@@ -107,7 +107,7 @@
             </div>
             @php($dataSlideTo++)
           @endforeach
-            
+          
         </div>
       
       </div>
@@ -116,7 +116,7 @@
     <div class="col-lg-6 pb-4">
       
       <h2 class="modal-title mb-3">
-        {{$item->title}}
+        <a href="{{$item->url}}">{{$item->title}} </a>
       </h2>
       <span class="badge info-badge">
           {{--Medellín--}}
@@ -143,6 +143,11 @@
           {{count($videos)}}</span>
       @endif
    
+      @php($videos = $item->mediaFiles()->videos)
+      @if(count($videos)>0)
+        <span class="badge info-badge videos">{{count($videos)}}</span>
+      @endif
+      @php($gallery = $item->mediaFiles()->gallery)
       @if(count($gallery)>0)
         <span class="badge info-badge photos">
           <i class="fa fa-camera" aria-hidden="true"></i>
@@ -332,13 +337,13 @@
   @endif
   
   <div class="row featured-pins">
-  
+ 
     <x-isite::carousel.owl-carousel
       title="Anuncios Destacados"
       id="featuredPins{{$item->id}}"
       :params="[
                         'include' => ['city','schedule','fields','categories','translations'],
-                        'filter' =>[ 'status' => [2,3], 'featured' => true ],
+                        'filter' =>[ 'status' => [2,3], 'featured' => true, 'categories' => $item->categories->pluck('id')->toArray(), 'order' => ['field' => 'uploaded_at', 'way' => 'asc'] ],
                         'take' => 10
                         ]"
       :responsive="[0 => ['items' =>  1],640 => ['items' => 2],992 => ['items' => 4]]"

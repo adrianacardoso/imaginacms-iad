@@ -10,7 +10,7 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
       OrderWasProcessed::class => [
-        ProcessOrder::class
+      ProcessOrder::class
       ]
     ];
 }

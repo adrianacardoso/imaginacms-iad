@@ -4,8 +4,11 @@ namespace Modules\Iad\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Log;
+use Modules\Iad\Entities\AdUp;
 use Modules\Iad\Repositories\CategoryRepository;
 use Modules\Iad\Repositories\UpRepository;
+use Modules\Iad\Transformers\AdUpTransformer;
+use mysql_xdevapi\Collection;
 use Route;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Http\Controllers\BasePublicController;
@@ -31,16 +34,17 @@ class PublicController extends BaseApiController
   
   public function __construct(
     AdRepository $ad,
-    UpRepository $up,
+
     CategoryRepository $categoryRepository,
     Category $category
   )
   {
     parent::__construct();
+
     $this->category = $category;
     $this->categoryRepository = $categoryRepository;
     $this->ad = $ad;
-    $this->up = $up;
+    $this->up = app("Modules\Iad\Repositories\UpRepository");
   }
   
   public function createAd()
@@ -187,20 +191,10 @@ class PublicController extends BaseApiController
     
     $item = $this->ad->getItem($adSlug, $params);
     
-    $params = json_decode(json_encode(
-      [
-        "include" => ["product"],
-        "filter" => [
-          "status" => 1
-        ]
-      ]
-    ));
-    
-    $ups = $this->up->getItemsBy($params);
     
     if (isset($item->id)) {
       
-      return view($tpl, compact('item', 'ups'));
+      return view($tpl, compact('item'));
       
     } else {
       return response()->view('errors.404', [], 404);
@@ -209,12 +203,12 @@ class PublicController extends BaseApiController
     
   }
   
-  public function buyUpStore(Request $request, $adId)
+  public function buyUpStore(Request $request, $pinId)
   {
     $cartService = app("Modules\Icommerce\Services\CartService");
     
     $data = $request->all();
-
+    
     $params = json_decode(json_encode(
       [
         "include" => ["product"],
@@ -228,14 +222,14 @@ class PublicController extends BaseApiController
     $products =   [[
       "id" => $up->product->id,
       "quantity" => 1,
-      "options" => array_merge($data,["adId" => $adId])
+      "options" => array_merge($data,["adId" => $pinId])
     ]];
     
     if(isset($data["featured"])){
       array_push($products,[
         "id" => config("asgard.iad.config.featuredProductId"),
         "quantity" => 1,
-        "options" => ["adId" => $adId]
+        "options" => ["adId" => $pinId]
       ]);
     }
     $cartService->create([

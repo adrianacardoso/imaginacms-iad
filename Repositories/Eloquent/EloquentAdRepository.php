@@ -4,11 +4,18 @@ namespace Modules\Iad\Repositories\Eloquent;
 
 use Modules\Iad\Repositories\AdRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Modules\Iad\Entities\Ad;
+
+//Events
 use Modules\Ihelpers\Events\CreateMedia;
 use Modules\Ihelpers\Events\DeleteMedia;
 use Modules\Ihelpers\Events\UpdateMedia;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
+use Modules\Iad\Events\AdIsCreating;
+use Modules\Iad\Events\AdWasCreated;
+use Modules\Iad\Events\AdIsUpdating;
+use Modules\Iad\Events\AdWasUpdated;
 
 class EloquentAdRepository extends EloquentBaseRepository implements AdRepository
 {
@@ -47,7 +54,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-  
+
       // add filter by Categories 1 or more than 1, in array/*
       if (isset($filter->categories) && !empty($filter->categories)) {
         is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
@@ -56,68 +63,70 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
             $query->whereIn('iad__ad_category.category_id', $filter->categories);
           });
         });
-    
+
       }
 
-       // add filter by Price Range
+      // add filter by Price Range
       if (isset($filter->priceRange) && !empty($filter->priceRange)) {
-       
+
         $query->where("min_price", '>=', $filter->priceRange->from);
         $query->where("max_price", '<=', $filter->priceRange->to);
-        
+
       }
 
-       // add filter by Age Range
+      // add filter by Age Range
       if (isset($filter->ageRange) && !empty($filter->ageRange)) {
 
         $query->where(function ($query) use ($filter) {
           $query->whereHas('fields', function ($query) use ($filter) {
-            $query->where('iad__fields.name','age',function ($query) use ($filter){
-             
+            $query->where('iad__fields.name', 'age', function ($query) use ($filter) {
+
               //$query->whereBetween('age',[$filter->ageRange->from,$filter->ageRange->to]);
 
-            })->whereBetween('iad__fields.value',[(int)$filter->ageRange->from,(int)$filter->ageRange->to]);
+            })->whereBetween('iad__fields.value', [(int)$filter->ageRange->from, (int)$filter->ageRange->to]);
           });
         });
-    
+
       }
 
       // add filter by nearby
-      if(isset($filter->nearby) && $filter->nearby){
+      if (isset($filter->nearby) && $filter->nearby) {
+        if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
 
-        if($filter->nearby->radio=="all"){
-          
-          if(isset($filter->nearby->lat) && isset($filter->nearby->lng) && !empty($filter->nearby->lat) && !empty($filter->nearby->lng)  ){
-            $query->select("*",\DB::raw("SQRT(
-            POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
-            POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
-              ->having('radio','<', 100);
-          }else{
-            if(isset($filter->nearby->country) && !empty($filter->nearby->country)){
-              $query->whereHas('country', function ($query) use ($filter) {
-                $query->where('ilocations__countries.iso_2', $filter->nearby->country);
-              });
+          if ($filter->nearby->radio == "all") {
+
+            if (isset($filter->nearby->lat) && isset($filter->nearby->lng) && !empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
+              $query->select("*", \DB::raw("SQRT(
+            POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
+            POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
+                ->having('radio', '<', 100);
+            } else {
+              if (isset($filter->nearby->country) && !empty($filter->nearby->country)) {
+                $query->whereHas('country', function ($query) use ($filter) {
+                  $query->where('ilocations__countries.iso_2', $filter->nearby->country);
+                });
+              }
+              if (isset($filter->nearby->province) && !empty($filter->nearby->province)) {
+                $query->whereHas('province', function ($query) use ($filter) {
+                  $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
+                    ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
+                });
+              }
+              if (isset($filter->nearby->city) && !empty($filter->nearby->city)) {
+                $query->whereHas('city', function ($query) use ($filter) {
+                  $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
+                    ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
+                });
+              }
             }
-            if(isset($filter->nearby->province) && !empty($filter->nearby->province)){
-              $query->whereHas('province', function ($query) use ($filter) {
-                $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id','ilocations__provinces.id')
-                  ->where("pt.name", "like", "%".$filter->nearby->province."%");
-              });
-            }
-            if(isset($filter->nearby->city) && !empty($filter->nearby->city)){
-              $query->whereHas('city', function ($query) use ($filter) {
-                $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id','ilocations__cities.id')
-                  ->where("ct.name", "like", "%".$filter->nearby->city."%");
-              });
+          } else {
+            if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
+              $query->select("*", \DB::raw("SQRT(
+            POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
+            POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
+                ->having('radio', '<', $filter->nearby->radio);
             }
           }
-        }else{
-          if(!empty($filter->nearby->lat) && !empty($filter->nearby->lng)){
-          $query->select("*",\DB::raw("SQRT(
-            POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
-            POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
-            ->having('radio','<', $filter->nearby->radio);
-      }
         }
       }
 
@@ -129,19 +138,19 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       //Filter by status
       if (isset($filter->featured) && !empty($filter->featured)) {
-      
+
         $query->where('featured', $filter->featured);
       }
 
       //Filter Search
-      if (isset($filter->search) && !empty($filter->search)) { 
+      if (isset($filter->search) && !empty($filter->search)) {
         $criterion = $filter->search;
 
         $query->whereHas('translations', function (Builder $q) use ($criterion) {
           $q->where('title', 'like', "%{$criterion}%");
           $q->orWhere('description', 'like', "%{$criterion}%");
         });
-        
+
       }
 
 
@@ -154,7 +163,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     /*== REQUEST ==*/
     if (isset($params->page) && $params->page) {
       //return $query->paginate($params->take);
-      return $query->paginate($params->take,['*'], null, $params->page);
+      return $query->paginate($params->take, ['*'], null, $params->page);
     } else {
       $params->take ? $query->take($params->take) : false;//Take
       return $query->get();
@@ -172,20 +181,20 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     } else {//Especific relationships
       $includeDefault = [];//Default relationships
       if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include ?? []);
+        $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
     }
 
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-  
+
       // find translatable attributes
       $translatedAttributes = $this->model->translatedAttributes;
-      
+
       if (isset($filter->field))
         $field = $filter->field;
-      
+
       if (isset($field) && in_array($field, $translatedAttributes))//Filter by slug
         $query->whereHas('translations', function ($query) use ($criteria, $filter, $field) {
           $query->where('locale', $filter->locale ?? \App::getLocale())
@@ -199,11 +208,11 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-  
+
     if (!isset($params->filter->field)) {
       $query->where('id', $criteria);
     }
-  
+
     //dd($query->toSql(),$query->getBindings());
     /*== REQUEST ==*/
     return $query->first();
@@ -211,6 +220,10 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
   public function create($data)
   {
+    //Dispatch event "isCreating"
+    event(new AdIsCreating($data));
+
+    //Create model
     $ad = $this->model->create($data);
 
     //Sync Categories
@@ -258,6 +271,9 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     //Event to save media
     event(new UpdateMedia($model, $data));
+
+    if (isset($data["uploaded_at"]))
+      unset($data["uploaded_at"]);
 
     return $model ? $model->update((array)$data) : false;
   }

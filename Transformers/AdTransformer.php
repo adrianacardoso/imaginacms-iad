@@ -41,7 +41,7 @@ class AdTransformer extends JsonResource
       'country' => new CountryTransformer($this->whenLoaded('country')),
       'province' => new ProvinceTransformer($this->whenLoaded('province')),
       'city' => new CityTransformer($this->whenLoaded('city')),
-      'adUps' => new AdUpTransformer($this->whenLoaded('adUps')),
+      'adUps' => AdUpTransformer::collection($this->whenLoaded('adUps')),
       'mediaFiles' => $this->mediaFiles(),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
