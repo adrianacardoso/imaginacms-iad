@@ -40,7 +40,8 @@ class AdUp extends Model
   public function getNextUploadAttribute(){
     
     if(($this->ups_counter+1)%$this->ups_daily != 0){
-      return date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")." +$this->range_minutes minutes"));
+      
+      return date("Y-m-d H:i:s",strtotime(date("Y-m-d")." ".$this->from_hour." +".(($this->ups_counter - ($this->days_counter * $this->ups_daily)) * $this->range_minutes)." minutes"));
     }
     
     return false;

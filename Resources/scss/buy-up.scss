@@ -38,6 +38,9 @@
         @include responsive-font-size(25px);
         color: $primary;
         text-align: center;
+        del{
+          font-size: 18px;
+        }
       }
      hr {
        border-top: 1px solid $primary;

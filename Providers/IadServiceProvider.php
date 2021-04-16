@@ -9,6 +9,7 @@ use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Iad\Listeners\RegisterIadSidebar;
 use Illuminate\Support\Facades\Blade;
+use Livewire\Livewire;
 
 class IadServiceProvider extends ServiceProvider
 {
@@ -61,6 +62,7 @@ class IadServiceProvider extends ServiceProvider
 
     $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     $this->registerComponents();
+    $this->registerComponentsLivewire();
   }
 
   /**
@@ -173,6 +175,13 @@ class IadServiceProvider extends ServiceProvider
   private function registerComponents()
   {
     Blade::componentNamespace("Modules\Iad\View\Components", 'iad');
+  }
+  /**
+   * Register components Livewire
+   */
+  private function registerComponentsLivewire()
+  {
+    Livewire::component('iad::buy-up', \Modules\Iad\Http\Livewire\AdUpForm::class);
   }
 
 }
