@@ -2,7 +2,7 @@
 
 use Illuminate\Routing\Router;
 
-$router->group(['prefix' => 'ads'], function (Router $router) {
+$router->group(['prefix' => 'pins'], function (Router $router) {
   $router->post('/', [
     'as' => 'api.iad.ads.create',
     'uses' => 'AdApiController@create',
@@ -29,9 +29,5 @@ $router->group(['prefix' => 'ads'], function (Router $router) {
     'as' => 'api.iad.ads.delete',
     'uses' => 'AdApiController@delete',
     'middleware' => ['auth:api']
-  ]);
-  $router->get('/{criteria}', [
-    'as' => 'api.iad.ads.show',
-    'uses' => 'AdApiController@show',
   ]);
 });

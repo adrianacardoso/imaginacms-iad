@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container modal-girl">
   <div class="row">
     <div class="col-lg-6 pb-4">
       <div class="modal-images">
-        
+  
         <div id="carouselGallery" class="carousel slide mb-2" data-ride="carousel">
           <a class="carousel-control-prev" href="#carouselGallery" role="button" data-slide="prev">
             <span class="fa fa-caret-right" aria-hidden="true"></span>
@@ -15,33 +15,99 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               <a
-                href="https://sexy-latinas.imaginacolombia.com/assets/Iad/ad/3YfGSuM7p8/gallery/0ZiUpnEdBa3yjZ7Xbd0gBl3zLA6m5ugK.jpg"
-                data-fancybox="gallery" data-caption="Nombre persona">
-                <picture class="slider-cover">
+                href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
+                data-fancybox="gallery" data-caption="{{$item->title}}">
+              
                   <x-media::single-image :alt="$item->title ?? $item->name"
                                          :title="$item->title ?? $item->name"
-                                         :url="$item->url ?? null" :isMedia="true"
+                                         :isMedia="true"
                                          imgClasses=""
                                          :mediaFiles="$item->mediaFiles()"/>
-                </picture>
+        
               </a>
             </div>
-          
+            @php($videos = $item->mediaFiles()->videos)
+            @php($gallery = $item->mediaFiles()->gallery)
+            @php($dataSlideTo = 1)
+            @foreach($gallery as $itemGallery)
+              <div class="carousel-item ">
+                <a href="{{$itemGallery->extraLargeThumb}}"
+                   data-fancybox="gallery" data-caption="{{$item->title}}">
+                  <x-media::single-image :alt="$item->title ?? $item->name"
+                                         :title="$item->title ?? $item->name"
+                                         :src="$itemGallery->extraLargeThumb ?? null"
+                                         imgClasses=""/>
+                </a>
+              </div>
+              @php($dataSlideTo++)
+            @endforeach
+            @foreach($videos as $video)
+              <div class="carousel-item ">
+                <a data-fancybox href="#myVideo">
+                  <video width="100%" height="450" controls>
+                    <source src="{{$video->path}}" type="video/mp4">
+                    <source src="{{$video->path}}" type="video/webm">
+                    <source src="{{$video->path}}" type="video/ogg">
+                    Your browser doesn't support HTML5 video tag.
+                  </video>
+                </a>
+                <video width="100%" height="450" controls id="myVideo" style="display:none;">
+                  <source src="{{$video->path}}" type="video/mp4">
+                  <source src="{{$video->path}}" type="video/webm">
+                  <source src="{{$video->path}}" type="video/ogg">
+                  Your browser doesn't support HTML5 video tag.
+                </video>
+              </div>
+            
+            @endforeach
+
           </div>
         
         </div>
         <!--carusel de abajo-->
-        <div class="owl-carousel owl-image-mini owl-theme">
+
+        <div class="owl-carousel owl-image-mini owl-image-mini{{$item->id}} owl-theme">
           <div class="item">
-            <picture class="slider-cover">
-              
+              <a data-slide-to="0" data-target="#carouselGallery"
+                 href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
+                data-fancybox="gallery" data-caption="{{$item->title}}">
               <x-media::single-image :alt="$item->title ?? $item->name"
                                      :title="$item->title ?? $item->name"
-                                     :url="$item->url ?? null" :isMedia="true"
+                                     :isMedia="true"
                                      imgClasses=""
                                      :mediaFiles="$item->mediaFiles()"/>
-            </picture>
+              </a>
+  
           </div>
+          @php($dataSlideTo = 1)
+          @foreach($gallery as $itemGallery)
+            <div class="item">
+              <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
+                 href="{{$itemGallery->extraLargeThumb}}"
+                data-fancybox="gallery" data-caption="{{$item->title}}">
+                <x-media::single-image :alt="$item->title ?? $item->name"
+                                       :title="$item->title ?? $item->name"
+                                       :src="$itemGallery->extraLargeThumb ?? null"
+                                       imgClasses=""/>
+              </a>
+            </div>
+            @php($dataSlideTo++)
+            @endforeach
+          @foreach($videos as $video)
+            <div class="item">
+              <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
+                 href="{{$video->path}}"
+                 data-fancybox="gallery" data-caption="{{$item->title}}">
+                <x-media::single-image :alt="$item->title ?? $item->name"
+                                       :title="$item->title ?? $item->name"
+                                       :src="url('/modules/iad/img/video.png')"
+                                       imgClasses="card-img-top img-fluid p-3"/>
+              </a>
+          
+            </div>
+            @php($dataSlideTo++)
+          @endforeach
+            
         </div>
       
       </div>
@@ -70,11 +136,13 @@
       @if($item->status == 3)
         <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
       @endif
-      @php($videos = $item->mediaFiles()->videos)
+     
       @if(count($videos)>0)
-        <span class="badge info-badge videos">{{count($videos)}}</span>
+        <span class="badge info-badge videos">
+          <i class="fa fa-play-circle-o" aria-hidden="true"></i>
+          {{count($videos)}}</span>
       @endif
-      @php($gallery = $item->mediaFiles()->gallery)
+   
       @if(count($gallery)>0)
         <span class="badge info-badge photos">
           <i class="fa fa-camera" aria-hidden="true"></i>
@@ -94,26 +162,35 @@
         {{--                    id placerat. Pellentesque id consequat arcu. Vestibulum sagittis velit non hendrerit pharetra.</p>--}}
       </div>
       
-      
       <div class="group-btn">
-        @if(isset(collect($item->fields)->where('name','whatsapp')->first()->value))
-          <a class="btn btn-whatsapp" href="" target="_blank">
+        @if(isset($item->options->whatsapp))
+          <a class="btn btn-whatsapp" href="https://wa.me/+57{{ $item->options->whatsapp }}?text=hola te ví en Sexy Latinas, me gustaría conocerte" target="_blank">
             <i class="fa fa-whatsapp"></i> WhatsApp
           </a>
         @endif
-        
-        @if(isset(collect($item->fields)->where('name','twitter')->first()->value))
+          @if(isset($item->options->instagram))
+          <a class="btn btn-instagram" href="https://instagram.com/{{$item->options->instagram}}" target="_blank">
+            <i class="fa fa-instagram"></i> Instagram
+          </a>
+        @endif
+  
+          @if(isset($item->options->twitter))
           <a class="btn btn-twitter"
-             href="" target="_blank">
-            <i class="fa fa-twitter"></i>twitter
-            {{collect($item->fields)->where('name','twitter')->first()->value}}
+             href="https://twitter.com/{{$item->options->twitter}}" target="_blank">
+            <i class="fa fa-twitter"></i>Twitter
+          </a>
+        @endif
+          @if(isset($item->options->youtube))
+          <a class="btn btn-youtube"
+             href="https://youtube.com/{{$item->options->youtube}}" target="_blank">
+            <i class="fa fa-youtube"></i>Youtube
           </a>
         @endif
         
-        @if(isset(collect($item->fields)->where('name','phone')->first()->value))
-          <a class="btn btn-phone" href="tel:collect($item->fields)->where('name','phone')->first()->value"
+        @if(isset($item->options->phone))
+          <a class="btn btn-phone" href="tel:{{$item->options->phone}}"
              target="_blank">
-            <i class="fa fa-mobile"></i> {{collect($item->fields)->where('name','phone')->first()->value}}
+            <i class="fa fa-mobile"></i> {{$item->options->phone}}
           </a>
         @endif
         
@@ -188,18 +265,21 @@
   
   <div class="row">
     
-    
+    @php($categories = Modules\Iad\Entities\Category::all())
     @foreach($categories->toTree() as $categoryParent)
       @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
       @if(!empty($categoriesAd))
         
-        <div class="col-12 pb-4">
+        <div class="col-12 col-md-4 pb-4">
           <h3 class="modal-title mb-3">
+            
             {{$categoryParent->title}}
           </h3>
           @foreach($categoriesAd as $categoryId)
             @php($categoryAd = $item->categories->where("id",$categoryId)->first())
-            <span class="badge info-badge">{{$categoryAd->title}}</span>
+            <span class="badge info-badge">
+              <a href="{{url("?filter[categories][0]=$categoryId")}}">{{$categoryAd->title}}</a>
+              </span>
           @endforeach
         </div>
       @endif
@@ -223,16 +303,15 @@
       </div>
     
     </div>
-    @push("css-stack")
+
       <style type="text/css">
         #girl-map{{$item->id}}   {
           height: 400px;
           width: 100%;
         }
       </style>
-    @endpush
-  @section("scripts")
-    @parent
+   
+
     <script>
       // Initialize and add the map
       $(document).ready(function () {
@@ -249,9 +328,29 @@
       });
     
     </script>
-  @stop
+
   @endif
   
+  <div class="row featured-pins">
+  
+    <x-isite::carousel.owl-carousel
+      title="Anuncios Destacados"
+      id="featuredPins{{$item->id}}"
+      :params="[
+                        'include' => ['city','schedule','fields','categories','translations'],
+                        'filter' =>[ 'status' => [2,3], 'featured' => true ],
+                        'take' => 10
+                        ]"
+      :responsive="[0 => ['items' =>  1],640 => ['items' => 2],992 => ['items' => 4]]"
+      repository="Modules\Iad\Repositories\AdRepository"
+      itemComponent="iad::list-item"
+    />
+  
+  
+    <div class="col-lg-12 pb-4">
+      <hr>
+    </div>
+  </div>
   <div class="row justify-content-center">
     <div class="col-auto">
       <a class="btn btn-flag" data-toggle="collapse" href="#collapseGirl{{$item->id}}" role="button"
@@ -275,3 +374,62 @@
     </div>
   </div>
 </div>
+
+
+  <script>
+  
+    $(document).ready(function () {
+    
+      $('.owl-image-mini{{$item->id}}').owlCarousel({
+        responsiveClass: true,
+        nav: false,
+        video: true,
+        margin: 10,
+        dots: false,
+        lazyContent: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        responsive: {
+          0: {
+            items: 4
+          },
+          768: {
+            items: 4
+          },
+          992: {
+            items: 4
+          }
+        }
+      });
+    
+    
+    
+    });
+    $(document).ready(function () {
+  
+      $('#featuredPins{{$item->id}}Carousel').owlCarousel({
+        responsiveClass: true,
+        nav: false,
+        margin: 15,
+        dots: false,
+        lazyContent: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        responsive: {
+          0: {
+            items: 2
+          },
+          768: {
+            items: 3
+          },
+          992: {
+            items: 4
+          }
+        }
+      });
+  
+  
+  
+    });
+  
+  </script>

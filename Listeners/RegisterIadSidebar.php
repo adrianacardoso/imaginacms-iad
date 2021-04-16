@@ -79,7 +79,37 @@ class RegisterIadSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                         $this->auth->hasAccess('iad.schedules.index')
                     );
                 });
+                $item->item(trans('iad::ups.title.ups'), function (Item $item) {
+                    $item->icon('fa fa-copy');
+                    $item->weight(0);
+                    $item->append('admin.iad.ups.create');
+                    $item->route('admin.iad.ups.index');
+                    $item->authorize(
+                        $this->auth->hasAccess('iad.ups.index')
+                    );
+                });
+                $item->item(trans('iad::adups.title.adups'), function (Item $item) {
+                    $item->icon('fa fa-copy');
+                    $item->weight(0);
+                    $item->append('admin.iad.adup.create');
+                    $item->route('admin.iad.adup.index');
+                    $item->authorize(
+                        $this->auth->hasAccess('iad.adups.index')
+                    );
+                });
+                $item->item(trans('iad::uplogs.title.uplogs'), function (Item $item) {
+                    $item->icon('fa fa-copy');
+                    $item->weight(0);
+                    $item->append('admin.iad.uplog.create');
+                    $item->route('admin.iad.uplog.index');
+                    $item->authorize(
+                        $this->auth->hasAccess('iad.uplogs.index')
+                    );
+                });
 // append
+
+
+
 
 
 

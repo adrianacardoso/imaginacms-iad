@@ -29,6 +29,11 @@ class Category extends Model
     return $this->belongsTo('Modules\Iad\Entities\Category', 'parent_id');
   }
 
+  public function children()
+  {
+    return $this->hasMany('Modules\Iad\Entities\Category', 'parent_id');
+  }
+
   public function getLftName()
   {
     return 'lft';

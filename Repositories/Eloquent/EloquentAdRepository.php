@@ -84,11 +84,40 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       // add filter by nearby
       if(isset($filter->nearby) && $filter->nearby){
-        if(!empty($filter->nearby->lat) && !empty($filter->nearby->lng)){
+
+        if($filter->nearby->radio=="all"){
+          
+          if(isset($filter->nearby->lat) && isset($filter->nearby->lng) && !empty($filter->nearby->lat) && !empty($filter->nearby->lng)  ){
+            $query->select("*",\DB::raw("SQRT(
+            POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
+            POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
+              ->having('radio','<', 100);
+          }else{
+            if(isset($filter->nearby->country) && !empty($filter->nearby->country)){
+              $query->whereHas('country', function ($query) use ($filter) {
+                $query->where('ilocations__countries.iso_2', $filter->nearby->country);
+              });
+            }
+            if(isset($filter->nearby->province) && !empty($filter->nearby->province)){
+              $query->whereHas('province', function ($query) use ($filter) {
+                $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id','ilocations__provinces.id')
+                  ->where("pt.name", "like", "%".$filter->nearby->province."%");
+              });
+            }
+            if(isset($filter->nearby->city) && !empty($filter->nearby->city)){
+              $query->whereHas('city', function ($query) use ($filter) {
+                $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id','ilocations__cities.id')
+                  ->where("ct.name", "like", "%".$filter->nearby->city."%");
+              });
+            }
+          }
+        }else{
+          if(!empty($filter->nearby->lat) && !empty($filter->nearby->lng)){
           $query->select("*",\DB::raw("SQRT(
             POW(69.1 * (lat - ".$filter->nearby->lat."), 2) +
             POW(69.1 * (".$filter->nearby->lng." - lng) * COS(lat / 57.3), 2)) AS radio"))
             ->having('radio','<', $filter->nearby->radio);
+      }
         }
       }
 
@@ -98,12 +127,19 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         $query->whereIn('status', $filter->status);
       }
 
+      //Filter by status
+      if (isset($filter->featured) && !empty($filter->featured)) {
+      
+        $query->where('featured', $filter->featured);
+      }
+
       //Filter Search
       if (isset($filter->search) && !empty($filter->search)) { 
         $criterion = $filter->search;
 
         $query->whereHas('translations', function (Builder $q) use ($criterion) {
           $q->where('title', 'like', "%{$criterion}%");
+          $q->orWhere('description', 'like', "%{$criterion}%");
         });
         
       }
@@ -168,6 +204,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       $query->where('id', $criteria);
     }
   
+    //dd($query->toSql(),$query->getBindings());
     /*== REQUEST ==*/
     return $query->first();
   }
