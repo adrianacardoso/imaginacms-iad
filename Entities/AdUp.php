@@ -30,6 +30,12 @@ class AdUp extends Model
     return $this->belongsTo(Up::class);
   }
   
+  public function ad()
+  {
+    
+    return $this->belongsTo(Ad::class);
+  }
+  
   public function getRangeMinutesAttribute(){
   
     $everyUp = config("asgard.iad.config.everyUp");

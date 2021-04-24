@@ -34,6 +34,7 @@ class AdUpTransformer extends JsonResource
       'fromHour' => $this->from_hour,
       'toHour' => $this->to_hour,
       'up' =>  new UpTransformer($this->whenLoaded('up')),
+      'ad' =>  new AdTransformer($this->whenLoaded('ad')),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
     ];
