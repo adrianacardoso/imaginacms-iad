@@ -21,7 +21,7 @@ class UploadAds implements ShouldQueue
     \Log::info("Running Ad Uploads | Now Date: $nowDate | Now Hour: $nowHour");
   
     $result = AdUp::select(
-      \DB::raw("DATEDIFF(NOW(), from_date) as days_elapsed"),
+      \DB::raw("DATEDIFF('$nowDate', from_date) as days_elapsed"),
       \DB::raw("iad__ad_up.*")
     )
       ->where("status", 1)
@@ -30,10 +30,11 @@ class UploadAds implements ShouldQueue
       ->where("from_hour", "<=", "$nowHour")
       ->where("to_hour", ">=", "$nowHour")
       ->whereRaw(\DB::raw("ups_counter/ups_daily <= days_limit"))
-      ->whereRaw(\DB::raw("DATEDIFF(NOW(), from_date) = TRUNCATE(ups_counter/ups_daily,0)"))
+      ->whereRaw(\DB::raw("DATEDIFF('$nowDate', from_date) = TRUNCATE(ups_counter/ups_daily,0)"))
       ->get();
-    $everyUp = config("asgard.iad.config.everyUp");
     
+    $everyUp = config("asgard.iad.config.everyUp");
+   
     $upsToUpload = [];
     foreach ($result as $item) {
       //validate for each item if the range time is valid to upload

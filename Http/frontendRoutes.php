@@ -40,7 +40,7 @@ $router->group(['prefix' => '/pins'], function (Router $router) {
   ]);
   
   $router->post('{pinId}/buy-up', [
-    'as' => 'pins.ad.by-up',
+    'as' => 'pins.ad.by-up.post',
     'uses' => 'PublicController@buyUpStore',
     'middleware' => 'logged.in'
   ]);

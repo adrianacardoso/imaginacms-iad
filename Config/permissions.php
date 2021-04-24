@@ -11,6 +11,7 @@ return [
   ],
   'iad.ads' => [
     'index' => 'iad::ads.list resource',
+    'index-all' => 'iad::ads.index-all resource',
     'manage' => 'iad::ads.manage resource',
     'create' => 'iad::ads.create resource',
     'edit' => 'iad::ads.edit resource',

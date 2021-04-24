@@ -11,10 +11,10 @@ $router->group(['prefix' => 'ipin/v1'], function (Router $router) {
   require('ApiRoutes/categoriesRoutes.php');
 
   //======  FIELDS
-  require('ApiRoutes/fieldsRoutes.php');
+  //require('ApiRoutes/fieldsRoutes.php');
 
   //======  SCHEDULES
-  require('ApiRoutes/schedulesRoutes.php');
+  //require('ApiRoutes/schedulesRoutes.php');
   
   //======  UPS
   require('ApiRoutes/upsRoutes.php');
