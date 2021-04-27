@@ -17,7 +17,7 @@ class AdUpTransformer extends JsonResource
 {
   public function toArray($request)
   {
-    $data = [
+    return [
       'id' => $this->when(isset($this->id), $this->id),
       'adId' => $this->when(isset($this->ad_id), $this->ad_id),
       'upId' => $this->when(isset($this->up_id), $this->up_id),
@@ -33,13 +33,10 @@ class AdUpTransformer extends JsonResource
       'toDate' => $this->to_date,
       'fromHour' => $this->from_hour,
       'toHour' => $this->to_hour,
-      'up' =>  new UpTransformer($this->whenLoaded('up')),
-      'ad' =>  new AdTransformer($this->whenLoaded('ad')),
+      'up' => new UpTransformer($this->whenLoaded('up')),
+      'ad' => new AdTransformer($this->whenLoaded('ad')),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
     ];
-
-
-    return $data;
   }
 }

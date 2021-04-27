@@ -31,7 +31,7 @@ return [
     "adUpSoldOut" => "Tu plan de subidas se ha agotado"
   ],
 'messages' => [
-  'adUpSoldOut'      => 'Tu Suscripción al plan <b>:name</b> se ha <b>vencido</b>',
+  'adUpSoldOut'      => 'Tu plan de subidas <b>:upName</b> en tu anuncio <b>:adName</b>, ha <b>terminado</b>',
   'adUpForSellOut'      => 'Te queda(n) <b>:days</b> día(s) del plan de subidas <b>:upName</b> en tu anuncio: <b>:adName</b>',
 ],
   "button" => [
