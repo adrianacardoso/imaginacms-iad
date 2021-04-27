@@ -13,6 +13,7 @@ use Modules\Ihelpers\Events\CreateMedia;
 use Modules\Ihelpers\Events\DeleteMedia;
 use Modules\Ihelpers\Events\UpdateMedia;
 use Modules\Iad\Events\AdIsCreating;
+use Modules\Iad\Events\AdIsDeleting;
 use Modules\Iad\Events\AdWasCreated;
 use Modules\Iad\Events\AdIsUpdating;
 use Modules\Iad\Events\AdWasUpdated;
@@ -155,11 +156,13 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
 
     }
-
+  
+    $this->validateIndexAllPermission($query, $params);
+    
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-
+    //dd($query->toSql(),$query->getBindings());
     /*== REQUEST ==*/
     if (isset($params->page) && $params->page) {
       //return $query->paginate($params->take);
@@ -208,6 +211,8 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
+  
+    $this->validateIndexAllPermission($query, $params);
 
     if (!isset($params->filter->field)) {
       $query->where('id', $criteria);
@@ -280,8 +285,11 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
   public function deleteBy($criteria, $params = false)
   {
+
+    
     /*== initialize query ==*/
     $query = $this->model->query();
+    
 
     /*== FILTER ==*/
     if (isset($params->filter)) {
@@ -293,6 +301,8 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
+    //Dispatch event "isCreating"
+    event(new AdIsDeleting($model));
     event(new DeleteMedia($model->id, get_class($model)));//Event to Delete media
     $model ? $model->delete() : false;
   }
@@ -318,5 +328,25 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     );
 
     return $query->first();
+  }
+  
+  
+  function validateIndexAllPermission(&$query, $params)
+  {
+    // filter by permission: index all leads
+    
+    if (!isset($params->permissions['iad.ads.index-all']) ||
+      (isset($params->permissions['iad.ads.index-all']) &&
+        !$params->permissions['iad.ads.index-all'])) {
+      $user = $params->user ?? null;
+
+      if(isset($user->id)){
+        // if is salesman or salesman manager or salesman sub manager
+        $query->where('user_id', $user->id);
+  
+      }
+      
+      
+    }
   }
 }

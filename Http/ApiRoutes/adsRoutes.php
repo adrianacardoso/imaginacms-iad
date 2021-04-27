@@ -11,14 +11,17 @@ $router->group(['prefix' => 'pins'], function (Router $router) {
   $router->get('/', [
     'as' => 'api.iad.ads.index',
     'uses' => 'AdApiController@index',
+    'middleware' => ['auth:api']
   ]);
   $router->get('/status', [
     'as' => 'api.iad.ads.status.index',
     'uses' => 'AdApiController@indexStatus',
+    'middleware' => ['auth:api']
   ]);
   $router->get('/{criteria}', [
     'as' => 'api.iad.ads.show',
     'uses' => 'AdApiController@show',
+    'middleware' => ['auth:api']
   ]);
   $router->put('/{criteria}', [
     'as' => 'api.iad.ads.update',

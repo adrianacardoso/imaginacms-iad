@@ -23,27 +23,33 @@ class AdUp extends Model
       'from_hour',
       'to_hour',
     ];
-  
+
   public function up()
   {
-    
+
     return $this->belongsTo(Up::class);
   }
-  
+
+  public function ad()
+  {
+
+    return $this->belongsTo(Ad::class);
+  }
+
   public function getRangeMinutesAttribute(){
-  
+
     $everyUp = config("asgard.iad.config.everyUp");
-    
+
     return (int)((strtotime($this->to_hour) - strtotime($this->from_hour))/60/$everyUp/$this->ups_daily);
   }
-  
+
   public function getNextUploadAttribute(){
-    
+
     if(($this->ups_counter+1)%$this->ups_daily != 0){
-      
+
       return date("Y-m-d H:i:s",strtotime(date("Y-m-d")." ".$this->from_hour." +".(($this->ups_counter - ($this->days_counter * $this->ups_daily)) * $this->range_minutes)." minutes"));
     }
-    
+
     return false;
   }
 }

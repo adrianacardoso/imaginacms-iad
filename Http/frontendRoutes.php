@@ -31,16 +31,16 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
 });
 
 $router->group(['prefix' => '/pins'], function (Router $router) {
-  
-  
+
+
   $router->get('{pinSlug}/buy-up', [
     'as' => 'pins.ad.by-up',
     'uses' => 'PublicController@buyUp',
     'middleware' => 'logged.in'
   ]);
-  
+
   $router->post('{pinId}/buy-up', [
-    'as' => 'pins.ad.by-up',
+    'as' => 'pins.ad.by-up.post',
     'uses' => 'PublicController@buyUpStore',
     'middleware' => 'logged.in'
   ]);
