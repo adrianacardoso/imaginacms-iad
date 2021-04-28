@@ -10,6 +10,6 @@ class AdIsDeleting
 
     public function __construct($model)
     {
-        $this->model = new Ad($model);
+        $this->model = $model;
     }
 }

@@ -156,9 +156,9 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
 
     }
-  
+
     $this->validateIndexAllPermission($query, $params);
-    
+
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
@@ -211,7 +211,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-  
+
     $this->validateIndexAllPermission($query, $params);
 
     if (!isset($params->filter->field)) {
@@ -242,6 +242,8 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     //Event to save media
     event(new CreateMedia($ad, $data));
+
+    event(new AdWasCreated($ad));
 
     return $ad;
   }
@@ -286,10 +288,10 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
   public function deleteBy($criteria, $params = false)
   {
 
-    
+
     /*== initialize query ==*/
     $query = $this->model->query();
-    
+
 
     /*== FILTER ==*/
     if (isset($params->filter)) {
@@ -329,12 +331,12 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     return $query->first();
   }
-  
-  
+
+
   function validateIndexAllPermission(&$query, $params)
   {
     // filter by permission: index all leads
-    
+
     if (!isset($params->permissions['iad.ads.index-all']) ||
       (isset($params->permissions['iad.ads.index-all']) &&
         !$params->permissions['iad.ads.index-all'])) {
@@ -343,10 +345,10 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       if(isset($user->id)){
         // if is salesman or salesman manager or salesman sub manager
         $query->where('user_id', $user->id);
-  
+
       }
-      
-      
+
+
     }
   }
 }
