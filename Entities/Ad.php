@@ -79,7 +79,8 @@ class Ad extends Model
     return $this->belongsTo(City::class);
   }
 
-  public function getStatusNameAttribute(){
+  public function getStatusNameAttribute()
+  {
     $adStatuses = new AdStatus();
     return collect($adStatuses->get())->where('id', $this->status)->pluck('name')->first();
   }
@@ -89,7 +90,6 @@ class Ad extends Model
     $this->attributes['options'] = json_encode($value);
   }
 
-
   /**
    * URL product
    * @return string
@@ -97,7 +97,7 @@ class Ad extends Model
   public function getUrlAttribute()
   {
 
-      return \URL::route(\LaravelLocalization::getCurrentLocale() . '.iad.ad.show', $this->slug);
+    return \URL::route(\LaravelLocalization::getCurrentLocale() . '.iad.ad.show', $this->slug);
 
   }
 
