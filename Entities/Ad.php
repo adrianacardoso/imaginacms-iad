@@ -32,6 +32,7 @@ class Ad extends Model
     'featured',
     'options',
     'uploaded_at',
+    'checked',
   ];
   protected $fakeColumns = ['options'];
   protected $casts = ['options' => 'array'];
