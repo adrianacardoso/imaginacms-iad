@@ -15,10 +15,10 @@ $router->group(['prefix' => 'ipin/v1'], function (Router $router) {
 
   //======  SCHEDULES
   //require('ApiRoutes/schedulesRoutes.php');
-  
+
   //======  UPS
   require('ApiRoutes/upsRoutes.php');
-  
+
   //======  ADUPS
   require('ApiRoutes/adUpsRoutes.php');
 });

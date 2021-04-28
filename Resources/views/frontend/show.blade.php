@@ -12,7 +12,7 @@
   <meta itemprop="image"
         content=" {{url($item->mediaFiles()->mainimage->path ?? 'modules/icommerce/img/product/default.jpg') }}">
   <!-- Open Graph para Facebook-->
-  
+
   <meta property="og:title"
         content="{{$item->meta_title??$item->title}}"/>
   <meta property="og:type" content="article"/>

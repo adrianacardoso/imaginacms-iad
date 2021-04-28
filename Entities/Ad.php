@@ -46,14 +46,14 @@ class Ad extends Model
   {
     return $this->belongsToMany(Category::class, 'iad__ad_category');
   }
-  
-  
+
+
   public function adUps()
   {
     return $this->hasMany(AdUp::class);
   }
-  
-  
+
+
   public function fields()
   {
     return $this->hasMany(Field::class);
@@ -79,17 +79,17 @@ class Ad extends Model
     return $this->belongsTo(City::class);
   }
 
-  public function getStatusNameAttribute(){
+  public function getStatusNameAttribute()
+  {
     $adStatuses = new AdStatus();
     return collect($adStatuses->get())->where('id', $this->status)->pluck('name')->first();
   }
-  
+
   public function setOptionsAttribute($value)
   {
     $this->attributes['options'] = json_encode($value);
   }
-  
-  
+
   /**
    * URL product
    * @return string
@@ -97,12 +97,17 @@ class Ad extends Model
   public function getUrlAttribute()
   {
 
-      return \URL::route(\LaravelLocalization::getCurrentLocale() . '.iad.ad.show', $this->slug);
-      
+    return \URL::route(\LaravelLocalization::getCurrentLocale() . '.iad.ad.show', $this->slug);
+
   }
-  
+
   public function getOptionsAttribute($value)
   {
     return json_decode($value);
+  }
+
+  public function getEntityTitleAttribute()
+  {
+    return trans('Test entity name');
   }
 }
