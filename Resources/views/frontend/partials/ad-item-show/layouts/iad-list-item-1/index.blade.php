@@ -1,4 +1,4 @@
-<div class="container modal-girl">
+<div class="container modal-pin">
   <div class="row">
     <div class="col-lg-6 pb-4">
       <div class="modal-images">
@@ -303,14 +303,14 @@
         <h3 class="modal-title mb-3">
           Ubicación
         </h3>
-        <div id="girl-map{{$item->id}}">
+        <div id="pin-map{{$item->id}}">
         </div>
       </div>
     
     </div>
 
       <style type="text/css">
-        #girl-map{{$item->id}}   {
+        #pin-map{{$item->id}}   {
           height: 400px;
           width: 100%;
         }
@@ -321,7 +321,7 @@
       // Initialize and add the map
       $(document).ready(function () {
         // The map, centered at Uluru
-        var map{{$item->id}} = new google.maps.Map(document.getElementById("girl-map{{$item->id}}"), {
+        var map{{$item->id}} = new google.maps.Map(document.getElementById("pin-map{{$item->id}}"), {
           zoom: 16,
           center: {lat: {{$item->options->map->lat}}, lng: {{$item->options->map->lng}} },
         });
@@ -358,14 +358,14 @@
   </div>
   <div class="row justify-content-center">
     <div class="col-auto">
-      <a class="btn btn-flag" data-toggle="collapse" href="#collapseGirl{{$item->id}}" role="button"
-         aria-expanded="false" aria-controls="collapseGirl{{$item->id}}">
-        <img class="img-fluid" src="{{Theme::url('girls-publication/ico-denunciar.png')}}" alt="Flag this ad">
+      <a class="btn btn-flag" data-toggle="collapse" href="#collapsePin{{$item->id}}" role="button"
+         aria-expanded="false" aria-controls="collapsePin{{$item->id}}">
+        <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
         Denunciar éste anuncio
       </a>
     </div>
     <div class="col-12">
-      <div class="collapse mt-4" id="collapseGirl{{$item->id}}">
+      <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
           
           {!! Forms::render('denuncia','iforms::frontend.form.bt-nolabel.form') !!}

@@ -1,9 +1,9 @@
- <div class="modal modal-girl fade" id="modalGirl{{$item->id}}" tabindex="-1" aria-hidden="true">
+ <div class="modal modal-pin fade" id="modalPin{{$item->id}}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <img class="img-fluid" src="{{Theme::url('girls-publication/close.png')}}" alt="girl-1">
+            <img class="img-fluid" src="{{Theme::url('pins-publication/close.png')}}" alt="pin-1">
           </button>
         </div>
         <div class="modal-body">
@@ -261,14 +261,14 @@
                   <h3 class="modal-title mb-3">
                     Ubicación
                   </h3>
-                  <div id="girl-map{{$item->id}}">
+                  <div id="pin-map{{$item->id}}">
                   </div>
                 </div>
               
               </div>
               @push("css-stack")
               <style type="text/css">
-                #girl-map{{$item->id}} {
+                #pin-map{{$item->id}} {
                   height: 400px;
                   width: 100%;
                 }
@@ -280,7 +280,7 @@
                 // Initialize and add the map
                 $(document).ready(function () {
                   // The map, centered at Uluru
-                  var map{{$item->id}} = new google.maps.Map(document.getElementById("girl-map{{$item->id}}"), {
+                  var map{{$item->id}} = new google.maps.Map(document.getElementById("pin-map{{$item->id}}"), {
                     zoom: 16,
                     center: {lat: {{$item->options->map->lat}}, lng: {{$item->options->map->lng}} },
                   });
@@ -302,14 +302,14 @@
           <div class="container-fluid">
             <div class="row justify-content-center">
               <div class="col-auto">
-                <a class="btn btn-flag" data-toggle="collapse" href="#collapseGirl{{$item->id}}" role="button"
-                   aria-expanded="false" aria-controls="collapseGirl{{$item->id}}">
-                  <img class="img-fluid" src="{{Theme::url('girls-publication/ico-denunciar.png')}}" alt="Flag this ad">
+                <a class="btn btn-flag" data-toggle="collapse" href="#collapsePin{{$item->id}}" role="button"
+                   aria-expanded="false" aria-controls="collapsePin{{$item->id}}">
+                  <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
                   Denunciar éste anuncio
                 </a>
               </div>
               <div class="col-12">
-                <div class="collapse mt-4" id="collapseGirl{{$item->id}}">
+                <div class="collapse mt-4" id="collapsePin{{$item->id}}">
                   <div class="card card-body pt-4 bg-light">
                     
                     {!! Forms::render('denuncia','iforms::frontend.form.bt-nolabel.form') !!}

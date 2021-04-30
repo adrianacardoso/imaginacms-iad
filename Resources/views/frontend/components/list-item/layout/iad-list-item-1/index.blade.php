@@ -1,7 +1,7 @@
-<div class="girls">
-  <div class="card-girl {{$item->featured ? 'featured' : ''}}">
+<div class="pins">
+  <div class="card-pin {{$item->featured ? 'featured' : ''}}">
    
-    <figure class="figure" data-toggle="modal" data-target="#modalGirl{{$item->id}}">
+    <figure class="figure" data-toggle="modal" data-target="#modalPin{{$item->id}}">
       @if($item->featured )
         <a class="link-star">
           <i class="fa fa-star text-white"></i>
