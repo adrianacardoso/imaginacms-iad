@@ -29,7 +29,7 @@
             @php($videos = $item->mediaFiles()->videos)
             @php($gallery = $item->mediaFiles()->gallery)
             @php($dataSlideTo = 1)
-            @foreach($gallery as $itemGallery)
+            @foreach($gallery ?? [] as $itemGallery)
               <div class="carousel-item ">
                 <a href="{{$itemGallery->extraLargeThumb}}"
                    data-fancybox="gallery" data-caption="{{$item->title}}">
@@ -41,7 +41,7 @@
               </div>
               @php($dataSlideTo++)
             @endforeach
-            @foreach($videos as $video)
+            @foreach($videos ?? [] as $video)
               <div class="carousel-item ">
                 <a data-fancybox href="#myVideo">
                   <video width="100%" height="450" controls>
@@ -80,7 +80,7 @@
   
           </div>
           @php($dataSlideTo = 1)
-          @foreach($gallery as $itemGallery)
+          @foreach($gallery ?? [] as $itemGallery)
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
                  href="{{$itemGallery->extraLargeThumb}}"
@@ -93,7 +93,7 @@
             </div>
             @php($dataSlideTo++)
             @endforeach
-          @foreach($videos as $video)
+          @foreach($videos ?? [] as $video)
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
                  href="{{$video->path}}"
@@ -220,7 +220,7 @@
         <h3 class="modal-title mb-3">
           Tarifas
         </h3>
-        @foreach($item->options->prices as $rate)
+        @foreach($item->options->prices ?? [] as $rate)
           <div class="row align-items-center modal-item">
             <div class="col-5 col-sm-3">{{$rate->description}}</div>
             <div class="col-2 col-sm-5">
@@ -237,7 +237,7 @@
         <h3 class="modal-title mb-3">
           Horarios
         </h3>
-        @foreach($item->options->schedule as $schedule)
+        @foreach($item->options->schedule ?? [] as $schedule)
           <div class="row align-items-center modal-item">
             <div class="col-5 col-sm-4">
               
@@ -250,8 +250,10 @@
             <div class="col-5 col-sm-4 text-primary">
               @if($schedule->schedules == 1)
                 {{trans("iad::schedules.schedules.24Hours")}}
+              @elseif($schedule->schedules == 0)
+                {{trans("iad::schedules.schedules.closed")}}
               @else
-                @foreach($schedule->schedules as $shift)
+                @foreach($schedule->schedules ?? [] as $shift)
                   {{date("g:ia",strtotime($shift->from))}} -
                   {{date("g:ia",strtotime($shift->to))}}
                 @endforeach
@@ -271,7 +273,9 @@
   <div class="row">
     
     @php($categories = Modules\Iad\Entities\Category::all())
-    @foreach($categories->toTree() as $categoryParent)
+    @php($categories = $categories->toTree())
+
+    @foreach($categories ?? [] as $categoryParent)
       @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
       @if(!empty($categoriesAd))
         
@@ -280,7 +284,7 @@
             
             {{$categoryParent->title}}
           </h3>
-          @foreach($categoriesAd as $categoryId)
+          @foreach($categoriesAd ?? [] as $categoryId)
             @php($categoryAd = $item->categories->where("id",$categoryId)->first())
             <span class="badge info-badge">
               <a href="{{url("?filter[categories][0]=$categoryId")}}">{{$categoryAd->title}}</a>
@@ -294,7 +298,7 @@
       <hr>
     </div>
   </div>
-  
+
   @if(isset($item->options->map->title) && !empty($item->options->map->lat) && !empty($item->options->map->lng))
     <div class="row">
       
