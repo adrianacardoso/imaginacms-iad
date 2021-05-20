@@ -11,7 +11,6 @@ class AdStatus
   const DISABLED = 0;
   const PENDING = 1;
   const PUBLISHED = 2;
-  const CHECKED = 3;
 
   /**
    * @var array
@@ -24,7 +23,6 @@ class AdStatus
       ['id' => self::DISABLED, 'name' => trans('iad::status.disabled')],
       ['id' => self::PENDING, 'name' => trans('iad::status.pending')],
       ['id' => self::PUBLISHED, 'name' => trans('iad::status.published')],
-      ['id' => self::CHECKED, 'name' => trans('iad::status.checked')]
     ];
   }
 
