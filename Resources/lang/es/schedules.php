@@ -14,6 +14,7 @@ return [
   'schedules' => [
   "allDay" => "Todo el día",
   "24Hours" => "24 horas",
+  "closed" => "Cerrado",
 ]
 
 ];

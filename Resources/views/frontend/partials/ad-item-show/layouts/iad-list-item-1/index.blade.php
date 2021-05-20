@@ -1,4 +1,4 @@
-<div class="container modal-girl">
+<div class="container modal-pin">
   <div class="row">
     <div class="col-lg-6 pb-4">
       <div class="modal-images">
@@ -29,7 +29,7 @@
             @php($videos = $item->mediaFiles()->videos)
             @php($gallery = $item->mediaFiles()->gallery)
             @php($dataSlideTo = 1)
-            @foreach($gallery as $itemGallery)
+            @foreach($gallery ?? [] as $itemGallery)
               <div class="carousel-item ">
                 <a href="{{$itemGallery->extraLargeThumb}}"
                    data-fancybox="gallery" data-caption="{{$item->title}}">
@@ -41,7 +41,7 @@
               </div>
               @php($dataSlideTo++)
             @endforeach
-            @foreach($videos as $video)
+            @foreach($videos ?? [] as $video)
               <div class="carousel-item ">
                 <a data-fancybox href="#myVideo">
                   <video width="100%" height="450" controls>
@@ -80,7 +80,7 @@
   
           </div>
           @php($dataSlideTo = 1)
-          @foreach($gallery as $itemGallery)
+          @foreach($gallery ?? [] as $itemGallery)
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
                  href="{{$itemGallery->extraLargeThumb}}"
@@ -93,7 +93,7 @@
             </div>
             @php($dataSlideTo++)
             @endforeach
-          @foreach($videos as $video)
+          @foreach($videos ?? [] as $video)
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
                  href="{{$video->path}}"
@@ -220,7 +220,7 @@
         <h3 class="modal-title mb-3">
           Tarifas
         </h3>
-        @foreach($item->options->prices as $rate)
+        @foreach($item->options->prices ?? [] as $rate)
           <div class="row align-items-center modal-item">
             <div class="col-5 col-sm-3">{{$rate->description}}</div>
             <div class="col-2 col-sm-5">
@@ -237,7 +237,7 @@
         <h3 class="modal-title mb-3">
           Horarios
         </h3>
-        @foreach($item->options->schedule as $schedule)
+        @foreach($item->options->schedule ?? [] as $schedule)
           <div class="row align-items-center modal-item">
             <div class="col-5 col-sm-4">
               
@@ -250,8 +250,10 @@
             <div class="col-5 col-sm-4 text-primary">
               @if($schedule->schedules == 1)
                 {{trans("iad::schedules.schedules.24Hours")}}
+              @elseif($schedule->schedules == 0)
+                {{trans("iad::schedules.schedules.closed")}}
               @else
-                @foreach($schedule->schedules as $shift)
+                @foreach($schedule->schedules ?? [] as $shift)
                   {{date("g:ia",strtotime($shift->from))}} -
                   {{date("g:ia",strtotime($shift->to))}}
                 @endforeach
@@ -271,7 +273,9 @@
   <div class="row">
     
     @php($categories = Modules\Iad\Entities\Category::all())
-    @foreach($categories->toTree() as $categoryParent)
+    @php($categories = $categories->toTree())
+
+    @foreach($categories ?? [] as $categoryParent)
       @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
       @if(!empty($categoriesAd))
         
@@ -280,7 +284,7 @@
             
             {{$categoryParent->title}}
           </h3>
-          @foreach($categoriesAd as $categoryId)
+          @foreach($categoriesAd ?? [] as $categoryId)
             @php($categoryAd = $item->categories->where("id",$categoryId)->first())
             <span class="badge info-badge">
               <a href="{{url("?filter[categories][0]=$categoryId")}}">{{$categoryAd->title}}</a>
@@ -294,7 +298,7 @@
       <hr>
     </div>
   </div>
-  
+
   @if(isset($item->options->map->title) && !empty($item->options->map->lat) && !empty($item->options->map->lng))
     <div class="row">
       
@@ -303,14 +307,14 @@
         <h3 class="modal-title mb-3">
           Ubicación
         </h3>
-        <div id="girl-map{{$item->id}}">
+        <div id="pin-map{{$item->id}}">
         </div>
       </div>
     
     </div>
 
       <style type="text/css">
-        #girl-map{{$item->id}}   {
+        #pin-map{{$item->id}}   {
           height: 400px;
           width: 100%;
         }
@@ -321,7 +325,7 @@
       // Initialize and add the map
       $(document).ready(function () {
         // The map, centered at Uluru
-        var map{{$item->id}} = new google.maps.Map(document.getElementById("girl-map{{$item->id}}"), {
+        var map{{$item->id}} = new google.maps.Map(document.getElementById("pin-map{{$item->id}}"), {
           zoom: 16,
           center: {lat: {{$item->options->map->lat}}, lng: {{$item->options->map->lng}} },
         });
@@ -358,14 +362,14 @@
   </div>
   <div class="row justify-content-center">
     <div class="col-auto">
-      <a class="btn btn-flag" data-toggle="collapse" href="#collapseGirl{{$item->id}}" role="button"
-         aria-expanded="false" aria-controls="collapseGirl{{$item->id}}">
-        <img class="img-fluid" src="{{Theme::url('girls-publication/ico-denunciar.png')}}" alt="Flag this ad">
+      <a class="btn btn-flag" data-toggle="collapse" href="#collapsePin{{$item->id}}" role="button"
+         aria-expanded="false" aria-controls="collapsePin{{$item->id}}">
+        <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
         Denunciar éste anuncio
       </a>
     </div>
     <div class="col-12">
-      <div class="collapse mt-4" id="collapseGirl{{$item->id}}">
+      <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
           
           {!! Forms::render('denuncia','iforms::frontend.form.bt-nolabel.form') !!}
