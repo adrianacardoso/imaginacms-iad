@@ -15,9 +15,7 @@ class CreateIadAdCategoryTable extends Migration
     Schema::create('iad__ad_category', function (Blueprint $table) {
       $table->increments('id');
       $table->integer('ad_id')->unsigned();
-      $table->foreign('ad_id')->references('id')->on('iad__ads')->onDelete('restrict');
       $table->integer('category_id')->unsigned();
-      $table->foreign('category_id')->references('id')->on('iad__categories')->onDelete('restrict');
     });
   }
 

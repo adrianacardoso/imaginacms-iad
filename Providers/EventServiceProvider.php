@@ -12,7 +12,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
     ];
 
-    public function boot()
+    public function register()
     {
         //Listen order was processed event
         if(is_module_enabled('Icommerce')) {
