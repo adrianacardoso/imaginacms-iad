@@ -153,11 +153,12 @@
           <i class="fa fa-camera" aria-hidden="true"></i>
           {{count($gallery)}}</span>
       @endif
-      
+  
       <p class="modal-date my-3">
-        06/11/2020 | 5:00PM
+        {{date("d/m/Y H:ia",strtotime($item->created_at))}}
       </p>
-      
+  
+  
       <div class="modal-description">
         {!! nl2br ($item->description) !!}
         {{--                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ullamcorper ante, et mattis ipsum.--}}

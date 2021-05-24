@@ -86,7 +86,7 @@
                 @endif
                 
                 <p class="modal-date my-3">
-                  06/11/2020 | 5:00PM
+                  {{date("d/m/Y H:i",strtotime($item->created_at))}}
                 </p>
                 
                 <div class="modal-description">

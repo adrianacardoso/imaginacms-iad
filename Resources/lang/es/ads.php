@@ -6,6 +6,7 @@ return [
     'edit resource' => 'Edit ads',
     'destroy resource' => 'Destroy ads',
     'title' => [
+        'ad' => 'Anuncios',
         'ads' => 'Mis Anuncios',
         'create ad' => 'Create a ad',
         'edit ad' => 'Edit a ad',
