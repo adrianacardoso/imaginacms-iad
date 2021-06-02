@@ -291,8 +291,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     /*== initialize query ==*/
     $query = $this->model->query();
-
-
+    
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;

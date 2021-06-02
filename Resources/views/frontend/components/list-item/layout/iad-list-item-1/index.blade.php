@@ -38,14 +38,18 @@
             {{$item->city->name}}
           @endif
         </span>
-        <span class="badge info-badge">
 
+        @if(isset(collect($item->fields)->where('name','age')->first()->value))
+        <span class="badge info-badge">
           {{--21 años--}}
-          @if(isset(collect($item->fields)->where('name','age')->first()->value))
             {{collect($item->fields)->where('name','age')->first()->value}} años
-          @endif
         </span>
+        @endif
+
+        @if(!empty($item->min_price))
         <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+        @endif
+
         <span class="badge info-badge">{{$item->country->name}}</span>
         @if($item->status == 3)
           <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>

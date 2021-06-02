@@ -171,7 +171,10 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
 
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
-    event(new DeleteMedia($model->id, get_class($model)));//Event to Delete media
-    $model ? $model->delete() : false;
+    if(isset($model->id)){
+      event(new DeleteMedia($model->id, get_class($model)));//Event to Delete media
+      $model ? $model->delete() : false;
+    }
+    
   }
 }

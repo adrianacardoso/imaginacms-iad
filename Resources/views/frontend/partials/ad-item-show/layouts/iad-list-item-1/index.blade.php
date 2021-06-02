@@ -124,14 +124,16 @@
           {{$item->city->name}}
         @endif
         </span>
+      @if(isset(collect($item->fields)->where('name','age')->first()->value))
       <span class="badge info-badge">
-
           {{--21 años--}}
-        @if(isset(collect($item->fields)->where('name','age')->first()->value))
           {{collect($item->fields)->where('name','age')->first()->value}} años
-        @endif
         </span>
+      @endif
+
+      @if(!empty($item->min_price))
       <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+      @endif
       <span class="badge info-badge">{{$item->country->name}}</span>
       @if($item->status == 3)
         <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
@@ -174,6 +176,11 @@
             <i class="fa fa-whatsapp"></i> WhatsApp
           </a>
         @endif
+          @if(isset($item->options->facebook))
+            <a class="btn btn-facebook" href="https://www.facebook.com/{{ $item->options->whatsapp }}" target="_blank">
+              <i class="fa fa-facebook"></i> Facebook
+            </a>
+          @endif
           @if(isset($item->options->instagram))
           <a class="btn btn-instagram" href="https://instagram.com/{{$item->options->instagram}}" target="_blank">
             <i class="fa fa-instagram"></i> Instagram
