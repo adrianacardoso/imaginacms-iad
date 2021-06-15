@@ -220,10 +220,10 @@
       <hr class="mb-4">
     </div>
   </div>
-  
+  @if(isset($item->options->prices) && !empty($item->options->prices) || isset($item->options->schedule) && !empty($item->options->schedule))
   <div class="row">
     <!--Rates-->
-    @if(isset($item->options->prices))
+    @if(isset($item->options->prices) && !empty($item->options->prices))
       <div class="col-lg-6 pb-4">
         <h3 class="modal-title mb-3">
           Tarifas
@@ -240,7 +240,7 @@
       </div>
     @endif
   <!--Schedule-->
-    @if(isset($item->options->schedule))
+    @if(isset($item->options->schedule) && !empty($item->options->schedule))
       <div class="col-lg-6 pb-4">
         <h3 class="modal-title mb-3">
           Horarios
@@ -276,13 +276,13 @@
       <hr>
     </div>
   </div>
-  
-  
-  <div class="row">
-    
-    @php($categories = Modules\Iad\Entities\Category::all())
-    @php($categories = $categories->toTree())
+   @endif
 
+  @php($categories = Modules\Iad\Entities\Category::all())
+  @php($categories = $categories->toTree())
+
+  @if(!empty($item->categories))
+  <div class="row">
     @foreach($categories ?? [] as $categoryParent)
       @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
       @if(!empty($categoriesAd))
@@ -306,8 +306,9 @@
       <hr>
     </div>
   </div>
+  @endif
 
-  @if(isset($item->options->map->title) && !empty($item->options->map->lat) && !empty($item->options->map->lng))
+  @if(isset($item->options->map->title) && !empty($item->options->map->title) &&  !empty($item->options->map->lat) && !empty($item->options->map->lng))
     <div class="row">
       
       
