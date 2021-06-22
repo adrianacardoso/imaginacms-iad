@@ -6,6 +6,7 @@ use Modules\Iad\Repositories\AdRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Modules\Iad\Entities\Ad;
 
 //Events
@@ -51,9 +52,20 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       //Order by
       if (isset($filter->order)) {
-        $orderByField = $filter->order->field ?? 'created_at';//Default field
-        $orderWay = $filter->order->way ?? 'desc';//Default way
-        $query->orderBy($orderByField, $orderWay);//Add order to query
+          $orderByField = $filter->order->field ?? 'created_at';//Default field
+          $orderWay = $filter->order->way ?? 'desc';//Default way
+
+          if (Str::contains($orderByField, $params->include)){ //if the order field does not have a relation
+              if(Str::contains($orderByField,'categories')){
+                  $orderByFieldInclude = explode('.',$orderByField);
+                  $query->join('iad__ad_category','iad__ad_category.ad_id','iad__ads.id')
+                      ->join('iad__categories','iad__ad_category.category_id','iad__categories.id')
+                        ->orderBy('iad__categories.'.$orderByFieldInclude[1],$orderWay);
+              }
+          }else {
+              $query->orderBy($orderByField, $orderWay);//Add order to query
+
+          }
       }
 
       // add filter by Categories 1 or more than 1, in array/*
@@ -134,13 +146,13 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       //Filter by status
       if (isset($filter->status) && !empty($filter->status)) {
         $filter->status = Arr::wrap($filter->status);
-        $query->whereIn('status', $filter->status);
+        $query->whereIn('iad__ads.status', $filter->status);
       }
 
       //Filter by status
       if (isset($filter->featured) && !empty($filter->featured)) {
 
-        $query->where('featured', $filter->featured);
+        $query->where('iad__ads.featured', $filter->featured);
       }
 
       //Filter Search
@@ -164,6 +176,9 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       $query->select($params->fields);
     //dd($query->toSql(),$query->getBindings());
     /*== REQUEST ==*/
+
+    //dd($query->toSql());
+
     if (isset($params->page) && $params->page) {
       //return $query->paginate($params->take);
       return $query->paginate($params->take, ['*'], null, $params->page);
@@ -291,7 +306,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
     /*== initialize query ==*/
     $query = $this->model->query();
-    
+
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
