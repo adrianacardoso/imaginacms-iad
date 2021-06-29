@@ -16,7 +16,8 @@ class Category extends Model
   protected $fillable = [
     'parent_id',
     'status',
-    'options'
+    'options',
+    'sort_order'
   ];
   protected $fakeColumns = ['options'];
 
@@ -32,6 +33,11 @@ class Category extends Model
   public function children()
   {
     return $this->hasMany('Modules\Iad\Entities\Category', 'parent_id');
+  }
+
+  public function ads()
+  {
+    return $this->belongsToMany(Ad::class, 'iad__ad_category');
   }
 
   public function getLftName()

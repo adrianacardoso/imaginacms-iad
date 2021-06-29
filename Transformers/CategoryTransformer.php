@@ -18,6 +18,7 @@ class CategoryTransformer extends JsonResource
       'parentId' => $this->parent_id ?? 0,
       'sortOrder' => $this->sort_order ?? 0,
       'parent' => new CategoryTransformer($this->whenLoaded('parent')),
+      'ads' => AdTransformer::collection($this->whenLoaded('ads')),
       'mediaFiles' => $this->mediaFiles(),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
