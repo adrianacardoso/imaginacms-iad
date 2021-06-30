@@ -143,6 +143,12 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         }
       }
 
+      //Filter by city id
+      // City ID is 0 when name is "ALL / TODOS"
+      if (isset($filter->cityId) && $filter->cityId!=0) {
+        $query->where("iad__ads.city_id", $filter->cityId);
+      }
+
       //Filter by status
       if (isset($filter->status) && !empty($filter->status)) {
         $filter->status = Arr::wrap($filter->status);
