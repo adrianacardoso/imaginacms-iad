@@ -169,10 +169,9 @@
         {{--                  <p>Curabitur congue tristique purus, non imperdiet dui tempus sit amet. Donec tincidunt congue sapien--}}
         {{--                    id placerat. Pellentesque id consequat arcu. Vestibulum sagittis velit non hendrerit pharetra.</p>--}}
       </div>
-      
       <div class="group-btn">
         @if(isset($item->options->whatsapp))
-          <a class="btn btn-whatsapp" href="https://wa.me/+57{{ $item->options->whatsapp }}?text=hola te ví en Sexy Latinas, me gustaría conocerte" target="_blank">
+          <a class="btn btn-whatsapp" href="https://wa.me/+57{{ $item->options->whatsapp }}?text={!! setting('iad::whatsappTextAnuncio') !!}" target="_blank">
             <i class="fa fa-whatsapp"></i> WhatsApp
           </a>
         @endif
