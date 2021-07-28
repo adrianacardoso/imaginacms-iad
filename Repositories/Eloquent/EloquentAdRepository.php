@@ -52,20 +52,10 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       //Order by
       if (isset($filter->order)) {
-          $orderByField = $filter->order->field ?? 'created_at';//Default field
-          $orderWay = $filter->order->way ?? 'desc';//Default way
+        $orderByField = $filter->order->field ?? 'created_at';//Default field
+        $orderWay = $filter->order->way ?? 'desc';//Default way
 
-          if (Str::contains($orderByField, $params->include)){ //if the order field does not have a relation
-              if(Str::contains($orderByField,'categories')){
-                  $orderByFieldInclude = explode('.',$orderByField);
-                  $query->join('iad__ad_category','iad__ad_category.ad_id','iad__ads.id')
-                      ->join('iad__categories','iad__ad_category.category_id','iad__categories.id')
-                        ->orderBy('iad__categories.'.$orderByFieldInclude[1],$orderWay);
-              }
-          }else {
-              $query->orderBy($orderByField, $orderWay);//Add order to query
-
-          }
+        $query->orderBy($orderByField, $orderWay);//Add order to query
       }
 
       // add filter by Categories 1 or more than 1, in array/*
@@ -145,7 +135,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       //Filter by city id
       // City ID is 0 when name is "ALL / TODOS"
-      if (isset($filter->cityId) && $filter->cityId!=0) {
+      if (isset($filter->cityId) && $filter->cityId != 0) {
         $query->where("iad__ads.city_id", $filter->cityId);
       }
 
@@ -182,8 +172,6 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       $query->select($params->fields);
     //dd($query->toSql(),$query->getBindings());
     /*== REQUEST ==*/
-
-    //dd($query->toSql());
 
     if (isset($params->page) && $params->page) {
       //return $query->paginate($params->take);
@@ -362,7 +350,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         !$params->permissions['iad.ads.index-all'])) {
       $user = $params->user ?? null;
 
-      if(isset($user->id)){
+      if (isset($user->id)) {
         // if is salesman or salesman manager or salesman sub manager
         $query->where('user_id', $user->id);
 
