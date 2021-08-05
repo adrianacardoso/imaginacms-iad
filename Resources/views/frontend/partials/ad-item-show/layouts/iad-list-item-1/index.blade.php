@@ -348,7 +348,7 @@
 
   @endif
   
-  <div class="row featured-pins">
+  <div class="featured-pins">
  
     <x-isite::carousel.owl-carousel
       title="Anuncios Destacados"
