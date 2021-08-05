@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-6 pb-4">
       <div class="modal-images">
-  
+
         <div id="carouselGallery" class="carousel slide mb-2" data-ride="carousel">
           <a class="carousel-control-prev" href="#carouselGallery" role="button" data-slide="prev">
             <span class="fa fa-caret-right" aria-hidden="true"></span>
@@ -17,13 +17,13 @@
               <a
                 href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
                 data-fancybox="gallery" data-caption="{{$item->title}}">
-              
+
                   <x-media::single-image :alt="$item->title ?? $item->name"
                                          :title="$item->title ?? $item->name"
                                          :isMedia="true"
                                          imgClasses=""
                                          :mediaFiles="$item->mediaFiles()"/>
-        
+
               </a>
             </div>
             @php($videos = $item->mediaFiles()->videos)
@@ -58,11 +58,11 @@
                   Your browser doesn't support HTML5 video tag.
                 </video>
               </div>
-            
+
             @endforeach
 
           </div>
-        
+
         </div>
         <!--carusel de abajo-->
 
@@ -77,7 +77,7 @@
                                      imgClasses=""
                                      :mediaFiles="$item->mediaFiles()"/>
               </a>
-  
+
           </div>
           @php($dataSlideTo = 1)
           @foreach($gallery ?? [] as $itemGallery)
@@ -103,18 +103,18 @@
                                        :src="url('/modules/iad/img/video.png')"
                                        imgClasses="card-img-top img-fluid p-3"/>
               </a>
-          
+
             </div>
             @php($dataSlideTo++)
           @endforeach
-          
+
         </div>
-      
+
       </div>
-    
+
     </div>
     <div class="col-lg-6 pb-4">
-      
+
       <h2 class="modal-title mb-3">
         <a href="{{$item->url}}">{{$item->title}} </a>
       </h2>
@@ -138,13 +138,13 @@
       @if($item->status == 3)
         <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
       @endif
-     
+
       @if(count($videos)>0)
         <span class="badge info-badge videos">
           <i class="fa fa-play-circle-o" aria-hidden="true"></i>
           {{count($videos)}}</span>
       @endif
-   
+
       @php($videos = $item->mediaFiles()->videos)
       @if(count($videos)>0)
         <span class="badge info-badge videos">{{count($videos)}}</span>
@@ -155,12 +155,12 @@
           <i class="fa fa-camera" aria-hidden="true"></i>
           {{count($gallery)}}</span>
       @endif
-  
+
       <p class="modal-date my-3">
         {{date("d/m/Y H:ia",strtotime($item->created_at))}}
       </p>
-  
-  
+
+
       <div class="modal-description">
         {!! nl2br ($item->description) !!}
         {{--                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ullamcorper ante, et mattis ipsum.--}}
@@ -176,7 +176,7 @@
           </a>
         @endif
           @if(isset($item->options->facebook))
-            <a class="btn btn-facebook" href="https://www.facebook.com/{{ $item->options->whatsapp }}" target="_blank">
+            <a class="btn btn-facebook" href="https://www.facebook.com/{{ $item->options->facebook }}" target="_blank">
               <i class="fa fa-facebook"></i> Facebook
             </a>
           @endif
@@ -185,7 +185,7 @@
             <i class="fa fa-instagram"></i> Instagram
           </a>
         @endif
-  
+
           @if(isset($item->options->twitter))
           <a class="btn btn-twitter"
              href="https://twitter.com/{{$item->options->twitter}}" target="_blank">
@@ -198,20 +198,20 @@
             <i class="fa fa-youtube"></i>Youtube
           </a>
         @endif
-        
+
         @if(isset($item->options->phone))
           <a class="btn btn-phone" href="tel:{{$item->options->phone}}"
              target="_blank">
             <i class="fa fa-mobile"></i> {{$item->options->phone}}
           </a>
         @endif
-        
+
         <a class="btn btn-like"
            onClick="window.livewire.emit('addToWishList',{{json_encode(["entityName" => "Modules\\Iad\\Entities\\Ad", "entityId" => $item->id])}})">
           <i class="fa fa-heart"></i>
         </a>
       </div>
-    
+
     </div>
   </div>
   <div class="row">
@@ -247,9 +247,9 @@
         @foreach($item->options->schedule ?? [] as $schedule)
           <div class="row align-items-center modal-item">
             <div class="col-5 col-sm-4">
-              
+
               {{trans("iad::schedules.days.".$schedule->name)}}
-            
+
             </div>
             <div class="col-2 col-sm-4">
               <hr class="solid">
@@ -270,7 +270,7 @@
         @endforeach
       </div>
     @endif
-    
+
     <div class="col-lg-12 pb-4">
       <hr>
     </div>
@@ -285,10 +285,10 @@
     @foreach($categories ?? [] as $categoryParent)
       @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
       @if(!empty($categoriesAd))
-        
+
         <div class="col-12 col-md-4 pb-4">
           <h3 class="modal-title mb-3">
-            
+
             {{$categoryParent->title}}
           </h3>
           @foreach($categoriesAd ?? [] as $categoryId)
@@ -300,7 +300,7 @@
         </div>
       @endif
     @endforeach
-    
+
     <div class="col-lg-12 pb-4">
       <hr>
     </div>
@@ -309,8 +309,8 @@
 
   @if(isset($item->options->map->title) && !empty($item->options->map->title) &&  !empty($item->options->map->lat) && !empty($item->options->map->lng))
     <div class="row">
-      
-      
+
+
       <div class="col-lg-8 pb-4">
         <h3 class="modal-title mb-3">
           Ubicación
@@ -318,7 +318,7 @@
         <div id="pin-map{{$item->id}}">
         </div>
       </div>
-    
+
     </div>
 
       <style type="text/css">
@@ -327,7 +327,7 @@
           width: 100%;
         }
       </style>
-   
+
 
     <script>
       // Initialize and add the map
@@ -343,13 +343,13 @@
           map: map{{$item->id}},
         });
       });
-    
+
     </script>
 
   @endif
-  
+
   <div class="featured-pins">
- 
+
     <x-isite::carousel.owl-carousel
       title="Anuncios Destacados"
       id="featuredPins{{$item->id}}"
@@ -362,8 +362,8 @@
       repository="Modules\Iad\Repositories\AdRepository"
       itemComponent="iad::list-item"
     />
-  
-  
+
+
     <div class="col-lg-12 pb-4">
       <hr>
     </div>
@@ -379,9 +379,9 @@
     <div class="col-12">
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
-          
+
           {!! Forms::render('denuncia','iforms::frontend.form.bt-nolabel.form') !!}
-          
+
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que
             se usó para publicarlo ni al teléfono que aparece en el anuncio, debes indicarnos un teléfono y
@@ -394,9 +394,9 @@
 
 
   <script>
-  
+
     $(document).ready(function () {
-    
+
       $('.owl-image-mini{{$item->id}}').owlCarousel({
         responsiveClass: true,
         nav: false,
@@ -418,12 +418,12 @@
           }
         }
       });
-    
-    
-    
+
+
+
     });
     $(document).ready(function () {
-  
+
       $('#featuredPins{{$item->id}}Carousel').owlCarousel({
         responsiveClass: true,
         nav: false,
@@ -444,9 +444,9 @@
           }
         }
       });
-  
-  
-  
+
+
+
     });
-  
+
   </script>
