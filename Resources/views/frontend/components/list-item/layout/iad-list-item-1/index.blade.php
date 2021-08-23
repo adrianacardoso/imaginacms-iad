@@ -31,7 +31,7 @@
       </a>
       @endif
       
-      <div class="d-inline-block">
+      <div id="extraInfo" class="d-inline-block">
         <span class="badge info-badge">
           {{--Medellín--}}
           @if(isset($item->city->name))
