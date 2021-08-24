@@ -239,7 +239,7 @@
       </div>
     @endif
   <!--Schedule-->
-    @if(isset($item->options->schedule) && !empty($item->options->schedule))
+    @if(isset($item->options->schedule) && isset($item->options->statusSchedule) && $item->options->statusSchedule)
       <div class="col-lg-6 pb-4">
         <h3 class="modal-title mb-3">
           Horarios
