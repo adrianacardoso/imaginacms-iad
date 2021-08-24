@@ -269,11 +269,12 @@
           </div>
         @endforeach
       </div>
+      <div class="col-lg-12 pb-4">
+        <hr>
+      </div>
     @endif
 
-    <div class="col-lg-12 pb-4">
-      <hr>
-    </div>
+   
   </div>
    @endif
 
@@ -362,11 +363,7 @@
       repository="Modules\Iad\Repositories\AdRepository"
       itemComponent="iad::list-item"
     />
-
-
-    <div class="col-lg-12 pb-4">
-      <hr>
-    </div>
+    
   </div>
   <div class="row justify-content-center">
     <div class="col-auto">
@@ -380,7 +377,7 @@
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          {!! Forms::render('denuncia','iforms::frontend.form.bt-nolabel.form') !!}
+          <x-iforms::form :id="setting('iad::complaintForm')" />
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que

@@ -17,4 +17,18 @@ return [
       'label' => 'Texto de Mensaje Whatsapp en el Anuncio'
     ]
   ],
+  'complaintForm' => [
+    'value' => null,
+    'name' => 'iad::complaintForm',
+    'type' => 'select',
+    'loadOptions' => [
+      'apiRoute' => 'apiRoutes.qform.forms',
+      'select' => ['label' => 'title', 'id' => 'id'],
+    ],
+    'props' => [
+      'label' => 'Formulario para Denunciar',
+      'multiple' => false,
+      'clearable' => true,
+    ],
+  ],
 ];
