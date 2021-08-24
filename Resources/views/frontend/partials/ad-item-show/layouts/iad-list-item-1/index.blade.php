@@ -377,7 +377,7 @@
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          <x-iforms::form :id="setting('iad::complaintForm')" />
+          {!! Forms::render(setting('iad::complaintForm'),'iforms::frontend.form.bt-nolabel.form') !!}
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que

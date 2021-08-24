@@ -23,7 +23,7 @@ return [
     'type' => 'select',
     'loadOptions' => [
       'apiRoute' => 'apiRoutes.qform.forms',
-      'select' => ['label' => 'title', 'id' => 'id'],
+      'select' => ['label' => 'title', 'id' => 'systemName'],
     ],
     'props' => [
       'label' => 'Formulario para Denunciar',
