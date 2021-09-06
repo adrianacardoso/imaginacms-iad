@@ -36,6 +36,11 @@
                   <x-media::single-image :alt="$item->title ?? $item->name"
                                          :title="$item->title ?? $item->name"
                                          :src="$itemGallery->extraLargeThumb ?? null"
+                                         :fallback="$itemGallery->path ?? null"
+                                         :extraLargeSrc="$itemGallery->extraLargeThumb ?? null"
+                                         :largeSrc="$itemGallery->largeThumb ?? null"
+                                         :mediumSrc="$itemGallery->mediumThumb ?? null"
+                                         :smallSrc="$itemGallery->smallThumb ?? null"
                                          imgClasses=""/>
                 </a>
               </div>
@@ -88,6 +93,11 @@
                 <x-media::single-image :alt="$item->title ?? $item->name"
                                        :title="$item->title ?? $item->name"
                                        :src="$itemGallery->extraLargeThumb ?? null"
+                                       :fallback="$itemGallery->path ?? null"
+                                       :extraLargeSrc="$itemGallery->extraLargeThumb ?? null"
+                                       :largeSrc="$itemGallery->largeThumb ?? null"
+                                       :mediumSrc="$itemGallery->mediumThumb ?? null"
+                                       :smallSrc="$itemGallery->smallThumb ?? null"
                                        imgClasses=""/>
               </a>
             </div>
