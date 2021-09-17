@@ -27,7 +27,7 @@ class CreateIadAdsTable extends Migration
       $table->integer('city_id')->unsigned();
       $table->foreign('city_id')->references('id')->on('ilocations__cities')->onDelete('restrict');
       $table->integer('featured')->default(0)->unsigned()->nullable();
-      $table->timestamp('uploaded_at')->default('CURRENT_TIMESTAMP')->nullable();
+      $table->timestamp('uploaded_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->nullable();
       $table->text('options')->nullable();
       // Your fields
       $table->timestamps();
