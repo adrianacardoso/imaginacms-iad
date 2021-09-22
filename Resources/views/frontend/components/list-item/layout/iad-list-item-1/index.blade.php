@@ -1,6 +1,6 @@
 <div class="pins">
   <div class="card-pin {{$item->featured ? 'featured' : ''}}">
-   
+
     <figure class="figure" data-toggle="modal" data-target="#modalPin{{$item->id}}">
       @if($item->featured )
         <a class="link-star">
@@ -15,22 +15,24 @@
       <a class="link-like">
         <i class="fa fa-heart"></i>
       </a>
-    
+
     </figure>
-    
+
     <div class="card-body p-0">
       @if(!$embedded)
-      <a href="{{$item->url ?? ''}}">
-  @endif
-        <h5 class="card-title" type="button">
-    
-          {{$item->title}}
-  
-        </h5>
-        @if(!$embedded)
-      </a>
+        <a href="{{$item->url ?? ''}}">
+          @endif
+          <h5 class="card-title" type="button">
+            {{$item->title}}
+            <br>
+            @if(isset($item->fields->where('name','name')->first()->value))
+              {{$item->fields->where('name','name')->first()->value}}
+            @endif
+          </h5>
+          @if(!$embedded)
+        </a>
       @endif
-      
+
       <div id="extraInfo" class="d-inline-block">
         <span class="badge info-badge">
           {{--Medellín--}}
@@ -40,14 +42,14 @@
         </span>
 
         @if(isset(collect($item->fields)->where('name','age')->first()->value))
-        <span class="badge info-badge">
+          <span class="badge info-badge">
           {{--21 años--}}
             {{collect($item->fields)->where('name','age')->first()->value}} años
         </span>
         @endif
 
         @if(!empty($item->min_price))
-        <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+          <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
         @endif
 
         <span class="badge info-badge">{{$item->country->name}}</span>
@@ -61,15 +63,19 @@
             <i class="fa fa-play-circle-o" aria-hidden="true"></i>
             {{count($videos)}}</span>
         @endif
-          @if(count($gallery)>0)
+        @if(count($gallery)>0)
           <span class="badge info-badge photos">
             <i class="fa fa-camera" aria-hidden="true"></i>
             {{count($gallery)}}</span>
         @endif
-        
+        @if($item->checked)
+          <span class="badge info-badge videos">
+          <a class="link-verified" data-toggle="tooltip" title="{{trans('iad::ads.verifiedAd')}}">
+            <i class="fa fa-check-square text-white"></i>
+          </a>
+          </span>
+        @endif
       </div>
-    
     </div>
   </div>
-  
 </div>
