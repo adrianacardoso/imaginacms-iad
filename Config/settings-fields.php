@@ -31,4 +31,29 @@ return [
       'clearable' => true,
     ],
   ],
+  'dateInShow' => [
+    'value' => false,
+    'name' => 'iad::dateInShow',
+    'type' => 'checkbox',
+    'props' => [
+      'label' => 'iad::ads.labelSettingDate'
+    ]
+  ],
+  'selectLayout' => [
+    'value' => "iad-list-item-1",
+    'name' => 'iad::selectLayout',
+    'type' => 'select',
+    'columns' => 'col-6',
+    'props' => [
+      'label' => 'iad::ads.labelSettingLayout',
+      'useInput' => false,
+      'useChips' => false,
+      'multiple' => false,
+      'hideDropdownIcon' => true,
+      'newValueMode' => 'add-unique',
+      'options' => [
+        ['label' => 'Layout 1', 'value' => "iad-list-item-1"],
+      ]
+    ]
+  ],
 ];
