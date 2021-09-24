@@ -25,5 +25,9 @@ return [
   'verifiedAd' => 'Anuncio verificado',
   'labelSettingDate' => 'Mostrar fecha en los anuncios',
   'labelSettingLayout' => 'Elegir layout a usar',
-  'titleMap' => 'Ubicación Geográfica'
-];
+  'titleMap' => 'Ubicación Geográfica',
+  'labelSettingMap' => 'Utilizar google maps',
+  'adWithTermsAndConditions' => 'Terminos y condiciones',
+  'adWithPoliticsOfPrivacy' => 'Politicas de privacidad',
+  'groupAds' => 'Anuncios'
+ ];

@@ -111,4 +111,18 @@ class Ad extends Model
   {
     return trans('Test entity name');
   }
+
+  public function getDefaultPriceAttribute()
+  {
+    //instance default price
+    $defaultPrice = 0;
+
+    //Search default price in list price
+    if (isset($this->options->prices) && is_array($this->options->prices)) {
+      $defaultPrice = collect($this->options->prices)->where('default', '1')->first();
+    }
+
+    //response
+    return $defaultPrice ? $defaultPrice->value : $this->min_price;
+  }
 }

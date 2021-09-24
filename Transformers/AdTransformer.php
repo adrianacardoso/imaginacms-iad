@@ -46,6 +46,7 @@ class AdTransformer extends JsonResource
       'checked' => $this->checked ? '1' : '0',
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
+      'defaultPrice' => $this->defaultPrice,
     ];
 
     // Return data with available translations

@@ -37,6 +37,7 @@
         <span class="badge info-badge">
           {{--Medellín--}}
           @if(isset($item->city->name))
+            <i class="fa fa-map-marker"></i>
             {{$item->city->name}}
           @endif
         </span>
@@ -48,8 +49,8 @@
         </span>
         @endif
 
-        @if(!empty($item->min_price))
-          <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+        @if(!empty($item->defaultPrice))
+          <span class="badge info-badge">${{formatMoney($item->defaultPrice)}}</span>
         @endif
 
         <span class="badge info-badge">{{$item->country->name}}</span>

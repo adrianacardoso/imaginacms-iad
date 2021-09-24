@@ -146,8 +146,8 @@
         </span>
       @endif
 
-      @if(!empty($item->min_price))
-        <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+      @if(!empty($item->defaultPrice))
+        <span class="badge info-badge">${{formatMoney($item->defaultPrice)}}</span>
       @endif
       <span class="badge info-badge">{{$item->country->name}}</span>
       @if($item->status == 3)
@@ -310,11 +310,63 @@
     </div>
   @endif
 
-  @if(!empty($item->map->lat) &&  !empty($item->map->lng))
+  @if(!empty($item->lat) && !empty($item->lng))
     <div class="col-12">
       <h2>{{trans('iad::ads.titleMap')}}</h2>
       <div class="section-map">
-        @include('partials.map')
+        <div class="map bg-light">
+          @if(setting('iad::mapInShow'))
+            <div class="content">
+              <div id="map_canvas_google" style="width:100%; height:314px"></div>
+            </div>
+          @else
+          <div class="content">
+            <div id="map_canvas" style="width:100%; height:314px"></div>
+          </div>
+          @endif
+        </div>
+        @section('scripts')
+          @parent
+          <script type='text/javascript'
+                  src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css"
+                type="text/css"/>
+          <script type="text/javascript">
+
+            function initialize() {
+              var map = L.map('map_canvas').setView([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}], 16);
+
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              }).addTo(map);
+
+
+              L.marker([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}]).addTo(map)
+                .bindPopup('{{ $item->title ?? 'Dirección' }}')
+                .openPopup();
+            }
+
+            $(document).ready(function () {
+              initialize();
+            });
+          </script>
+        @stop
+        <script>
+          // Initialize and add the map
+          $(document).ready(function () {
+            // The map, centered at Uluru
+            var map{{$item->id}} = new google.maps.Map(document.getElementById("map_canvas_google"), {
+              zoom: 16,
+              center: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+            });
+            // The marker, positioned at Uluru
+            var marker{{$item->id}} = new google.maps.Marker({
+              position: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+              map: map{{$item->id}},
+            });
+          });
+
+        </script>
       </div>
     </div>
   @endif
@@ -347,7 +399,8 @@
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          {!! Forms::render(setting('iad::complaintForm'),'iforms::frontend.form.bt-nolabel.form') !!}
+          <x-iforms::form :id="setting('iad::complaintForm')" :fieldsParams="['adname' => ['readonly' => 'readonly' , 'value' => $item->title]]" />
+{{--          {!! Forms::render(,'iforms::frontend.form.bt-nolabel.form') !!}--}}
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que
