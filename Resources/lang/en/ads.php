@@ -28,5 +28,6 @@ return [
   'labelSettingMap' => 'Use google maps',
   'adWithTermsAndConditions' => 'Terms and conditions',
   'adWithPoliticsOfPrivacy' => 'Politics of privacy',
-  'groupAds' => 'Ads'
+  'groupAds' => 'Ads',
+  'contactFields' => 'Contact fields'
 ];

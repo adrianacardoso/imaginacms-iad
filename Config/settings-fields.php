@@ -88,4 +88,23 @@ return [
       'type' => 'text'
     ],
   ],
+  'contactFields' => [
+    'name' => 'iad::contactFields',
+    'value' => ['phone', 'whatsapp', 'facebook', 'instagram', 'twitter', 'youtube'],
+    'type' => 'select',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'multiple' => true,
+      'useChips' => true,
+      'label' => 'iad::ads.contactFields',
+      'options' => [
+        ['label' => 'Phone', 'value' => 'phone'],
+        ['label' => 'Whatsapp', 'value' => 'whatsapp'],
+        ['label' => 'Facebook', 'value' => 'facebook'],
+        ['label' => 'Instagram', 'value' => 'instagram'],
+        ['label' => 'Twitter', 'value' => 'twitter'],
+        ['label' => 'Youtube', 'value' => 'youtube']
+      ]
+    ],
+  ],
 ];

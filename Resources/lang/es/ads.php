@@ -29,5 +29,6 @@ return [
   'labelSettingMap' => 'Utilizar google maps',
   'adWithTermsAndConditions' => 'Terminos y condiciones',
   'adWithPoliticsOfPrivacy' => 'Politicas de privacidad',
-  'groupAds' => 'Anuncios'
+  'groupAds' => 'Anuncios',
+  'contactFields' => 'Campos de contactos'
  ];
