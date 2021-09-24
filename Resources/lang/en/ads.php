@@ -24,5 +24,9 @@ return [
   'verifiedAd' => 'Verified Ad',
   'labelSettingDate' => 'Show date in ads',
   'labelSettingLayout' => 'Choose the layout to use',
-  'titleMap' => 'Geographic location'
+  'titleMap' => 'Geographic location',
+  'labelSettingMap' => 'Use google maps',
+  'adWithTermsAndConditions' => 'Terms and conditions',
+  'adWithPoliticsOfPrivacy' => 'Politics of privacy',
+  'groupAds' => 'Ads'
 ];

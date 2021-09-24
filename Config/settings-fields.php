@@ -23,7 +23,7 @@ return [
     'type' => 'select',
     'loadOptions' => [
       'apiRoute' => 'apiRoutes.qform.forms',
-      'select' => ['label' => 'title', 'id' => 'systemName'],
+      'select' => ['label' => 'title', 'id' => 'id'],
     ],
     'props' => [
       'label' => 'Formulario para Denunciar',
@@ -35,6 +35,7 @@ return [
     'value' => false,
     'name' => 'iad::dateInShow',
     'type' => 'checkbox',
+    'group' => 'iad::ads.groupAds',
     'props' => [
       'label' => 'iad::ads.labelSettingDate'
     ]
@@ -55,5 +56,36 @@ return [
         ['label' => 'Layout 1', 'value' => "iad-list-item-1"],
       ]
     ]
+  ],
+  'mapInShow' => [
+    'value' => false,
+    'name' => 'iad::mapInShow',
+    'type' => 'checkbox',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.labelSettingMap'
+    ]
+  ],
+  //Enable register with oliticsOfPrivacy
+  'adWithPoliticsOfPrivacy' => [
+    'name' => 'iad::adWithPoliticsOfPrivacy',
+    'value' => null,
+    'type' => 'input',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.adWithPoliticsOfPrivacy',
+      'type' => 'text'
+    ],
+  ],
+  //Enable register with DataTreatment
+  'adWithTermsAndConditions' => [
+    'name' => 'iad::adWithTermsAndConditions',
+    'value' => null,
+    'type' => 'input',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.adWithTermsAndConditions',
+      'type' => 'text'
+    ],
   ],
 ];
