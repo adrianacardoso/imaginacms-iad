@@ -125,4 +125,5 @@ class Ad extends Model
     //response
     return $defaultPrice ? $defaultPrice->value : $this->min_price;
   }
+
 }
