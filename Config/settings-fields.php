@@ -57,15 +57,6 @@ return [
       ]
     ]
   ],
-  'mapInShow' => [
-    'value' => false,
-    'name' => 'iad::mapInShow',
-    'type' => 'checkbox',
-    'group' => 'iad::ads.groupAds',
-    'props' => [
-      'label' => 'iad::ads.labelSettingMap'
-    ]
-  ],
   //Enable register with oliticsOfPrivacy
   'adWithPoliticsOfPrivacy' => [
     'name' => 'iad::adWithPoliticsOfPrivacy',

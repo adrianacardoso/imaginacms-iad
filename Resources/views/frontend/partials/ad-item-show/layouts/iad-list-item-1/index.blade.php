@@ -315,11 +315,11 @@
       <h2>{{trans('iad::ads.titleMap')}}</h2>
       <div class="section-map">
         <div class="map bg-light">
-          @if(setting('iad::mapInShow'))
+          @if(setting('isite::mapInShow') == 'googleMaps')
             <div class="content">
               <div id="map_canvas_google" style="width:100%; height:314px"></div>
             </div>
-          @else
+          @elseif(setting('isite::mapInShow') == 'openStreet')
           <div class="content">
             <div id="map_canvas" style="width:100%; height:314px"></div>
           </div>
