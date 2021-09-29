@@ -22,7 +22,7 @@ return [
     'name' => 'iad::complaintForm',
     'type' => 'select',
     'loadOptions' => [
-      'apiRoute' => 'apiRoutes.form.forms',
+      'apiRoute' => 'apiRoutes.qform.forms',
       'select' => ['label' => 'title', 'id' => 'id'],
     ],
     'props' => [
