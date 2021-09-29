@@ -22,7 +22,7 @@ return [
     'name' => 'iad::complaintForm',
     'type' => 'select',
     'loadOptions' => [
-      'apiRoute' => 'apiRoutes.qform.forms',
+      'apiRoute' => 'apiRoutes.form.forms',
       'select' => ['label' => 'title', 'id' => 'id'],
     ],
     'props' => [
@@ -55,15 +55,6 @@ return [
       'options' => [
         ['label' => 'Layout 1', 'value' => "iad-list-item-1"],
       ]
-    ]
-  ],
-  'mapInShow' => [
-    'value' => false,
-    'name' => 'iad::mapInShow',
-    'type' => 'checkbox',
-    'group' => 'iad::ads.groupAds',
-    'props' => [
-      'label' => 'iad::ads.labelSettingMap'
     ]
   ],
   //Enable register with oliticsOfPrivacy
