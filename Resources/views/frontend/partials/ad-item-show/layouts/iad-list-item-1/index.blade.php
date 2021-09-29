@@ -18,11 +18,11 @@
                 href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
                 data-fancybox="gallery" data-caption="{{$item->title}}">
 
-                  <x-media::single-image :alt="$item->title ?? $item->name"
-                                         :title="$item->title ?? $item->name"
-                                         :isMedia="true"
-                                         imgClasses=""
-                                         :mediaFiles="$item->mediaFiles()"/>
+                <x-media::single-image :alt="$item->title ?? $item->name"
+                                       :title="$item->title ?? $item->name"
+                                       :isMedia="true"
+                                       imgClasses=""
+                                       :mediaFiles="$item->mediaFiles()"/>
 
               </a>
             </div>
@@ -73,15 +73,15 @@
 
         <div class="owl-carousel owl-image-mini owl-image-mini{{$item->id}} owl-theme">
           <div class="item">
-              <a data-slide-to="0" data-target="#carouselGallery"
-                 href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
-                data-fancybox="gallery" data-caption="{{$item->title}}">
+            <a data-slide-to="0" data-target="#carouselGallery"
+               href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
+               data-fancybox="gallery" data-caption="{{$item->title}}">
               <x-media::single-image :alt="$item->title ?? $item->name"
                                      :title="$item->title ?? $item->name"
                                      :isMedia="true"
                                      imgClasses=""
                                      :mediaFiles="$item->mediaFiles()"/>
-              </a>
+            </a>
 
           </div>
           @php($dataSlideTo = 1)
@@ -89,7 +89,7 @@
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
                  href="{{$itemGallery->extraLargeThumb}}"
-                data-fancybox="gallery" data-caption="{{$item->title}}">
+                 data-fancybox="gallery" data-caption="{{$item->title}}">
                 <x-media::single-image :alt="$item->title ?? $item->name"
                                        :title="$item->title ?? $item->name"
                                        :src="$itemGallery->extraLargeThumb ?? null"
@@ -102,7 +102,7 @@
               </a>
             </div>
             @php($dataSlideTo++)
-            @endforeach
+          @endforeach
           @foreach($videos ?? [] as $video)
             <div class="item">
               <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
@@ -127,22 +127,27 @@
 
       <h2 class="modal-title mb-3">
         <a href="{{$item->url}}">{{$item->title}} </a>
+        <br>
+        @if(isset($item->fields->where('name','name')->first()->value))
+          {{$item->fields->where('name','name')->first()->value}}
+        @endif
       </h2>
       <span class="badge info-badge">
           {{--Medellín--}}
         @if(isset($item->city->name))
+          <i class="fa fa-map-marker"></i>
           {{$item->city->name}}
         @endif
         </span>
       @if(isset(collect($item->fields)->where('name','age')->first()->value))
-      <span class="badge info-badge">
+        <span class="badge info-badge">
           {{--21 años--}}
           {{collect($item->fields)->where('name','age')->first()->value}} años
         </span>
       @endif
 
-      @if(!empty($item->min_price))
-      <span class="badge info-badge">${{formatMoney($item->min_price)}}</span>
+      @if(!empty($item->defaultPrice))
+        <span class="badge info-badge">${{formatMoney($item->defaultPrice)}}</span>
       @endif
       <span class="badge info-badge">{{$item->country->name}}</span>
       @if($item->status == 3)
@@ -154,22 +159,24 @@
           <i class="fa fa-play-circle-o" aria-hidden="true"></i>
           {{count($videos)}}</span>
       @endif
-
-      @php($videos = $item->mediaFiles()->videos)
-      @if(count($videos)>0)
-        <span class="badge info-badge videos">{{count($videos)}}</span>
-      @endif
       @php($gallery = $item->mediaFiles()->gallery)
       @if(count($gallery)>0)
         <span class="badge info-badge photos">
           <i class="fa fa-camera" aria-hidden="true"></i>
           {{count($gallery)}}</span>
       @endif
-
-      <p class="modal-date my-3">
-        {{date("d/m/Y H:ia",strtotime($item->created_at))}}
-      </p>
-
+      @if($item->checked)
+        <span class="badge info-badge videos">
+          <a class="link-verified" data-toggle="tooltip" title="{{trans('iad::ads.verifiedAd')}}">
+            <i class="fa fa-check-square text-white"></i>
+          </a>
+          {{trans('iad::ads.verifiedAd')}}</span>
+      @endif
+      @if(setting('iad::dateInShow'))
+        <p class="modal-date my-3">
+          {{date("d/m/Y H:ia",strtotime($item->created_at))}}
+        </p>
+      @endif
 
       <div class="modal-description">
         {!! nl2br ($item->description) !!}
@@ -181,28 +188,30 @@
       </div>
       <div class="group-btn">
         @if(isset($item->options->whatsapp))
-          <a class="btn btn-whatsapp" href="https://wa.me/+57{{ $item->options->whatsapp }}?text={!! setting('iad::whatsappTextAnuncio') !!}" target="_blank">
-            <i class="fa fa-whatsapp"></i> WhatsApp
+          <a class="btn btn-whatsapp"
+             href="https://wa.me/+57{{ $item->options->whatsapp }}?text={!! setting('iad::whatsappTextAnuncio') !!}"
+             target="_blank">
+            <i class="fa fa-whatsapp"> </i> WhatsApp
           </a>
         @endif
-          @if(isset($item->options->facebook))
-            <a class="btn btn-facebook" href="https://www.facebook.com/{{ $item->options->facebook }}" target="_blank">
-              <i class="fa fa-facebook"></i> Facebook
-            </a>
-          @endif
-          @if(isset($item->options->instagram))
+        @if(isset($item->options->facebook))
+          <a class="btn btn-facebook" href="https://www.facebook.com/{{ $item->options->facebook }}" target="_blank">
+            <i class="fa fa-facebook"> </i> Facebook
+          </a>
+        @endif
+        @if(isset($item->options->instagram))
           <a class="btn btn-instagram" href="https://instagram.com/{{$item->options->instagram}}" target="_blank">
-            <i class="fa fa-instagram"></i> Instagram
+            <i class="fa fa-instagram"> </i> Instagram
           </a>
         @endif
 
-          @if(isset($item->options->twitter))
+        @if(isset($item->options->twitter))
           <a class="btn btn-twitter"
              href="https://twitter.com/{{$item->options->twitter}}" target="_blank">
-            <i class="fa fa-twitter"></i>Twitter
+            <i class="fa fa-twitter"> </i>Twitter
           </a>
         @endif
-          @if(isset($item->options->youtube))
+        @if(isset($item->options->youtube))
           <a class="btn btn-youtube"
              href="https://youtube.com/{{$item->options->youtube}}" target="_blank">
             <i class="fa fa-youtube"></i>Youtube
@@ -224,139 +233,142 @@
 
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <hr class="mb-4">
-    </div>
-  </div>
   @if(isset($item->options->prices) && !empty($item->options->prices) || isset($item->options->schedule) && !empty($item->options->schedule))
-  <div class="row">
-    <!--Rates-->
-    @if(isset($item->options->prices) && !empty($item->options->prices))
-      <div class="col-lg-6 pb-4">
-        <h3 class="modal-title mb-3">
-          Tarifas
-        </h3>
-        @foreach($item->options->prices ?? [] as $rate)
-          <div class="row align-items-center modal-item">
-            <div class="col-5 col-sm-3">{{$rate->description}}</div>
-            <div class="col-2 col-sm-5">
-              <hr class="solid">
+    <div class="row">
+      <!--Rates-->
+      @if(isset($item->options->prices) && !empty($item->options->prices))
+        <div class="col-lg-6 pb-4">
+          <h3 class="modal-title mb-3">
+            Tarifas
+          </h3>
+          @foreach($item->options->prices ?? [] as $rate)
+            <div class="row align-items-center modal-item">
+              <div class="col-5 col-sm-3">{{$rate->description}}</div>
+              <div class="col-5 col-sm-4 text-primary">${{formatMoney($rate->value)}}</div>
             </div>
-            <div class="col-5 col-sm-4 text-primary">${{formatMoney($rate->value)}}</div>
-          </div>
-        @endforeach
-      </div>
-    @endif
-  <!--Schedule-->
-    @if(isset($item->options->schedule) && isset($item->options->statusSchedule) && $item->options->statusSchedule)
-      <div class="col-lg-6 pb-4">
-        <h3 class="modal-title mb-3">
-          Horarios
-        </h3>
-        @foreach($item->options->schedule ?? [] as $schedule)
-          <div class="row align-items-center modal-item">
-            <div class="col-5 col-sm-4">
+          @endforeach
+        </div>
+      @endif
+    <!--Schedule-->
+      @if(isset($item->options->schedule) && isset($item->options->statusSchedule) && $item->options->statusSchedule)
+        <div class="col-lg-6 pb-4">
+          <h3 class="modal-title mb-3">
+            Horarios
+          </h3>
+          @foreach($item->options->schedule ?? [] as $schedule)
+            <div class="row align-items-center modal-item">
+              <div class="col-5 col-sm-4">
 
-              {{trans("iad::schedules.days.".$schedule->name)}}
+                {{trans("iad::schedules.days.".$schedule->name)}}
 
+              </div>
+              <div class="col-5 col-sm-4 text-primary">
+                @if($schedule->schedules == 1)
+                  {{trans("iad::schedules.schedules.24Hours")}}
+                @elseif($schedule->schedules == 0)
+                  {{trans("iad::schedules.schedules.closed")}}
+                @else
+                  @foreach($schedule->schedules ?? [] as $shift)
+                    {{date("g:ia",strtotime($shift->from))}} -
+                    {{date("g:ia",strtotime($shift->to))}}
+                  @endforeach
+                @endif
+              </div>
             </div>
-            <div class="col-2 col-sm-4">
-              <hr class="solid">
-            </div>
-            <div class="col-5 col-sm-4 text-primary">
-              @if($schedule->schedules == 1)
-                {{trans("iad::schedules.schedules.24Hours")}}
-              @elseif($schedule->schedules == 0)
-                {{trans("iad::schedules.schedules.closed")}}
-              @else
-                @foreach($schedule->schedules ?? [] as $shift)
-                  {{date("g:ia",strtotime($shift->from))}} -
-                  {{date("g:ia",strtotime($shift->to))}}
-                @endforeach
-              @endif
-            </div>
-          </div>
-        @endforeach
-      </div>
-      <div class="col-lg-12 pb-4">
-        <hr>
-      </div>
-    @endif
+          @endforeach
+        </div>
+      @endif
 
-   
-  </div>
-   @endif
+
+    </div>
+  @endif
 
   @php($categories = Modules\Iad\Entities\Category::all())
   @php($categories = $categories->toTree())
 
   @if(!empty($item->categories))
-  <div class="row">
-    @foreach($categories ?? [] as $categoryParent)
-      @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
-      @if(!empty($categoriesAd))
+    <div class="row">
+      @foreach($categories ?? [] as $categoryParent)
+        @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
+        @if(!empty($categoriesAd))
 
-        <div class="col-12 col-md-4 pb-4">
-          <h3 class="modal-title mb-3">
+          <div class="col-12 col-md-4 pb-4">
+            <h3 class="modal-title mb-3">
 
-            {{$categoryParent->title}}
-          </h3>
-          @foreach($categoriesAd ?? [] as $categoryId)
-            @php($categoryAd = $item->categories->where("id",$categoryId)->first())
-            <span class="badge info-badge">
+              {{$categoryParent->title}}
+            </h3>
+            @foreach($categoriesAd ?? [] as $categoryId)
+              @php($categoryAd = $item->categories->where("id",$categoryId)->first())
+              <span class="badge info-badge">
               <a href="{{url("?filter[categories][0]=$categoryId")}}">{{$categoryAd->title}}</a>
               </span>
-          @endforeach
-        </div>
-      @endif
-    @endforeach
+            @endforeach
+          </div>
+        @endif
+      @endforeach
 
-    <div class="col-lg-12 pb-4">
-      <hr>
     </div>
-  </div>
   @endif
 
-  @if(isset($item->options->map->title) && !empty($item->options->map->title) &&  !empty($item->options->map->lat) && !empty($item->options->map->lng))
-    <div class="row">
-
-
-      <div class="col-lg-8 pb-4">
-        <h3 class="modal-title mb-3">
-          Ubicación
-        </h3>
-        <div id="pin-map{{$item->id}}">
+  @if(!empty($item->lat) && !empty($item->lng))
+    <div class="col-12">
+      <h2>{{trans('iad::ads.titleMap')}}</h2>
+      <div class="section-map">
+        <div class="map bg-light">
+          @if(setting('iad::mapInShow'))
+            <div class="content">
+              <div id="map_canvas_google" style="width:100%; height:314px"></div>
+            </div>
+          @else
+          <div class="content">
+            <div id="map_canvas" style="width:100%; height:314px"></div>
+          </div>
+          @endif
         </div>
+        @section('scripts')
+          @parent
+          <script type='text/javascript'
+                  src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css"
+                type="text/css"/>
+          <script type="text/javascript">
+
+            function initialize() {
+              var map = L.map('map_canvas').setView([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}], 16);
+
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              }).addTo(map);
+
+
+              L.marker([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}]).addTo(map)
+                .bindPopup('{{ $item->title ?? 'Dirección' }}')
+                .openPopup();
+            }
+
+            $(document).ready(function () {
+              initialize();
+            });
+          </script>
+        @stop
+        <script>
+          // Initialize and add the map
+          $(document).ready(function () {
+            // The map, centered at Uluru
+            var map{{$item->id}} = new google.maps.Map(document.getElementById("map_canvas_google"), {
+              zoom: 16,
+              center: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+            });
+            // The marker, positioned at Uluru
+            var marker{{$item->id}} = new google.maps.Marker({
+              position: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+              map: map{{$item->id}},
+            });
+          });
+
+        </script>
       </div>
-
     </div>
-
-      <style type="text/css">
-        #pin-map{{$item->id}}   {
-          height: 400px;
-          width: 100%;
-        }
-      </style>
-
-
-    <script>
-      // Initialize and add the map
-      $(document).ready(function () {
-        // The map, centered at Uluru
-        var map{{$item->id}} = new google.maps.Map(document.getElementById("pin-map{{$item->id}}"), {
-          zoom: 16,
-          center: {lat: {{$item->options->map->lat}}, lng: {{$item->options->map->lng}} },
-        });
-        // The marker, positioned at Uluru
-        var marker{{$item->id}} = new google.maps.Marker({
-          position: {lat: {{$item->options->map->lat}}, lng: {{$item->options->map->lng}} },
-          map: map{{$item->id}},
-        });
-      });
-
-    </script>
-
   @endif
 
   <div class="featured-pins">
@@ -373,7 +385,7 @@
       repository="Modules\Iad\Repositories\AdRepository"
       itemComponent="iad::list-item"
     />
-    
+
   </div>
   <div class="row justify-content-center">
     <div class="col-auto">
@@ -387,7 +399,8 @@
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          {!! Forms::render(setting('iad::complaintForm'),'iforms::frontend.form.bt-nolabel.form') !!}
+          <x-iforms::form :id="setting('iad::complaintForm')" :fieldsParams="['adname' => ['readonly' => 'readonly' , 'value' => $item->title]]" />
+{{--          {!! Forms::render(,'iforms::frontend.form.bt-nolabel.form') !!}--}}
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que
@@ -400,60 +413,58 @@
 </div>
 
 
-  <script>
+<script>
 
-    $(document).ready(function () {
+  $(document).ready(function () {
 
-      $('.owl-image-mini{{$item->id}}').owlCarousel({
-        responsiveClass: true,
-        nav: false,
-        video: true,
-        margin: 10,
-        dots: false,
-        lazyContent: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive: {
-          0: {
-            items: 4
-          },
-          768: {
-            items: 4
-          },
-          992: {
-            items: 4
-          }
+    $('.owl-image-mini{{$item->id}}').owlCarousel({
+      responsiveClass: true,
+      nav: false,
+      video: true,
+      margin: 10,
+      dots: false,
+      lazyContent: true,
+      autoplay: true,
+      autoplayHoverPause: true,
+      responsive: {
+        0: {
+          items: 4
+        },
+        768: {
+          items: 4
+        },
+        992: {
+          items: 4
         }
-      });
-
-
-
-    });
-    $(document).ready(function () {
-
-      $('#featuredPins{{$item->id}}Carousel').owlCarousel({
-        responsiveClass: true,
-        nav: false,
-        margin: 15,
-        dots: false,
-        lazyContent: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive: {
-          0: {
-            items: 2
-          },
-          768: {
-            items: 3
-          },
-          992: {
-            items: 4
-          }
-        }
-      });
-
-
-
+      }
     });
 
-  </script>
+
+  });
+  $(document).ready(function () {
+
+    $('#featuredPins{{$item->id}}Carousel').owlCarousel({
+      responsiveClass: true,
+      nav: false,
+      margin: 15,
+      dots: false,
+      lazyContent: true,
+      autoplay: true,
+      autoplayHoverPause: true,
+      responsive: {
+        0: {
+          items: 2
+        },
+        768: {
+          items: 3
+        },
+        992: {
+          items: 4
+        }
+      }
+    });
+
+
+  });
+
+</script>
