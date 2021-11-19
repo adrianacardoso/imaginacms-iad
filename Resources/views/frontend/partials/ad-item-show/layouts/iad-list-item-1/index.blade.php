@@ -315,11 +315,11 @@
       <h2>{{trans('iad::ads.titleMap')}}</h2>
       <div class="section-map">
         <div class="map bg-light">
-          @if(setting('iad::mapInShow'))
+          @if(setting('isite::mapInShow') == 'googleMaps')
             <div class="content">
               <div id="map_canvas_google" style="width:100%; height:314px"></div>
             </div>
-          @else
+          @elseif(setting('isite::mapInShow') == 'openStreet')
           <div class="content">
             <div id="map_canvas" style="width:100%; height:314px"></div>
           </div>
@@ -399,7 +399,7 @@
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          <x-iforms::form :id="setting('iad::complaintForm')" :fieldsParams="['adname' => ['readonly' => 'readonly' , 'value' => $item->title]]" />
+          <x-iforms::form :id="setting('iad::complaintForm')" :fieldsParams="['adName' => ['readonly' => 'readonly' , 'value' => $item->title]]" />
 {{--          {!! Forms::render(,'iforms::frontend.form.bt-nolabel.form') !!}--}}
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
