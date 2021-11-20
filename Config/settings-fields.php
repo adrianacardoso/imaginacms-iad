@@ -1,14 +1,6 @@
 <?php
 
 return [
-  'activateUploadsJob' => [
-    'value' => false,
-    'name' => 'iad::activateUploadsJob',
-    'type' => 'checkbox',
-    'props' => [
-      'label' => 'Activar Job de Subidas automáticas'
-    ]
-  ],
   'whatsappTextAnuncio' => [
     'value' => '¡Hola! Quiero conocer mas...',
     'name' => 'iad::whatsappTextAnuncio',
@@ -30,15 +22,6 @@ return [
       'multiple' => false,
       'clearable' => true,
     ],
-  ],
-  'dateInShow' => [
-    'value' => false,
-    'name' => 'iad::dateInShow',
-    'type' => 'checkbox',
-    'group' => 'iad::ads.groupAds',
-    'props' => [
-      'label' => 'iad::ads.labelSettingDate'
-    ]
   ],
   'selectLayout' => [
     'value' => "iad-list-item-1",
@@ -98,4 +81,50 @@ return [
       ]
     ],
   ],
+  'usersToNotify' => [
+    'name' => 'iad::usersToNotify',
+    'value' => [],
+    'type' => 'select',
+    'columns' => 'col-12 col-md-6',
+    'loadOptions' => [
+      'apiRoute' => 'apiRoutes.quser.users',
+      'select' => ['label' => 'email', 'id' => 'id'],
+    ],
+    'props' => [
+      'label' => 'iad::common.settings.usersToNotify',
+      'multiple' => true,
+      'clearable' => true,
+    ],
+  ],
+  'activateUploadsJob' => [
+    'value' => '0',
+    'name' => 'iad::activateUploadsJob',
+    'type' => 'checkbox',
+    'props' => [
+      'label' => 'Activar Job de Subidas automáticas',
+      'trueValue' => "1",
+      'falseValue' => "0",
+    ]
+  ],
+  'dateInShow' => [
+    'value' => '0',
+    'name' => 'iad::dateInShow',
+    'type' => 'checkbox',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.labelSettingDate',
+      'trueValue' => "1",
+      'falseValue' => "0",
+    ]
+  ],
+  'allowRequestForChecked' => [
+    'value' => "0",
+    'name' => 'iad::allowRequestForChecked',
+    'type' => 'checkbox',
+    'props' => [
+      'label' => 'iad::iad.settings.allowRequestForChecked',
+      'trueValue' => "1",
+      'falseValue' => "0",
+    ]
+  ]
 ];
