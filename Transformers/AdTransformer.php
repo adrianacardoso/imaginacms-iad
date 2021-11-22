@@ -9,6 +9,7 @@ use Modules\Iprofile\Transformers\UserTransformer;
 use Modules\Ilocations\Transformers\CountryTransformer;
 use Modules\Ilocations\Transformers\ProvinceTransformer;
 use Modules\Ilocations\Transformers\CityTransformer;
+use Modules\Ilocations\Transformers\NeighborhoodTransformer;
 use Modules\Iad\Transformers\CategoryTransformer;
 use Modules\Iad\Transformers\FieldTransformer;
 use Modules\Iad\Transformers\ScheduleTransformer;
@@ -29,9 +30,11 @@ class AdTransformer extends JsonResource
       'maxPrice' => $this->when(isset($this->max_price), $this->max_price),
       'countryId' => $this->when(isset($this->country_id), $this->country_id),
       'provinceId' => $this->when(isset($this->province_id), $this->province_id),
+      'neighborhoodId' => $this->when(isset($this->neighborhood_id), $this->neighborhood_id),
       'cityId' => $this->when(isset($this->city_id), $this->city_id),
       'lat' => $this->when(isset($this->lat), $this->lat),
       'lng' => $this->when(isset($this->lng), $this->lng),
+      'sortOrder' => $this->when(isset($this->sort_order), $this->sort_order),
       'featured' => $this->when(isset($this->featured), $this->featured),
       'options' => $this->when(isset($this->options), $this->options),
       'user' => new UserTransformer($this->whenLoaded('user')),
@@ -41,6 +44,7 @@ class AdTransformer extends JsonResource
       'country' => new CountryTransformer($this->whenLoaded('country')),
       'province' => new ProvinceTransformer($this->whenLoaded('province')),
       'city' => new CityTransformer($this->whenLoaded('city')),
+      'neighborhood' => new NeighborhoodTransformer($this->whenLoaded('neighborhood')),
       'adUps' => AdUpTransformer::collection($this->whenLoaded('adUps')),
       'mediaFiles' => $this->mediaFiles(),
       'checked' => $this->checked ? '1' : '0',

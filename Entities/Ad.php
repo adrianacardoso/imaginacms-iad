@@ -6,6 +6,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Media\Support\Traits\MediaRelation;
 use Modules\Iad\Entities\Category;
+use Modules\Iad\Entities\Neighborhood;
 use Modules\Iad\Entities\Field;
 use Modules\Iad\Entities\Schedule;
 use Modules\Ilocations\Entities\Country;
@@ -27,9 +28,11 @@ class Ad extends Model
     'country_id',
     'province_id',
     'city_id',
+    'neighborhood_id',
     'lat',
     'lng',
     'featured',
+    'sort_order',
     'options',
     'uploaded_at',
     'checked',
@@ -78,6 +81,12 @@ class Ad extends Model
   public function city()
   {
     return $this->belongsTo(City::class);
+  }
+
+
+  public function neighborhood()
+  {
+    return $this->belongsTo(Neigborhood::class);
   }
 
   public function getStatusNameAttribute()
