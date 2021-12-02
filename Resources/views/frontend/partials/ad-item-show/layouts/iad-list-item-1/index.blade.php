@@ -133,10 +133,18 @@
         @endif
       </h2>
       <span class="badge info-badge">
-          {{--Medellín--}}
+          {{--Ciudad--}}
         @if(isset($item->city->name))
           <i class="fa fa-map-marker"></i>
           {{$item->city->name}}
+        @endif
+        </span>
+      <span class="badge info-badge">
+          {{--Barrio--}}
+          {{--Barrio--}}
+        @if(isset($item->neighborhood->name))
+          <i class="fa fa-thumb-tack"></i>
+          {{$item->neighborhood->name}}
         @endif
         </span>
       @if(isset(collect($item->fields)->where('name','age')->first()->value))
@@ -387,10 +395,9 @@
     />
 
   </div>
-  <div class="row justify-content-center">
+  <div id="report" class="row justify-content-center">
     <div class="col-auto">
-      <a class="btn btn-flag" data-toggle="collapse" href="#collapsePin{{$item->id}}" role="button"
-         aria-expanded="false" aria-controls="collapsePin{{$item->id}}">
+      <a class="btn btn-flag" {{isset($inModal) && $inModal ? 'onclick=Iad__goToReport(event,\''.$item->url."#report".'\')' : 'data-toggle=collapse aria-expanded=false aria-controls=collapsePin'.$item->id}} href="{{isset($inModal) && $inModal ? $item->url."#report" : "#collapsePin".$item->id}}" role="button">
         <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
         Denunciar éste anuncio
       </a>
@@ -414,9 +421,18 @@
 
 
 <script>
-
+  
+  function Iad__goToReport(event,url){
+    event.preventDefault();
+    console.warn("url",url)
+    window.location.href=url
+    window.location.reload(true)
+  }
+  
+  
   $(document).ready(function () {
 
+ 
     $('.owl-image-mini{{$item->id}}').owlCarousel({
       responsiveClass: true,
       nav: false,

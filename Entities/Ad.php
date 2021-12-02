@@ -6,12 +6,12 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Media\Support\Traits\MediaRelation;
 use Modules\Iad\Entities\Category;
-use Modules\Iad\Entities\Neighborhood;
 use Modules\Iad\Entities\Field;
 use Modules\Iad\Entities\Schedule;
 use Modules\Ilocations\Entities\Country;
 use Modules\Ilocations\Entities\Province;
 use Modules\Ilocations\Entities\City;
+use Modules\Ilocations\Entities\Neighborhood;
 use Modules\Iad\Entities\AdStatus;
 
 class Ad extends Model
@@ -86,7 +86,7 @@ class Ad extends Model
 
   public function neighborhood()
   {
-    return $this->belongsTo(Neigborhood::class);
+    return $this->belongsTo(Neighborhood::class);
   }
 
   public function getStatusNameAttribute()
