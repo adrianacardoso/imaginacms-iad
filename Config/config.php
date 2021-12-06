@@ -181,7 +181,7 @@ return [
   ],
 
   //DEfine entities allowed to limit with Iplan Module
-  'limitEntities' => [
+  'limitableEntities' => [
     [
       'entity' => 'Modules\Iad\Entities\Ad',
       'name' => 'Anuncio',
