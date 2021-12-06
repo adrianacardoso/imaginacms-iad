@@ -126,5 +126,15 @@ return [
       'trueValue' => "1",
       'falseValue' => "0",
     ]
-  ]
+  ],
+  'ratioLocationFilter' => [
+    'name' => 'iad::ratioLocationFilter',
+    'value' => null,
+    'type' => 'input',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.ratioLocationFilter',
+      'type' => 'number'
+    ],
+  ],
 ];

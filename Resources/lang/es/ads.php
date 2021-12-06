@@ -30,5 +30,6 @@ return [
   'adWithTermsAndConditions' => 'Terminos y condiciones',
   'adWithPoliticsOfPrivacy' => 'Politicas de privacidad',
   'groupAds' => 'Anuncios',
-  'contactFields' => 'Campos de contactos'
+  'contactFields' => 'Campos de contactos',
+  'ratioLocationFilter' => 'Radio (en km) para la opcion "todo" en el filtro de localizacion',
  ];

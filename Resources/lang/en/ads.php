@@ -29,5 +29,6 @@ return [
   'adWithTermsAndConditions' => 'Terms and conditions',
   'adWithPoliticsOfPrivacy' => 'Politics of privacy',
   'groupAds' => 'Ads',
-  'contactFields' => 'Contact fields'
+  'contactFields' => 'Contact fields',
+  'ratioLocationFilter' => 'Ratio Location Filter',
 ];

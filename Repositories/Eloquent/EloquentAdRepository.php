@@ -102,7 +102,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
               $query->select("*", \DB::raw("SQRT(
             POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
             POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
-                ->having('radio', '<', 100);
+                ->having('radio', '<', (int)setting('iad::ratioLocationFilter') ?? 20);
             } else {
               if (isset($filter->nearby->country) && !empty($filter->nearby->country)) {
                 $query->whereHas('country', function ($query) use ($filter) {
