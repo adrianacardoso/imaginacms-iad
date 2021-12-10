@@ -67,18 +67,19 @@ class PublicController extends BaseApiController
     $argv = explode("/", $request->path());
     $slug = end($argv);
     
-    $tpl = 'Iad::frontend.index';
-    $ttpl = 'Iad.index';
+    $tpl = 'iad::frontend.index';
+    $ttpl = 'iad.index';
     
     if (view()->exists($ttpl)) $tpl = $ttpl;
     
     $category = null;
-    
+
     $categoryBreadcrumb = [];
-    
-    if ($slug && $slug != trans('Iad::routes.ad.index.index')) {
+ 
+    if ($slug && $slug != trans('iad::routes.ad.index.index')) {
       
-      $category = $this->category->findBySlug($slug);
+      $params = ["filter" => ["field" => "slug"]];
+      $category = $this->categoryRepository->getItem($slug,json_decode(json_encode($params)));
       
       if (isset($category->id)) {
         //With nestedset package
