@@ -163,7 +163,41 @@ return [
       'wrapperClasses' => 'card-columns', // Class to group the children (Filters)
       'childrenClasses' => 'card' // Class to each children (Filter)
     ]
+  ],
 
+  /*
+ |--------------------------------------------------------------------------
+ | Define config to the orderBy in the index page
+ |--------------------------------------------------------------------------
+ */
+  'orderBy' => [
+    'default' => 'recently',
+    'options' => [
+      'nameaz' => [
+        'title' => 'iad::common.sort.name_a_z',
+        'name' => 'nameaz',
+        'order' => [
+          'field' => "name",
+          'way' => "asc",
+        ]
+      ],
+      'nameza' => [
+        'title' => 'iad::common.sort.name_z_a',
+        'name' => 'nameza',
+        'order' => [
+          'field' => "name",
+          'way' => "desc",
+        ]
+      ],
+      'recently' => [
+        'title' => 'iad::common.sort.recently',
+        'name' => 'recently',
+        'order' => [
+          'field' => "created_at",
+          'way' => "desc",
+        ]
+      ]
+    ],
   ],
 
   //Media Fillables
