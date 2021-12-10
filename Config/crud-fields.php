@@ -43,6 +43,67 @@ return [
         'clearable' => true
       ]
     ],
+    'squareMeter' => [
+      'value' => null,
+      'name' => 'squareMeter',
+      'type' => 'input',
+      'required' => true,
+      'isFakeField' => true,
+      "fakeFieldName" => "options",
+      'props' => [
+        'label' => 'Metros Cuadrados*',
+       
+      ]
+    ],
+    
+    'bedrooms' => [
+      'value' => null,
+      'name' => 'bedrooms',
+      'type' => 'input',
+      'required' => true,
+      'isFakeField' => true,
+      "fakeFieldName" => "options",
+      'props' => [
+        'label' => 'Numero de Habitaciones*',
+        
+      ]
+    ],
+    'toilets' => [
+      'value' => null,
+      'name' => 'toilets',
+      'type' => 'input',
+      'required' => true,
+      'isFakeField' => true,
+      "fakeFieldName" => "options",
+      'props' => [
+        'label' => 'Numeros de Baños*',
+       
+      ]
+    ],
+    'parking' => [
+      'value' => null,
+      'name' => 'parking',
+      'type' => 'input',
+      'required' => true,
+      'isFakeField' => true,
+      "fakeFieldName" => "options",
+      'props' => [
+        'label' => 'Espacio para Autos*',
+     
+      ]
+    ],
+    'typoSale' => [
+      'value' => null,
+      'name' => 'typoSale',
+      'type' => 'select',
+      'required' => false,
+      'isFakeField' => true,
+      "fakeFieldName" => "options",
+      'props' => [
+        'label' => 'Tipo de anuncio',
+        'options' => $optionsSale
+      ]
+    ],
   ],
   'category' => [
       'sortOrder' => [
