@@ -43,6 +43,7 @@ return [
         'clearable' => true
       ]
     ],
+   
   ],
   'category' => [
       'sortOrder' => [

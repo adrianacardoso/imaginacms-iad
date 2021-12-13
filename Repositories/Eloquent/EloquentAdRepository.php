@@ -50,12 +50,22 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
           $query->whereDate($date->field, '<=', $date->to);
       }
 
+//      //Order by
+//      if (isset($filter->order)) {
+//        $orderByField = $filter->order->field ?? 'created_at';//Default field
+//        $orderWay = $filter->order->way ?? 'desc';//Default way
+//        $query->orderBy($orderByField, $orderWay);//Add order to query
+//      }
+
       //Order by
-      if (isset($filter->order)) {
+      if (isset($filter->order) && !empty($filter->order)) {
         $orderByField = $filter->order->field ?? 'created_at';//Default field
         $orderWay = $filter->order->way ?? 'desc';//Default way
-
-        $query->orderBy($orderByField, $orderWay);//Add order to query
+        if (in_array($orderByField, ["slug", "name"])) {
+          $query->join('iad__ad_translations as translations', 'translations.ad_id', '=', 'iad__ads.id');
+          $query->orderBy("translations.{$orderByField}", $orderWay);
+        } else
+          $query->orderBy($orderByField, $orderWay);//Add order to query
       }
 
       // add filter by Categories 1 or more than 1, in array/*

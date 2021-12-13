@@ -188,10 +188,34 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
 
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
-    if(isset($model->id)){
+    if (isset($model->id)) {
       event(new DeleteMedia($model->id, get_class($model)));//Event to Delete media
       $model ? $model->delete() : false;
     }
-    
+  }
+
+  public function findBySlug($slug)
+  {
+    if (method_exists($this->model, 'translations')) {
+
+
+      $query = $this->model->whereHas('translations', function (Builder $q) use ($slug) {
+        $q->where('slug', $slug);
+      })->with('translations', 'parent', 'children');
+
+    } else
+      $query = $this->model->where('slug', $slug)->with('translations', 'parent', 'children', 'vehicles');
+
+
+    if (isset($this->model->tenantWithCentralData) && $this->model->tenantWithCentralData && isset(tenant()->id)) {
+      $model = $this->model;
+      $query->withoutTenancy();
+      $query->where(function ($query) use ($model) {
+        $query->where($model->qualifyColumn(BelongsToTenant::$tenantIdColumn), tenant()->getTenantKey())
+          ->orWhereNull($model->qualifyColumn(BelongsToTenant::$tenantIdColumn));
+      });
+    }
+
+    return $query->first();
   }
 }
