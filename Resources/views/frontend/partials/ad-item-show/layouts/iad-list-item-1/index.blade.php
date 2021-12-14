@@ -286,11 +286,11 @@
   </div>
   <div id="report" class="row justify-content-center">
     <div class="col-auto">
-      <a class="btn btn-flag"
+      <a class="btn btn-danger"
          {{isset($inModal) && $inModal ? 'onclick=Iad__goToReport(event,\''.$item->url."#report".'\')' : 'data-toggle=collapse aria-expanded=false aria-controls=collapsePin'.$item->id}} href="{{isset($inModal) && $inModal ? $item->url."#report" : "#collapsePin".$item->id}}"
          role="button">
-        <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
-        Denunciar éste anuncio
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+        {{trans('iad::common.report')}}
       </a>
     </div>
     <div class="col-12">
