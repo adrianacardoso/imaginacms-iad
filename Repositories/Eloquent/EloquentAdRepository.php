@@ -102,6 +102,17 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       }
 
+      // add filter by Antiquity Range
+      if (isset($filter->antiquityRange) && !empty($filter->antiquityRange)) {
+
+        $query->where(function ($query) use ($filter) {
+          $query->whereHas('fields', function ($query) use ($filter) {
+            $query->where('iad__fields.name', 'antiquity', function ($query) use ($filter) {
+            })->whereBetween('iad__fields.value', [(int)$filter->antiquityRange->from, (int)$filter->antiquityRange->to]);
+          });
+        });
+      }
+
       // add filter by nearby
       if (isset($filter->nearby) && $filter->nearby) {
         if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
