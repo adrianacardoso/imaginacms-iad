@@ -29,8 +29,14 @@
         @endif
         </span>
       <span class="badge info-badge">
+          {{--Localidad--}}
+        @if(isset($item->locality->name))
+          <i class="fa fa-map-marker"></i>
+          {{$item->locality->name}}
+        @endif
+        </span>
+      <span class="badge info-badge">
           {{--Barrio--}}
-        {{--Barrio--}}
         @if(isset($item->neighborhood->name))
           <i class="fa fa-thumb-tack"></i>
           {{$item->neighborhood->name}}
