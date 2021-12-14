@@ -35,9 +35,9 @@
             'filter' => ['category' => $category->id ?? null],
             'include' => ['categories'],
             'take' => 12]"
-            :configOrderBy="config('asgard.icommerce.config.orderBy')"
-            :pagination="config('asgard.icommerce.config.pagination')"
-            :configLayoutIndex="config('asgard.icommerce.config.layoutIndex')"/>
+            :configOrderBy="config('asgard.iad.config.orderBy')"
+            :pagination="config('asgard.iad.config.pagination')"
+            :configLayoutIndex="config('asgard.iad.config.layoutIndex')"/>
           <hr>
         </div>
       </div>
