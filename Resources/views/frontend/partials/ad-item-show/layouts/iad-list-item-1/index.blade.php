@@ -1,127 +1,16 @@
 <div class="container modal-pin">
   <div class="row">
     <div class="col-lg-6 pb-4">
-      <div class="modal-images">
+      <x-media::gallery id="pinGallery" :mediaFiles="$item->mediaFiles()" :zones="['mainimage','gallery']"
+                        layout="gallery-layout-4" :dots="false"/>
 
-        <div id="carouselGallery" class="carousel slide mb-2" data-ride="carousel">
-          <a class="carousel-control-prev" href="#carouselGallery" role="button" data-slide="prev">
-            <span class="fa fa-caret-right" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselGallery" role="button" data-slide="next">
-            <span class="fa fa-caret-left" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <a
-                href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
-                data-fancybox="gallery" data-caption="{{$item->title}}">
-
-                <x-media::single-image :alt="$item->title ?? $item->name"
-                                       :title="$item->title ?? $item->name"
-                                       :isMedia="true"
-                                       imgClasses=""
-                                       :mediaFiles="$item->mediaFiles()"/>
-
-              </a>
-            </div>
-            @php($videos = $item->mediaFiles()->videos)
-            @php($gallery = $item->mediaFiles()->gallery)
-            @php($dataSlideTo = 1)
-            @foreach($gallery ?? [] as $itemGallery)
-              <div class="carousel-item ">
-                <a href="{{$itemGallery->extraLargeThumb}}"
-                   data-fancybox="gallery" data-caption="{{$item->title}}">
-                  <x-media::single-image :alt="$item->title ?? $item->name"
-                                         :title="$item->title ?? $item->name"
-                                         :src="$itemGallery->extraLargeThumb ?? null"
-                                         :fallback="$itemGallery->path ?? null"
-                                         :extraLargeSrc="$itemGallery->extraLargeThumb ?? null"
-                                         :largeSrc="$itemGallery->largeThumb ?? null"
-                                         :mediumSrc="$itemGallery->mediumThumb ?? null"
-                                         :smallSrc="$itemGallery->smallThumb ?? null"
-                                         imgClasses=""/>
-                </a>
-              </div>
-              @php($dataSlideTo++)
-            @endforeach
-            @foreach($videos ?? [] as $video)
-              <div class="carousel-item ">
-                <a data-fancybox href="#myVideo">
-                  <video width="100%" height="450" controls>
-                    <source src="{{$video->path}}" type="video/mp4">
-                    <source src="{{$video->path}}" type="video/webm">
-                    <source src="{{$video->path}}" type="video/ogg">
-                    Your browser doesn't support HTML5 video tag.
-                  </video>
-                </a>
-                <video width="100%" height="450" controls id="myVideo" style="display:none;">
-                  <source src="{{$video->path}}" type="video/mp4">
-                  <source src="{{$video->path}}" type="video/webm">
-                  <source src="{{$video->path}}" type="video/ogg">
-                  Your browser doesn't support HTML5 video tag.
-                </video>
-              </div>
-
-            @endforeach
-
-          </div>
-
-        </div>
-        <!--carusel de abajo-->
-
-        <div class="owl-carousel owl-image-mini owl-image-mini{{$item->id}} owl-theme">
-          <div class="item">
-            <a data-slide-to="0" data-target="#carouselGallery"
-               href="{{$item->mediaFiles()->mainimage->extraLargeThumb}}"
-               data-fancybox="gallery" data-caption="{{$item->title}}">
-              <x-media::single-image :alt="$item->title ?? $item->name"
-                                     :title="$item->title ?? $item->name"
-                                     :isMedia="true"
-                                     imgClasses=""
-                                     :mediaFiles="$item->mediaFiles()"/>
-            </a>
-
-          </div>
-          @php($dataSlideTo = 1)
-          @foreach($gallery ?? [] as $itemGallery)
-            <div class="item">
-              <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
-                 href="{{$itemGallery->extraLargeThumb}}"
-                 data-fancybox="gallery" data-caption="{{$item->title}}">
-                <x-media::single-image :alt="$item->title ?? $item->name"
-                                       :title="$item->title ?? $item->name"
-                                       :src="$itemGallery->extraLargeThumb ?? null"
-                                       :fallback="$itemGallery->path ?? null"
-                                       :extraLargeSrc="$itemGallery->extraLargeThumb ?? null"
-                                       :largeSrc="$itemGallery->largeThumb ?? null"
-                                       :mediumSrc="$itemGallery->mediumThumb ?? null"
-                                       :smallSrc="$itemGallery->smallThumb ?? null"
-                                       imgClasses=""/>
-              </a>
-            </div>
-            @php($dataSlideTo++)
-          @endforeach
-          @foreach($videos ?? [] as $video)
-            <div class="item">
-              <a data-slide-to="{{$dataSlideTo}}" data-target="#carouselGallery"
-                 href="{{$video->path}}"
-                 data-fancybox="gallery" data-caption="{{$item->title}}">
-                <x-media::single-image :alt="$item->title ?? $item->name"
-                                       :title="$item->title ?? $item->name"
-                                       :src="url('/modules/iad/img/video.png')"
-                                       imgClasses="card-img-top img-fluid p-3"/>
-              </a>
-
-            </div>
-            @php($dataSlideTo++)
-          @endforeach
-
-        </div>
-
-      </div>
-
+      @if(count($item->mediaFiles()->videos)>0)
+        <h3 class="modal-title my-3">
+          Videos
+        </h3>
+        <x-media::gallery :mediaFiles="$item->mediaFiles()" :zones="['videos']" layout="gallery-layout-2"
+                          :columnMasonry="3"/>
+      @endif
     </div>
     <div class="col-lg-6 pb-4">
 
@@ -141,7 +30,7 @@
         </span>
       <span class="badge info-badge">
           {{--Barrio--}}
-          {{--Barrio--}}
+        {{--Barrio--}}
         @if(isset($item->neighborhood->name))
           <i class="fa fa-thumb-tack"></i>
           {{$item->neighborhood->name}}
@@ -162,10 +51,10 @@
         <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
       @endif
 
-      @if(count($videos)>0)
+      @if(count($item->mediaFiles()->videos)>0)
         <span class="badge info-badge videos">
           <i class="fa fa-play-circle-o" aria-hidden="true"></i>
-          {{count($videos)}}</span>
+          {{count($item->mediaFiles()->videos)}}</span>
       @endif
       @php($gallery = $item->mediaFiles()->gallery)
       @if(count($gallery)>0)
@@ -328,9 +217,9 @@
               <div id="map_canvas_google" style="width:100%; height:314px"></div>
             </div>
           @elseif(setting('isite::mapInShow') == 'openStreet')
-          <div class="content">
-            <div id="map_canvas" style="width:100%; height:314px"></div>
-          </div>
+            <div class="content">
+              <div id="map_canvas" style="width:100%; height:314px"></div>
+            </div>
           @endif
         </div>
         @section('scripts')
@@ -365,11 +254,11 @@
             // The map, centered at Uluru
             var map{{$item->id}} = new google.maps.Map(document.getElementById("map_canvas_google"), {
               zoom: 16,
-              center: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+              center: {lat: {{$item->lat}}, lng: {{$item->lng}}},
             });
             // The marker, positioned at Uluru
             var marker{{$item->id}} = new google.maps.Marker({
-              position: {lat: {{$item->lat}}, lng: {{$item->lng}} },
+              position: {lat: {{$item->lat}}, lng: {{$item->lng}}},
               map: map{{$item->id}},
             });
           });
@@ -397,17 +286,20 @@
   </div>
   <div id="report" class="row justify-content-center">
     <div class="col-auto">
-      <a class="btn btn-flag" {{isset($inModal) && $inModal ? 'onclick=Iad__goToReport(event,\''.$item->url."#report".'\')' : 'data-toggle=collapse aria-expanded=false aria-controls=collapsePin'.$item->id}} href="{{isset($inModal) && $inModal ? $item->url."#report" : "#collapsePin".$item->id}}" role="button">
-        <img class="img-fluid" src="{{Theme::url('pins-publication/ico-denunciar.png')}}" alt="Flag this ad">
-        Denunciar éste anuncio
+      <a class="btn btn-danger"
+         {{isset($inModal) && $inModal ? 'onclick=Iad__goToReport(event,\''.$item->url."#report".'\')' : 'data-toggle=collapse aria-expanded=false aria-controls=collapsePin'.$item->id}} href="{{isset($inModal) && $inModal ? $item->url."#report" : "#collapsePin".$item->id}}"
+         role="button">
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+        {{trans('iad::common.report')}}
       </a>
     </div>
     <div class="col-12">
       <div class="collapse mt-4" id="collapsePin{{$item->id}}">
         <div class="card card-body pt-4 bg-light">
 
-          <x-iforms::form :id="setting('iad::complaintForm')" :fieldsParams="['adName' => ['readonly' => 'readonly' , 'value' => $item->title]]" />
-{{--          {!! Forms::render(,'iforms::frontend.form.bt-nolabel.form') !!}--}}
+          <x-iforms::form :id="setting('iad::complaintForm')"
+                          :fieldsParams="['adName' => ['readonly' => 'readonly' , 'value' => $item->title]]"/>
+          {{--          {!! Forms::render(,'iforms::frontend.form.bt-nolabel.form') !!}--}}
 
           <p class="text-justify mt-4 mb-0"><strong>Nota:</strong> Si el motivo de la denuncia es que eres la
             persona que aparece en las fotos y quieres eliminar el anuncio, y no tienes acceso ni al email que
@@ -421,18 +313,18 @@
 
 
 <script>
-  
-  function Iad__goToReport(event,url){
+
+  function Iad__goToReport(event, url) {
     event.preventDefault();
-    console.warn("url",url)
-    window.location.href=url
+    console.warn("url", url)
+    window.location.href = url
     window.location.reload(true)
   }
-  
-  
+
+
   $(document).ready(function () {
 
- 
+
     $('.owl-image-mini{{$item->id}}').owlCarousel({
       responsiveClass: true,
       nav: false,

@@ -13,4 +13,5 @@ return [
     'name_z_a' => 'Nombre (Z - A)',
     'recently' => 'Más Recientes',
   ],
+  'report' => 'Denunciar éste anuncio',
 ];
