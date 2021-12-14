@@ -11,6 +11,7 @@ use Modules\Iad\Entities\Schedule;
 use Modules\Ilocations\Entities\Country;
 use Modules\Ilocations\Entities\Province;
 use Modules\Ilocations\Entities\City;
+use Modules\Ilocations\Entities\Locality;
 use Modules\Ilocations\Entities\Neighborhood;
 use Modules\Iad\Entities\AdStatus;
 
@@ -83,6 +84,10 @@ class Ad extends Model
     return $this->belongsTo(City::class);
   }
 
+  public function locality()
+  {
+    return $this->belongsTo(Locality::class);
+  }
 
   public function neighborhood()
   {

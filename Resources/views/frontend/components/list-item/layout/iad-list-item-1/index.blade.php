@@ -32,16 +32,28 @@
           @if(!$embedded)
         </a>
       @endif
-
       <div id="extraInfo" class="d-inline-block">
-        <span class="badge info-badge">
-          {{--Medellín--}}
-          @if(isset($item->city->name))
+        @if(isset($item->city->name))
+          <span class="badge info-badge">
+          {{--Ciudad--}}
             <i class="fa fa-map-marker"></i>
             {{$item->city->name}}
-          @endif
         </span>
-
+        @endif
+        @if(isset($item->locality->name))
+          <span class="badge info-badge">
+          {{--Localidad--}}
+            <i class="fa fa-map-marker"></i>
+            {{$item->locality->name}}
+        </span>
+        @endif
+        @if(isset($item->neighborhood->name))
+          <span class="badge info-badge">
+          {{--Barrio--}}
+            <i class="fa fa-thumb-tack"></i>
+            {{$item->neighborhood->name}}
+        </span>
+        @endif
         @if(isset(collect($item->fields)->where('name','age')->first()->value))
           <span class="badge info-badge">
           {{--21 años--}}
