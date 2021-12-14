@@ -31,12 +31,12 @@ class PublicController extends BaseApiController
   private $up;
   private $category;
   private $categoryRepository;
-
+  
   public function __construct(
-    AdRepository       $ad,
+    AdRepository $ad,
 
     CategoryRepository $categoryRepository,
-    Category           $category
+    Category $category
   )
   {
     parent::__construct();
@@ -46,40 +46,41 @@ class PublicController extends BaseApiController
     $this->ad = $ad;
     $this->up = app("Modules\Iad\Repositories\UpRepository");
   }
-
+  
   public function createAd()
   {
     //Get categories
     $categories = $this->category->with('translations')->get();
-
+    
     //Validate view
     $tpl = 'iad::frontend.adForm.create.view';
     $ttpl = 'iad.adForm.create.view';
     if (view()->exists($ttpl)) $tpl = $ttpl;
-
+    
     //Render
     return view($tpl, ["categories" => $categories->toTree()]);
   }
-
+  
   // view products by category
   public function index(Request $request)
   {
     $argv = explode("/", $request->path());
     $slug = end($argv);
-
+    
     $tpl = 'iad::frontend.index';
     $ttpl = 'iad.index';
-
+    
     if (view()->exists($ttpl)) $tpl = $ttpl;
-
+    
     $category = null;
 
     $categoryBreadcrumb = [];
-
+ 
     if ($slug && $slug != trans('iad::routes.ad.index.index')) {
-
-      $category = $this->category->findBySlug($slug);
-
+      
+      $params = ["filter" => ["field" => "slug"]];
+      $category = $this->categoryRepository->getItem($slug,json_decode(json_encode($params)));
+      
       if (isset($category->id)) {
         //With nestedset package
         // $categoryBreadcrumb = CategoryTransformer::collection(Category::ancestorsAndSelf($category->id));
@@ -88,29 +89,29 @@ class PublicController extends BaseApiController
         $categories = array_merge($categories, $categories->childrens);
         $categoryBreadcrumb = CategoryTransformer::collection($categories);
         //Without nestedset package
-
-        $ptpl = "iad.category.{$category->parent_id}%.index";
+        
+        $ptpl = "Iad.category.{$category->parent_id}%.index";
         if ($category->parent_id != 0 && view()->exists($ptpl)) {
           $tpl = $ptpl;
         }
-
-        $ctpl = "iad.category.{$category->id}.index";
+        
+        $ctpl = "Iad.category.{$category->id}.index";
         if (view()->exists($ctpl)) $tpl = $ctpl;
-
-        $ctpl = "iad.category.{$category->id}%.index";
+        
+        $ctpl = "Iad.category.{$category->id}%.index";
         if (view()->exists($ctpl)) $tpl = $ctpl;
-
+        
       } else {
         return response()->view('errors.404', [], 404);
       }
-
+      
     }
-
+    
     //$dataRequest = $request->all();
-
+    
     return view($tpl, compact('category', 'categoryBreadcrumb'));
   }
-
+  
   /**
    * Show product
    * @param Request $request
@@ -120,7 +121,7 @@ class PublicController extends BaseApiController
   {
     $argv = explode("/", $request->path());
     $slug = end($argv);
-
+    
     $tpl = 'iad::frontend.show';
     $ttpl = 'iad.show';
     if (view()->exists($ttpl)) $tpl = $ttpl;
@@ -132,18 +133,18 @@ class PublicController extends BaseApiController
         ]
       ]
     ));
-
+    
     $item = $this->ad->getItem($slug, $params);
     $categories = $this->categoryRepository->getItemsBy(json_decode(json_encode([])));
     if (isset($item->id)) {
       return view($tpl, compact('item', 'categories'));
-
+      
     } else {
       return response()->view('errors.404', [], 404);
     }
-
+    
   }
-
+  
   public function editAd($adId)
   {
     $params = json_decode(json_encode(
@@ -156,9 +157,9 @@ class PublicController extends BaseApiController
       ]
     ));
     $ad = $this->ad->getItem($adId, $params);
-
+    
     if (!isset($ad->id)) abort(404);
-
+    
     $categories = $this->category->all();
     $services = $this->service->all();
     $tpl = 'Iad::frontend.adForm.edit.view';
@@ -170,16 +171,16 @@ class PublicController extends BaseApiController
       "adId" => $adId,
     ]);
   }//createAd
-
-
+  
+  
   public function buyUp(Request $request, $adSlug)
   {
-
-
+    
+    
     $tpl = 'iad::frontend.buy-up';
     $ttpl = 'iad.buy-up';
     if (view()->exists($ttpl)) $tpl = $ttpl;
-
+    
     $params = json_decode(json_encode(
       [
         "include" => explode(",", "city,schedule,fields,categories,translations"),
@@ -188,27 +189,27 @@ class PublicController extends BaseApiController
         ]
       ]
     ));
-
+    
     $item = $this->ad->getItem($adSlug, $params);
-
-
+    
+    
     if (isset($item->id)) {
-
+      
       return view($tpl, compact('item'));
-
+      
     } else {
       return response()->view('errors.404', [], 404);
     }
-
-
+    
+    
   }
-
+  
   public function buyUpStore(Request $request, $pinId)
   {
     $cartService = app("Modules\Icommerce\Services\CartService");
-
+    
     $data = $request->all();
-
+    
     $params = json_decode(json_encode(
       [
         "include" => ["product"],
@@ -218,15 +219,15 @@ class PublicController extends BaseApiController
       ]
     ));
     $up = $this->up->getItem($data["upId"], $params);
-
-    $products = [[
+  
+    $products =   [[
       "id" => $up->product->id,
       "quantity" => 1,
-      "options" => array_merge($data, ["adId" => $pinId])
+      "options" => array_merge($data,["adId" => $pinId])
     ]];
-
-    if (isset($data["featured"])) {
-      array_push($products, [
+    
+    if(isset($data["featured"])){
+      array_push($products,[
         "id" => config("asgard.iad.config.featuredProductId"),
         "quantity" => 1,
         "options" => ["adId" => $pinId]
@@ -235,9 +236,9 @@ class PublicController extends BaseApiController
     $cartService->create([
       "products" => $products
     ]);
-
+    
     $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
     return redirect()->route($locale . '.icommerce.store.checkout');
   }
-
+  
 }
