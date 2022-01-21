@@ -8,7 +8,7 @@
         <div class="card shadow-sm mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="col-12 col-md-auto">
+              <div class="col-12 col-md-3">
                 <x-media::single-image :alt="$item->title"
                                        :title="$item->title"
                                        :isMedia="true"
@@ -16,7 +16,7 @@
                                        width="100%"
                                        :mediaFiles="$item->mediaFiles()" zone="mainimage"/>
               </div>
-              <div class="col-12 col-md pin-description">
+              <div class="col-12 col-md-9 pin-description">
                 <h1 class="h5 font-weight-bold">{{$item->title}}</h1>
                 {!! $item->description!!}
               </div>

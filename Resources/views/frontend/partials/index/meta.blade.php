@@ -10,6 +10,7 @@
             $withImage = !strpos($mediaFiles->mainimage->path,"default.jpg");
             $image = $mediaFiles->mainimage->path;
             $url = $category->url;
+            }
     @endphp
 
     <meta name="description" content="{{$description}}">
