@@ -108,8 +108,21 @@ return [
       'defaultValue' => 'all'
     ]
   ],
-
-
+  /*
+  |--------------------------------------------------------------------------
+  | Pagination to the index page
+  |--------------------------------------------------------------------------
+  */
+  'pagination' => [
+    "show" => true,
+    /*
+  * Types of pagination:
+  *  normal
+  *  loadMore
+  *  infiniteScroll
+  */
+    "type" => "normal"
+  ],
   /*
   |--------------------------------------------------------------------------
   | Filters to the index page
