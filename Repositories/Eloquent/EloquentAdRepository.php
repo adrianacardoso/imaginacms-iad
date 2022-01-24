@@ -2,6 +2,7 @@
 
 namespace Modules\Iad\Repositories\Eloquent;
 
+use Modules\Iad\Entities\Category;
 use Modules\Iad\Repositories\AdRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -67,7 +68,22 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         } else
           $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-
+  
+      //Filter by catgeory ID
+      if (isset($filter->category) && !empty($filter->category)) {
+    
+    
+        $categories = Category::descendantsAndSelf($filter->category);
+    
+        if ($categories->isNotEmpty()) {
+            $query->where(function ($query) use ($categories) {
+              $query->whereHas('categories', function ($query) use ($categories) {
+                $query->whereIn('iad__ad_category.category_id', $categories->pluck("id"));
+              });
+            });
+        }
+      }
+      
       // add filter by Categories 1 or more than 1, in array/*
       if (isset($filter->categories) && !empty($filter->categories)) {
         is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
