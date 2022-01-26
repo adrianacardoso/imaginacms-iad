@@ -43,7 +43,14 @@ return [
         'clearable' => true
       ]
     ],
-   
+    'urlPage' => [
+      'value' => null,
+      'name' => 'urlPage',
+      'type' => 'input',
+      'props' => [
+        'label' => 'iad::common.crudFields.label-urlPage',
+      ]
+    ],
   ],
   'category' => [
       'sortOrder' => [
