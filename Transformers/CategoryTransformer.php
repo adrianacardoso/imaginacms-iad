@@ -14,6 +14,7 @@ class CategoryTransformer extends JsonResource
       'title' => $this->when($this->title, $this->title),
       'description' => $this->when($this->description, $this->description),
       'slug' => $this->when($this->slug, $this->slug),
+      'url' => $this->when($this->url, $this->url),
       'status' => $this->when($this->status, $this->status),
       'parentId' => $this->parent_id ?? 0,
       'sortOrder' => $this->sort_order ?? 0,

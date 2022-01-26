@@ -12,6 +12,8 @@
         "Modules\\Iad\\Providers\\ScheduleServiceProvider"
     ],
     "aliases": {},
-    "files": [],
+    "files": [
+        "helpers.php"
+    ],
     "requires": []
 }

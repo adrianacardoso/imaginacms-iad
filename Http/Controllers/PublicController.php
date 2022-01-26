@@ -85,11 +85,9 @@ class PublicController extends BaseApiController
         //With nestedset package
         // $categoryBreadcrumb = CategoryTransformer::collection(Category::ancestorsAndSelf($category->id));
         //Without nestedset package
-        $categories = [$category];
-        $categories = array_merge($categories, $categories->childrens);
-        $categoryBreadcrumb = CategoryTransformer::collection($categories);
-        //Without nestedset package
+        $categoryBreadcrumb = $this->getCategoryBreadcrumb($category);
         
+        //Without nestedset package
         $ptpl = "Iad.category.{$category->parent_id}%.index";
         if ($category->parent_id != 0 && view()->exists($ptpl)) {
           $tpl = $ptpl;
@@ -108,7 +106,7 @@ class PublicController extends BaseApiController
     }
     
     //$dataRequest = $request->all();
-    
+
     return view($tpl, compact('category', 'categoryBreadcrumb'));
   }
   
@@ -241,4 +239,16 @@ class PublicController extends BaseApiController
     return redirect()->route($locale . '.icommerce.store.checkout');
   }
   
+  private function getCategoryBreadcrumb($category)
+  {
+    if (config("asgard.icommerce.config.tenantWithCentralData.categories")) {
+      $query = Category::whereAncestorOf($category->id,true);
+      //  dd($query->toSql(),$query->getBindings());
+      
+      return CategoryTransformer::collection($query->get());
+    } else {
+      return CategoryTransformer::collection(Category::defaultOrder()->ancestorsAndSelf($category->id));
+    }
+    
+  }
 }

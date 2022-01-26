@@ -39,7 +39,21 @@ class Category extends Model
   {
     return $this->belongsToMany(Ad::class, 'iad__ad_category');
   }
-
+  
+  public function getUrlAttribute()
+  {
+    $url = "";
+  
+    $currentLocale = \LaravelLocalization::getCurrentLocale();
+ 
+    if (!(request()->wantsJson() || Str::startsWith(request()->path(), 'api'))) {
+  
+      $url = tenant_route(request()->getHost(), $currentLocale . '.iad.ad.index.category',[$this->slug]);
+      
+    }
+    return $url;
+  }
+  
   public function getLftName()
   {
     return 'lft';
