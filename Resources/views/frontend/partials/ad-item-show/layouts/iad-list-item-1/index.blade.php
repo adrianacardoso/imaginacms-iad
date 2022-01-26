@@ -120,6 +120,12 @@
             <i class="fa fa-youtube"></i>Youtube
           </a>
         @endif
+        @if(isset($item->options->urlPage))
+          <a class="btn btn-web"
+             href="{{$item->options->urlPage}}" target="_blank">
+            <i class="fa fa-globe"></i>Pagina Web
+          </a>
+        @endif
 
         @if(isset($item->options->phone))
           <a class="btn btn-phone" href="tel:{{$item->options->phone}}"

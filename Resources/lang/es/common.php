@@ -14,4 +14,7 @@ return [
     'recently' => 'Más Recientes',
   ],
   'report' => 'Denunciar éste anuncio',
+  'crudFields' => [
+    'label-urlPage' => 'Url pagina web'
+  ],
 ];

@@ -166,10 +166,9 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         $query->whereIn('iad__ads.status', $filter->status);
       }
 
-      //Filter by status
-      if (isset($filter->featured) && !empty($filter->featured)) {
-
-        $query->where('iad__ads.featured', $filter->featured);
+      //Filter by featured
+      if (isset($filter->featured) && is_bool($filter->featured)) {
+        $query->where('featured', $filter->featured);
       }
 
       //Filter Search
