@@ -146,7 +146,7 @@ class AdApiController extends BaseApiController
       \DB::rollback();//Rollback to Data Base
       $status = $this->getStatusError($e->getCode());
       $response = ($status != 403) ? ["errors" => $e->getMessage()] :
-        ["messages" => ["type" => 'error', "message" => $e->getMessage()]];
+        ["messages" => [["type" => 'error', "message" => $e->getMessage()]]];
     }
     //Return response
     return response()->json($response, $status ?? 200);
