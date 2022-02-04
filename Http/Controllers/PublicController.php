@@ -75,6 +75,8 @@ class PublicController extends BaseApiController
     $category = null;
 
     $categoryBreadcrumb = [];
+  
+    $configFilters = config("asgard.iad.config.filters");
  
     if ($slug && $slug != trans('iad::routes.ad.index.index')) {
       
@@ -98,13 +100,15 @@ class PublicController extends BaseApiController
         
         $ctpl = "Iad.category.{$category->id}%.index";
         if (view()->exists($ctpl)) $tpl = $ctpl;
-        
+  
+        $configFilters["categories"]["itemSelected"] = $category;
       } else {
         return response()->view('errors.404', [], 404);
       }
       
     }
-    
+  
+    config(["asgard.iad.config.filters" => $configFilters]);
     //$dataRequest = $request->all();
 
     return view($tpl, compact('category', 'categoryBreadcrumb'));

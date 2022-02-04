@@ -1,7 +1,7 @@
 <x-isite::breadcrumb>
   <li class="breadcrumb-item text-capitalize store-index" aria-current="page">
     @if(isset($category->id))
-      <a href="{{tenant_route(request()->getHost(), \LaravelLocalization::getCurrentLocale() . '.iad.store.index')}}">
+      <a href="{{tenant_route(request()->getHost(), \LaravelLocalization::getCurrentLocale() . '.iad.ad.index')}}">
         {{ trans('iad::routes.ad.index.index') }}
       </a>
     @else
