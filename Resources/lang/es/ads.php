@@ -32,4 +32,7 @@ return [
   'groupAds' => 'Anuncios',
   'contactFields' => 'Campos de contactos',
   'ratioLocationFilter' => 'Radio (en km) para la opcion "todo" en el filtro de localizacion',
- ];
+  'selectFromMedia' => 'Seleccionar imagenes desde el Media',
+  'yes' => 'Si',
+  'no' => 'No'
+];
