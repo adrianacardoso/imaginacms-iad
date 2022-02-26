@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 {{-- Meta --}}
-@include('icommerce::frontend.partials.index.meta')
+@include('iad::frontend.partials.index.meta')
 
 
 @section('content')
 
-  <div id="content_index_commerce"
-       class="page icommerce icommerce-index {{isset($category->id) ? 'iad-index-category iad-index-category-'.$category->id : ''}} py-5">
+  <div id="content_index_iad"
+       class="page iad iad-index {{isset($category->id) ? 'iad-index-category iad-index-category-'.$category->id : ''}} py-5">
 
     {{-- Banner Top--}}
-    @include("icommerce::frontend.partials.banner")
+    @include("iad::frontend.partials.banner")
 
     <div class="container">
       <div class="row">

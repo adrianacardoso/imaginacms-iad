@@ -31,4 +31,7 @@ return [
   'groupAds' => 'Ads',
   'contactFields' => 'Contact fields',
   'ratioLocationFilter' => 'Ratio Location Filter',
+  'selectFromMedia' => 'Select files from Media',
+  'yes' => 'Yes',
+  'no' => 'No'
 ];
