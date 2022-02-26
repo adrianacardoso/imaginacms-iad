@@ -80,6 +80,7 @@
               </p>
               <div class="modal-description">
                 {!! nl2br ($item->description) !!}
+                {!! $item->options->secondaryDescription ?? "" !!}
               </div>
               <div class="group-btn">
                 @if(isset(collect($item->fields)->where('name','whatsapp')->first()->value))

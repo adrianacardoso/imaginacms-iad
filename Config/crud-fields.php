@@ -51,6 +51,14 @@ return [
         'label' => 'iad::common.crudFields.label-urlPage',
       ]
     ],
+    'secondaryDescription' => [
+      'value' => null,
+      'name' => 'secondaryDescription',
+      'type' => 'html',
+      'props' => [
+        'label' => 'iad::common.crudFields.label-secondaryDescription',
+      ]
+    ],
   ],
   'category' => [
       'sortOrder' => [

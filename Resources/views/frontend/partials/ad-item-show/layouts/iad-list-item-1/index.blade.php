@@ -79,6 +79,7 @@
       @endif
       <div class="modal-description">
         {!! nl2br ($item->description) !!}
+        {!! $item->options->secondaryDescription ?? "" !!}
       </div>
       <div class="group-btn">
         @if(isset($item->options->whatsapp))
