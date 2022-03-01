@@ -15,6 +15,7 @@ return [
   ],
   'report' => 'Denunciar éste anuncio',
   'crudFields' => [
-    'label-urlPage' => 'Url pagina web'
+    'label-urlPage' => 'Url pagina web',
+    'label-secondaryDescription' => 'Contenido Principal (Opcional)'
   ],
 ];
