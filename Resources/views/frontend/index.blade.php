@@ -6,8 +6,8 @@
 
 @section('content')
 
-  <div id="content_index_iad"
-       class="page iad iad-index {{isset($category->id) ? 'iad-index-category iad-index-category-'.$category->id : ''}} py-5">
+  <div id="content_index_commerce"
+       class="page icommerce icommerce-index {{isset($category->id) ? 'iad-index-category iad-index-category-'.$category->id : ''}} py-5">
 
     {{-- Banner Top--}}
     @include("iad::frontend.partials.banner")

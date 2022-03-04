@@ -200,7 +200,13 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
 
     }
-
+  
+    //Order by "Sort order"
+    if (!isset($params->filter->noSortOrder) || !$params->filter->noSortOrder) {
+      $query->orderBy('sort_order', 'desc');//Add order to query
+    }
+  
+  
     $this->validateIndexAllPermission($query, $params);
 
     /*== FIELDS ==*/
