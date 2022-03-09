@@ -29,7 +29,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_admin_ads"
         ],
         "recommendations" => [
           "name" => "addForm"
@@ -49,7 +49,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_admin_ads"
         ],
         "recommendations" => [
           "name" => "addForm"
@@ -70,7 +70,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_admin_ads"
         ]
       ]
     ],
@@ -88,7 +88,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_admin_ads"
         ]
       ]
     ],
@@ -106,7 +106,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_admin_ads"
         ]
       ]
     ]
@@ -140,7 +140,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_panel_ads"
         ],
         "recommendations" => [
           "name" => "addForm"
@@ -160,7 +160,7 @@ return [
       "subHeader" => [
         "refresh" => true,
         "breadcrumb" => [
-          "qad.ads"
+          "iad_cms_panel_ads"
         ],
         "recommendations" => [
           "name" => "addForm"
