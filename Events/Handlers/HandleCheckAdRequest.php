@@ -18,9 +18,8 @@ class HandleCheckAdRequest
 
     if ($request && ($request->requestable_type === "Modules\Iad\Entities\Ad")) {
       //Request created
-      if ($action == 'created') {
-        $this->notifyAdRequest($action);
-      }
+        $this->notifyAdRequest($action,$request);
+
 
       //Request updated
       if ($action == 'updated') {
@@ -40,7 +39,7 @@ class HandleCheckAdRequest
    *
    * @param $action
    */
-  private function notifyAdRequest($action)
+  private function notifyAdRequest($action,$request)
   {
     $inotification = app('Modules\Notification\Services\Inotification');
 
@@ -56,6 +55,22 @@ class HandleCheckAdRequest
       ])->push([
         "title" => trans('iad::iad.requestable.notifyNewRequest.title'),
         "message" => trans('iad::iad.requestable.notifyNewRequest.message'),
+        "link" => url('iadmin/#/requestable/index/'),
+        "buttonText" => trans("iad::iad.requestable.notifyNewRequest.viewRequests"),
+        "withButton" => true,
+        "setting" => ["saveInDatabase" => 1]
+      ]);
+    }else{
+      //get Users to notify
+      $status = \Modules\Requestable\Entities\Status::find($request->status_id);
+      $settingUserManageRequestables = User::where('id', $request->created_by)->get();
+      //Send pusher notification
+      $inotification->to([
+        'broadcast' => $settingUserManageRequestables->pluck('id')->toArray(),
+        "email" => $settingUserManageRequestables->pluck('email')->toArray()
+      ])->push([
+        "title" => trans('iad::iad.requestable.notifyUpdateRequest.title'),
+        "message" => trans('iad::iad.requestable.notifyUpdateRequest.message',["status" => $status->title]),
         "link" => url('iadmin/#/requestable/index/'),
         "buttonText" => trans("iad::iad.requestable.notifyNewRequest.viewRequests"),
         "withButton" => true,
