@@ -68,13 +68,13 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
         } else
           $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-  
+
       //Filter by catgeory ID
       if (isset($filter->category) && !empty($filter->category)) {
-    
-    
+
+
         $categories = Category::descendantsAndSelf($filter->category);
-    
+
         if ($categories->isNotEmpty()) {
             $query->where(function ($query) use ($categories) {
               $query->whereHas('categories', function ($query) use ($categories) {
@@ -83,7 +83,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
             });
         }
       }
-      
+
       // add filter by Categories 1 or more than 1, in array/*
       if (isset($filter->categories) && !empty($filter->categories)) {
         is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
@@ -198,14 +198,17 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       }
 
-
+      //Filter by userId
+      if(isset($filter->userId)){
+        $query->where('user_id', $filter->userId);
+      }
     }
-  
+
     //Order by "Sort order"
     if (!isset($params->filter->noSortOrder) || !$params->filter->noSortOrder) {
       $query->orderBy('sort_order', 'desc');//Add order to query
     }
-  
+
   
     $this->validateIndexAllPermission($query, $params);
 

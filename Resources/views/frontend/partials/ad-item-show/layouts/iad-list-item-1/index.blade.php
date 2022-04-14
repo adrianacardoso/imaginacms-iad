@@ -13,7 +13,6 @@
       @endif
     </div>
     <div class="col-lg-6 pb-4">
-
       <h2 class="modal-title mb-3">
         <a href="{{$item->url}}">{{$item->title}} </a>
         <br>
@@ -21,34 +20,33 @@
           {{$item->fields->where('name','name')->first()->value}}
         @endif
       </h2>
-      <span class="badge info-badge">
+      @if(isset($item->city->name))
+        <span class="badge info-badge">
           {{--Ciudad--}}
-        @if(isset($item->city->name))
           <i class="fa fa-map-marker"></i>
           {{$item->city->name}}
-        @endif
         </span>
-      <span class="badge info-badge">
+      @endif
+      @if(isset($item->locality->name))
+        <span class="badge info-badge">
           {{--Localidad--}}
-        @if(isset($item->locality->name))
           <i class="fa fa-map-marker"></i>
           {{$item->locality->name}}
-        @endif
         </span>
-      <span class="badge info-badge">
+      @endif
+      @if(isset($item->neighborhood->name))
+        <span class="badge info-badge">
           {{--Barrio--}}
-        @if(isset($item->neighborhood->name))
           <i class="fa fa-thumb-tack"></i>
           {{$item->neighborhood->name}}
-        @endif
         </span>
+      @endif
       @if(isset(collect($item->fields)->where('name','age')->first()->value))
         <span class="badge info-badge">
           {{--21 años--}}
           {{collect($item->fields)->where('name','age')->first()->value}} años
         </span>
       @endif
-
       @if(!empty($item->defaultPrice))
         <span class="badge info-badge">${{formatMoney($item->defaultPrice)}}</span>
       @endif
@@ -56,7 +54,6 @@
       @if($item->status == 3)
         <span class="badge info-badge certified" title="{{trans("iad::status.checked")}}"></span>
       @endif
-
       @if(count($item->mediaFiles()->videos)>0)
         <span class="badge info-badge videos">
           <i class="fa fa-play-circle-o" aria-hidden="true"></i>
@@ -80,14 +77,9 @@
           {{date("d/m/Y H:ia",strtotime($item->created_at))}}
         </p>
       @endif
-
       <div class="modal-description">
         {!! nl2br ($item->description) !!}
-        {{--                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ullamcorper ante, et mattis ipsum.--}}
-        {{--                    Quisque a nisi in risus cursus ullamcorper. Vestibulum et laoreet orci. Duis pulvinar sapien quam,--}}
-        {{--                    ut feugiat sem bibendum pellentesque. Interdum et malesuada fames ac ante ipsum primis.</p>--}}
-        {{--                  <p>Curabitur congue tristique purus, non imperdiet dui tempus sit amet. Donec tincidunt congue sapien--}}
-        {{--                    id placerat. Pellentesque id consequat arcu. Vestibulum sagittis velit non hendrerit pharetra.</p>--}}
+        {!! $item->options->secondaryDescription ?? "" !!}
       </div>
       <div class="group-btn">
         @if(isset($item->options->whatsapp))
@@ -107,7 +99,6 @@
             <i class="fa fa-instagram"> </i> Instagram
           </a>
         @endif
-
         @if(isset($item->options->twitter))
           <a class="btn btn-twitter"
              href="https://twitter.com/{{$item->options->twitter}}" target="_blank">
@@ -126,20 +117,17 @@
             <i class="fa fa-globe"></i>Pagina Web
           </a>
         @endif
-
         @if(isset($item->options->phone))
           <a class="btn btn-phone" href="tel:{{$item->options->phone}}"
              target="_blank">
             <i class="fa fa-mobile"></i> {{$item->options->phone}}
           </a>
         @endif
-
         <a class="btn btn-like"
            onClick="window.livewire.emit('addToWishList',{{json_encode(["entityName" => "Modules\\Iad\\Entities\\Ad", "entityId" => $item->id])}})">
           <i class="fa fa-heart"></i>
         </a>
       </div>
-
     </div>
   </div>
   @if(isset($item->options->prices) && !empty($item->options->prices) || isset($item->options->schedule) && !empty($item->options->schedule))
@@ -167,9 +155,7 @@
           @foreach($item->options->schedule ?? [] as $schedule)
             <div class="row align-items-center modal-item">
               <div class="col-5 col-sm-4">
-
                 {{trans("iad::schedules.days.".$schedule->name)}}
-
               </div>
               <div class="col-5 col-sm-4 text-primary">
                 @if($schedule->schedules == 1)
@@ -187,23 +173,17 @@
           @endforeach
         </div>
       @endif
-
-
     </div>
   @endif
-
   @php($categories = Modules\Iad\Entities\Category::all())
   @php($categories = $categories->toTree())
-
   @if(!empty($item->categories))
     <div class="row">
       @foreach($categories ?? [] as $categoryParent)
         @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
         @if(!empty($categoriesAd))
-
           <div class="col-12 col-md-4 pb-4">
             <h3 class="modal-title mb-3">
-
               {{$categoryParent->title}}
             </h3>
             @foreach($categoriesAd ?? [] as $categoryId)
@@ -215,68 +195,11 @@
           </div>
         @endif
       @endforeach
-
     </div>
   @endif
-
   @if(!empty($item->lat) && !empty($item->lng))
     <div class="col-12">
-      <h2>{{trans('iad::ads.titleMap')}}</h2>
-      <div class="section-map">
-        <div class="map bg-light">
-          @if(setting('isite::mapInShow') == 'googleMaps')
-            <div class="content">
-              <div id="map_canvas_google" style="width:100%; height:314px"></div>
-            </div>
-          @elseif(setting('isite::mapInShow') == 'openStreet')
-            <div class="content">
-              <div id="map_canvas" style="width:100%; height:314px"></div>
-            </div>
-          @endif
-        </div>
-        @section('scripts')
-          @parent
-          <script type='text/javascript'
-                  src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css"
-                type="text/css"/>
-          <script type="text/javascript">
-
-            function initialize() {
-              var map = L.map('map_canvas').setView([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}], 16);
-
-              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              }).addTo(map);
-
-
-              L.marker([{{ $item->lat ?? '4.570868' }}, {{ $item->lng ?? '-74.297333' }}]).addTo(map)
-                .bindPopup('{{ $item->title ?? 'Dirección' }}')
-                .openPopup();
-            }
-
-            $(document).ready(function () {
-              initialize();
-            });
-          </script>
-        @stop
-        <script>
-          // Initialize and add the map
-          $(document).ready(function () {
-            // The map, centered at Uluru
-            var map{{$item->id}} = new google.maps.Map(document.getElementById("map_canvas_google"), {
-              zoom: 16,
-              center: {lat: {{$item->lat}}, lng: {{$item->lng}}},
-            });
-            // The marker, positioned at Uluru
-            var marker{{$item->id}} = new google.maps.Marker({
-              position: {lat: {{$item->lat}}, lng: {{$item->lng}}},
-              map: map{{$item->id}},
-            });
-          });
-
-        </script>
-      </div>
+      <x-isite::Maps :lat="$item->lat" :lng="$item->lng" locationName="{{$item->title}}" zoom="16"/>
     </div>
   @endif
 

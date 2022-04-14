@@ -96,6 +96,29 @@ return [
       'clearable' => true,
     ],
   ],
+  'ratioLocationFilter' => [
+    'name' => 'iad::ratioLocationFilter',
+    'value' => null,
+    'type' => 'input',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.ratioLocationFilter',
+      'type' => 'number'
+    ],
+  ],
+  'selectFromMedia' => [
+    'name' => 'iad::selectFromMedia',
+    'value' => '0',
+    'type' => 'select',
+    'group' => 'iad::ads.groupAds',
+    'props' => [
+      'label' => 'iad::ads.selectFromMedia',
+      'options' => [
+        ['label' => 'iad::ads.yes', 'value' => '1'],
+        ['label' => 'iad::ads.no', 'value' => '0'],
+      ]
+    ],
+  ],
   'activateUploadsJob' => [
     'value' => '0',
     'name' => 'iad::activateUploadsJob',
@@ -126,15 +149,5 @@ return [
       'trueValue' => "1",
       'falseValue' => "0",
     ]
-  ],
-  'ratioLocationFilter' => [
-    'name' => 'iad::ratioLocationFilter',
-    'value' => null,
-    'type' => 'input',
-    'group' => 'iad::ads.groupAds',
-    'props' => [
-      'label' => 'iad::ads.ratioLocationFilter',
-      'type' => 'number'
-    ],
-  ],
+  ]
 ];
