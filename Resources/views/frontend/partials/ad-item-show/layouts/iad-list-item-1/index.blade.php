@@ -197,10 +197,19 @@
       @endforeach
     </div>
   @endif
-  @if(!empty($item->lat) && !empty($item->lng))
-    <div class="col-12">
-      <x-isite::Maps :lat="$item->lat" :lng="$item->lng" locationName="{{$item->title}}" zoom="16"/>
-    </div>
+  @if(!empty($item->options) && !empty($item->options->map))
+    @if(!empty($item->options->map->lat) && !empty($item->options->map->lng))
+      <div class="row">
+        
+        {{--Component Doesn't work to map - Reported --}}
+        {{--
+        <x-isite::Maps :lat="$item->options->map->lat" :lng="$item->options->map->lng" locationName="{{$item->title}}" zoom="16"/>
+        --}}
+        
+        <iframe class="iframe-modal-iad" src="https://maps.google.com/?ll={{$item->options->map->lat}},{{$item->options->map->lng}}&z=16&t=m&output=embed" frameborder="0" height="400" style="width: 100%;" allowfullscreen></iframe>
+    
+      </div>
+    @endif
   @endif
 
   <div class="featured-pins">
