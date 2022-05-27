@@ -183,6 +183,11 @@ class AdApiController extends BaseApiController
       //Get Parameters from URL.
       $params = $this->getParamsRequest($request);
 
+     
+      // Validating that they will not replace the user_id when updating Ad
+      if(isset($data['user_id']))
+        unset($data['user_id']);
+      
       //Request to Repository
       $this->ad->updateBy($criteria, $data, $params);
 
