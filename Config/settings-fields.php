@@ -121,6 +121,7 @@ return [
   ],
   'activateUploadsJob' => [
     'value' => '0',
+    "onlySuperAdmin" => true,
     'name' => 'iad::activateUploadsJob',
     'type' => 'checkbox',
     'props' => [
@@ -142,6 +143,7 @@ return [
   ],
   'allowRequestForChecked' => [
     'value' => "0",
+    "onlySuperAdmin" => true,
     'name' => 'iad::allowRequestForChecked',
     'type' => 'checkbox',
     'props' => [
