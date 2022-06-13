@@ -227,7 +227,6 @@
             :responsive="[0 => ['items' =>  1],640 => ['items' => 2],992 => ['items' => 4]]"
             repository="Modules\Iad\Repositories\AdRepository"
             itemComponent="iad::list-item"
-
             moduleName="Iad"
             itemComponentName="iad::list-item"
             itemComponentNamespace="Modules\Iad\View\Components\ListItem"
@@ -239,8 +238,6 @@
                         'filter' =>[ 'status' => [2,3], 'featured' => true, 'order' => ['field' => 'uploaded_at', 'way' => 'desc'] ],
                         'take' => setting('isite::items-per-page',null,20)]"
             :responsiveTopContent="['mobile'=>false,'desktop'=>false]"
-            :pagination="['show' => false ]"
-            :itemModal="['idModal'=>'mainItemModal','mobile'=>true,'desktop'=>true,'view'=>'iad::frontend.partials.ad-item-show.layouts.iad-list-item-1.index']"
             :uniqueItemListRendered="false"
     />
 
