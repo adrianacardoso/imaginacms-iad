@@ -146,7 +146,7 @@
           @endforeach
         </div>
       @endif
-    <!--Schedule-->
+      <!--Schedule-->
       @if(isset($item->options->schedule) && isset($item->options->statusSchedule) && $item->options->statusSchedule)
         <div class="col-lg-6 pb-4">
           <h3 class="modal-title mb-3">
@@ -200,14 +200,16 @@
   @if(!empty($item->options) && !empty($item->options->map))
     @if(!empty($item->options->map->lat) && !empty($item->options->map->lng))
       <div class="row">
-        
+
         {{--Component Doesn't work to map - Reported --}}
         {{--
         <x-isite::Maps :lat="$item->options->map->lat" :lng="$item->options->map->lng" locationName="{{$item->title}}" zoom="16"/>
         --}}
-        
-        <iframe class="iframe-modal-iad" src="https://maps.google.com/?ll={{$item->options->map->lat}},{{$item->options->map->lng}}&z=16&t=m&output=embed" frameborder="0" height="400" style="width: 100%;" allowfullscreen></iframe>
-    
+
+        <iframe class="iframe-modal-iad"
+                src="https://maps.google.com/?ll={{$item->options->map->lat}},{{$item->options->map->lng}}&z=16&t=m&output=embed"
+                frameborder="0" height="400" style="width: 100%;" allowfullscreen></iframe>
+
       </div>
     @endif
   @endif
@@ -215,16 +217,28 @@
   <div class="featured-pins">
 
     <x-isite::carousel.owl-carousel
-      title="Anuncios Destacados"
-      id="featuredPins{{$item->id}}"
-      :params="[
+            title="Anuncios Destacados"
+            id="featuredPins{{$item->id}}"
+            loop=true
+            autoplay=true
+            autoplayTimeout=4000
+            margin=10
+            :nav=false
+            :responsive="[0 => ['items' =>  1],640 => ['items' => 2],992 => ['items' => 4]]"
+            repository="Modules\Iad\Repositories\AdRepository"
+            itemComponent="iad::list-item"
+            moduleName="Iad"
+            itemComponentName="iad::list-item"
+            itemComponentNamespace="Modules\Iad\View\Components\ListItem"
+            :itemComponentAttributes="['embedded' => false]"
+            entityName="Ad"
+            :showTitle="false"
+            :params="[
                         'include' => ['city','schedule','fields','categories','translations'],
-                        'filter' =>[ 'status' => [2,3], 'featured' => true, 'categories' => $item->categories->pluck('id')->toArray(), 'order' => ['field' => 'uploaded_at', 'way' => 'asc'] ],
-                        'take' => 10
-                        ]"
-      :responsive="[0 => ['items' =>  1],640 => ['items' => 2],992 => ['items' => 4]]"
-      repository="Modules\Iad\Repositories\AdRepository"
-      itemComponent="iad::list-item"
+                        'filter' =>[ 'status' => [2,3], 'featured' => true, 'order' => ['field' => 'uploaded_at', 'way' => 'desc'] ],
+                        'take' => setting('isite::items-per-page',null,20)]"
+            :responsiveTopContent="['mobile'=>false,'desktop'=>false]"
+            :uniqueItemListRendered="false"
     />
 
   </div>
