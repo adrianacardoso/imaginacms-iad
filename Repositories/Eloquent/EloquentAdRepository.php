@@ -131,43 +131,76 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
       // add filter by nearby
       if (isset($filter->nearby) && $filter->nearby) {
-        if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
 
-          if ($filter->nearby->radio == "all") {
+        if(isset($filter->nearby->findByLngLat) && $filter->nearby->findByLngLat==false){
 
-            if (isset($filter->nearby->lat) && isset($filter->nearby->lng) && !empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
-              $query->select("*", \DB::raw("SQRT(
-            POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
-            POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
-                ->having('radio', '<', (int)setting('iad::ratioLocationFilter') ?? 20);
-            } else {
-              if (isset($filter->nearby->country) && !empty($filter->nearby->country)) {
-                $query->whereHas('country', function ($query) use ($filter) {
-                  $query->where('ilocations__countries.iso_2', $filter->nearby->country);
-                });
-              }
-              if (isset($filter->nearby->province) && !empty($filter->nearby->province)) {
-                $query->whereHas('province', function ($query) use ($filter) {
-                  $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
-                    ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
-                });
-              }
-              if (isset($filter->nearby->city) && !empty($filter->nearby->city)) {
-                $query->whereHas('city', function ($query) use ($filter) {
-                  $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
-                    ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
-                });
-              }
-            }
-          } else {
-            if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
-              $query->select("*", \DB::raw("SQRT(
-            POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
-            POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
-                ->having('radio', '<', $filter->nearby->radio);
-            }
+          $query->whereHas('country', function ($query) use ($filter) {
+              $query->where('ilocations__countries.iso_2', $filter->nearby->country);
+          });
+
+          $query->whereHas('city', function ($query) use ($filter) {
+            $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
+              ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
+          });
+
+          
+          // Cuando se buscaba Bogota, estaba en la tabla ciudad pero no en la provincia. Por lo tanto no traia nada y se agrego esta validacion.
+          if($filter->nearby->city!=$filter->nearby->province){
+
+            $query->whereHas('province', function ($query) use ($filter) {
+              $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
+                ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
+            });
+
           }
+
+
+        }else{
+          
+
+          if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
+
+            if ($filter->nearby->radio == "all") {
+
+              if (isset($filter->nearby->lat) && isset($filter->nearby->lng) && !empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
+                $query->select("*", \DB::raw("SQRT(
+              POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
+              POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
+                  ->having('radio', '<', (int)setting('iad::ratioLocationFilter') ?? 20);
+              } else {
+                if (isset($filter->nearby->country) && !empty($filter->nearby->country)) {
+                  $query->whereHas('country', function ($query) use ($filter) {
+                    $query->where('ilocations__countries.iso_2', $filter->nearby->country);
+                  });
+                }
+                if (isset($filter->nearby->province) && !empty($filter->nearby->province)) {
+                  $query->whereHas('province', function ($query) use ($filter) {
+                    $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
+                      ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
+                  });
+                }
+                if (isset($filter->nearby->city) && !empty($filter->nearby->city)) {
+                  $query->whereHas('city', function ($query) use ($filter) {
+                    $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
+                      ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
+                  });
+                }
+              }
+            } else {
+              if (!empty($filter->nearby->lat) && !empty($filter->nearby->lng)) {
+                $query->select("*", \DB::raw("SQRT(
+              POW(69.1 * (lat - " . $filter->nearby->lat . "), 2) +
+              POW(69.1 * (" . $filter->nearby->lng . " - lng) * COS(lat / 57.3), 2)) AS radio"))
+                  ->having('radio', '<', $filter->nearby->radio);
+              }
+            }
+          }  
         }
+
+
+
+       
+
       }
 
       //Filter by city id
