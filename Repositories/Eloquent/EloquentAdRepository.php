@@ -134,26 +134,42 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
         if(isset($filter->nearby->findByLngLat) && $filter->nearby->findByLngLat==false){
 
+          //dd($filter->nearby);
+
           $query->whereHas('country', function ($query) use ($filter) {
               $query->where('ilocations__countries.iso_2', $filter->nearby->country);
           });
 
-          $query->whereHas('city', function ($query) use ($filter) {
-            $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
-              ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
-          });
 
-          
-          // Cuando se buscaba Bogota, estaba en la tabla ciudad pero no en la provincia. Por lo tanto no traia nada y se agrego esta validacion.
-          if($filter->nearby->city!=$filter->nearby->province){
+          //Departments
+          if(!is_null($filter->nearby->province)){
+            //Cuando se busca "Bogota", google trae dpto Bogota, y esto no existe en el ilocations
+            if($filter->nearby->province!="Bogotá"){
+              $query->whereHas('province', function ($query) use ($filter) {
+                  $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
+                    ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
+              });
+            }
+          }
 
-            $query->whereHas('province', function ($query) use ($filter) {
-              $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
-                ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
+          if(!is_null($filter->nearby->city)){
+
+            $query->whereHas('city', function ($query) use ($filter) {
+              $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
+                ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
             });
 
           }
 
+          //Esto es xq google sino se coloca barrio trae la misma localidad para ambas
+          if($filter->nearby->neighborhood!=$filter->nearby->city){
+          
+            $query->whereHas('neighborhood', function ($query) use ($filter) {
+                $query->leftJoin('ilocations__neighborhood_translations as nt', 'nt.neighborhood_id', 'ilocations__neighborhoods.id')
+                  ->where("nt.name", "like", "%" . $filter->nearby->neighborhood . "%");
+            });
+
+          }
 
         }else{
           
