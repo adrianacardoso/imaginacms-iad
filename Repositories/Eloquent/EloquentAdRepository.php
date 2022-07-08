@@ -163,11 +163,29 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
           //Esto es xq google sino se coloca barrio trae la misma localidad para ambas
           if($filter->nearby->neighborhood!=$filter->nearby->city){
-          
+            
+            
+            // Google a veces retorna direcciones como rutas en vez de barrios
+            // se formatea para que lo pueda encontrar en el ilocations
+            $words = config("asgard.iad.config.location-range.googleWordsMap");
+            if(is_null($words))
+              $words = array('Av.'); //default - Route Google
+
+            $searchResult = trim(str_replace($words,'',$filter->nearby->neighborhood));
+
+            // Query
+            $query->whereHas('neighborhood', function ($query) use ($filter,$searchResult) {
+                $query->leftJoin('ilocations__neighborhood_translations as nt', 'nt.neighborhood_id', 'ilocations__neighborhoods.id')
+                  ->where("nt.name", "like", "%" . $searchResult . "%");
+            });
+
+            //Old
+            /*
             $query->whereHas('neighborhood', function ($query) use ($filter) {
                 $query->leftJoin('ilocations__neighborhood_translations as nt', 'nt.neighborhood_id', 'ilocations__neighborhoods.id')
                   ->where("nt.name", "like", "%" . $filter->nearby->neighborhood . "%");
             });
+            */
 
           }
 
