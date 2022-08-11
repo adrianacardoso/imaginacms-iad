@@ -152,7 +152,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
             }
           }
 
-          if(!is_null($filter->nearby->city)){
+          if(isset($filter->nearby->city) && !is_null($filter->nearby->city)){
 
             $query->whereHas('city', function ($query) use ($filter) {
               $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
@@ -162,16 +162,18 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
           }
 
           //Esto es xq google sino se coloca barrio trae la misma localidad para ambas
-          if($filter->nearby->neighborhood!=$filter->nearby->city){
+          if(!isset($filter->nearby->city) || $filter->nearby->neighborhood!=$filter->nearby->city){
             
             
             // Google a veces retorna direcciones como rutas en vez de barrios
             // se formatea para que lo pueda encontrar en el ilocations
             $words = config("asgard.iad.config.location-range.googleWordsMap");
             if(is_null($words))
-              $words = array('Av.'); //default - Route Google
-
+              $words = array('Av.','Localidad de'); //default - Route Google
+            
             $searchResult = trim(str_replace($words,'',$filter->nearby->neighborhood));
+
+            \Log::info("Search result: ".$searchResult);
 
             // Query
             $query->whereHas('neighborhood', function ($query) use ($filter,$searchResult) {
