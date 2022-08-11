@@ -143,13 +143,22 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
 
           //Departments
           if(!is_null($filter->nearby->province)){
-            //Cuando se busca "Bogota", google trae dpto Bogota, y esto no existe en el ilocations
+
+            //Cuando se busca "Bogota", google trae dpto Bogota, y esto no existe en el ilocations sino como ciudad
             if($filter->nearby->province!="Bogotá"){
               $query->whereHas('province', function ($query) use ($filter) {
                   $query->leftJoin('ilocations__province_translations as pt', 'pt.province_id', 'ilocations__provinces.id')
                     ->where("pt.name", "like", "%" . $filter->nearby->province . "%");
               });
+              \Log::info("Province: ".$filter->nearby->province);
+            }else{
+              \Log::info("Province: Bogota-Formateo por Ilocations Google");
+              //Se agrega ciudad para este caso y no entre en la condicion de neighborhood solo para este caso
+              $filter->nearby->city="Bogotá";
+
             }
+
+
           }
 
           if(isset($filter->nearby->city) && !is_null($filter->nearby->city)){
@@ -158,6 +167,8 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
               $query->leftJoin('ilocations__city_translations as ct', 'ct.city_id', 'ilocations__cities.id')
                 ->where("ct.name", "like", "%" . $filter->nearby->city . "%");
             });
+
+            \Log::info("City: ".$filter->nearby->city);
 
           }
 
@@ -173,7 +184,7 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
             
             $searchResult = trim(str_replace($words,'',$filter->nearby->neighborhood));
 
-            \Log::info("Search result: ".$searchResult);
+            \Log::info("Neighborhood:".$searchResult);
 
             // Query
             $query->whereHas('neighborhood', function ($query) use ($filter,$searchResult) {
