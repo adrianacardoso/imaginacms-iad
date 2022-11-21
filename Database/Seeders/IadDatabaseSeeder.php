@@ -16,6 +16,7 @@ class IadDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+      $this->call(IadModuleTableSeeder::class);
       $this->call(IformComplaintTableSeeder::class);
         // $this->call("OthersTableSeeder");
     }
