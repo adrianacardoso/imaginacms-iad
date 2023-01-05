@@ -22,11 +22,11 @@ return [
 
   //add: product relations like users relations style
   'relations' => [
-    'ad' => [
-      'rates' => function () {
-        return $this->belongsToMany(Rate::class, 'icustom__rate_ad')->withPivot('price');
-      },
-    ]
+//    'ad' => [
+//      'rates' => function () {
+//        return $this->belongsToMany(Rate::class, 'icustom__rate_ad')->withPivot('price');
+//      },
+//    ]
   ],
   'imagesize' => ['width' => 800, 'height' => 800],
   'mediumthumbsize' => ['width' => 400, 'height' => 400],
