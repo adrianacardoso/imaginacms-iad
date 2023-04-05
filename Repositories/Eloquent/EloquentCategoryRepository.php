@@ -14,23 +14,22 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
   {
     /*== initialize query ==*/
     $query = $this->model->query();
-
+    
     /*== RELATIONSHIPS ==*/
-    if (isset($params->include)) {
-      if (in_array('*', $params->include)) {//If Request all relationships
-        $query->with([]);
-      } else {//Especific relationships
-        $includeDefault = [];//Default relationships
-        if (isset($params->include))//merge relations with default relationships
-          $includeDefault = array_merge($includeDefault, $params->include);
-        $query->with($includeDefault);//Add Relationships to query
-      }
+    if (in_array('*', $params->include ?? [])) {//If Request all relationships
+      $query->with(['files', 'translations']);
+    } else {//Especific relationships
+      $includeDefault = ['files', 'translations'];//Default relationships
+      if (isset($params->include))//merge relations with default relationships
+        $includeDefault = array_merge($includeDefault, $params->include);
+      $query->with($includeDefault);//Add Relationships to query
     }
-
+    
+    
     /*== FILTERS ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;//Short filter
-
+      
       //Filter by date
       if (isset($filter->date)) {
         $date = $filter->date;//Short filter date
@@ -40,13 +39,13 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
         if (isset($date->to))//to a date
           $query->whereDate($date->field, '<=', $date->to);
       }
-
+      
       //Filter by parent
       if (isset($filter->parentId)) {
         if (!is_array($filter->parentId)) $filter->parentId = [$filter->parentId];
         $query->whereIn('parent_id', $filter->parentId);
       }
-
+      
       //Filter search
       if (isset($filter->search)) {
         $query->where(function ($query) use ($filter) {
@@ -55,15 +54,15 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
           });
         })->orWhere('id', 'like', "%{$filter->search}%");
       }
-
+      
       //Order by
       if (isset($filter->order)) {
         $orderByField = $filter->order->field ?? 'created_at';//Default field
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-
-
+      
+      
       //Filter by parent ID
       if (isset($filter->parentId)) {
         if ($filter->parentId == 0) {
@@ -72,19 +71,19 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
           $query->where("parent_id", $filter->parentId);
         }
       }
-
+      
       //Filter by  IDs
       if (isset($filter->ids)) {
         is_array($filter->ids) ? true : $filter->ids = [$filter->ids];
         $query->whereIn('iad__categories.id', $filter->ids);
       }
-
+      
     }
-
+    
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-
+    
     /*== REQUEST ==*/
     if (isset($params->page) && $params->page) {
       return $query->paginate($params->take);
@@ -93,32 +92,32 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
       return $query->get();
     }
   }
-
+  
   public function getItem($criteria, $params = false)
   {
     //Initialize query
     $query = $this->model->query();
-
+    
     /*== RELATIONSHIPS ==*/
     if (in_array('*', $params->include ?? [])) {//If Request all relationships
-      $query->with([]);
+      $query->with(['files', 'translations']);
     } else {//Especific relationships
-      $includeDefault = [];//Default relationships
+      $includeDefault = ['files', 'translations'];//Default relationships
       if (isset($params->include))//merge relations with default relationships
         $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
     }
-
+    
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-  
+      
       // find translatable attributes
       $translatedAttributes = $this->model->translatedAttributes;
-  
+      
       if (isset($filter->field))//Filter by specific field
         $field = $filter->field;
-  
+      
       if (isset($field) && in_array($field, $translatedAttributes))//Filter by slug
         $query->whereHas('translations', function ($query) use ($criteria, $filter, $field) {
           $query->where('locale', $filter->locale ?? \App::getLocale())
@@ -129,11 +128,11 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
         $query->where($field ?? 'id', $criteria);
       
     }
-
+    
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-
+    
     /*== REQUEST ==*/
     if (!isset($params->filter->field)) {
       $query->where('id', $criteria);
@@ -141,51 +140,51 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     
     return $query->first();
   }
-
+  
   public function create($data)
   {
     $category = $this->model->create($data);
-
+    
     //Event to ADD media
     event(new CreateMedia($category, $data));
-
+    
     return $category;
   }
-
+  
   public function updateBy($criteria, $data, $params = false)
   {
     /*== initialize query ==*/
     $query = $this->model->query();
-
+    
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-
+      
       //Update by field
       if (isset($filter->field))
         $field = $filter->field;
     }
-
+    
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
-
+    
     event(new UpdateMedia($model, $data));//Event to Update media
     return $model ? $model->update((array)$data) : false;
   }
-
+  
   public function deleteBy($criteria, $params = false)
   {
     /*== initialize query ==*/
     $query = $this->model->query();
-
+    
     /*== FILTER ==*/
     if (isset($params->filter)) {
       $filter = $params->filter;
-
+      
       if (isset($filter->field))//Where field
         $field = $filter->field;
     }
-
+    
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
     if (isset($model->id)) {
@@ -193,20 +192,20 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
       $model ? $model->delete() : false;
     }
   }
-
+  
   public function findBySlug($slug)
   {
     if (method_exists($this->model, 'translations')) {
-
-
+      
+      
       $query = $this->model->whereHas('translations', function (Builder $q) use ($slug) {
         $q->where('slug', $slug);
       })->with('translations', 'parent', 'children');
-
+      
     } else
       $query = $this->model->where('slug', $slug)->with('translations', 'parent', 'children', 'vehicles');
-
-
+    
+    
     if (isset($this->model->tenantWithCentralData) && $this->model->tenantWithCentralData && isset(tenant()->id)) {
       $model = $this->model;
       $query->withoutTenancy();
@@ -215,7 +214,7 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
           ->orWhereNull($model->qualifyColumn(BelongsToTenant::$tenantIdColumn));
       });
     }
-
+    
     return $query->first();
   }
 }
