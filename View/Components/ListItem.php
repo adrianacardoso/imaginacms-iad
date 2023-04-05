@@ -26,7 +26,7 @@ class ListItem extends Component
     $this->item = $item;
     $this->embedded = $embedded;
     $this->view = "iad::frontend.components.list-item.layout.". ( $layout ?? '.iad-list-item-1').".index";
-  $this->initCategories();
+  //$this->initCategories();
   }
   
   

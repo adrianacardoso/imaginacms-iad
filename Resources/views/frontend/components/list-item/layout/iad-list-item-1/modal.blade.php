@@ -166,6 +166,9 @@
           </div>
           <div class="row">
             <!--About me-->
+            @php
+              $categories = app('Modules\Iad\Repositories\CategoryRepository')->getItemsBy(json_decode(json_encode([])));
+            @endphp
             @foreach($categories->toTree() as $categoryParent)
               @php($categoriesAd = array_intersect($item->categories->pluck("id")->toArray(),$categoryParent->children->pluck("id")->toArray()))
               @if(!empty($categoriesAd))
