@@ -27,6 +27,14 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
     /*== initialize query ==*/
     $query = $this->model->query();
 
+    //In the autocomplete filter they send the category
+    //This relation not exist in AD entity
+    $keyCat = array_search("category",$params->include);
+    if(!is_null($keyCat)) {
+      $params->include[$keyCat] = "categories";
+    }
+
+    
     /*== RELATIONSHIPS ==*/
     if (in_array('*', $params->include)) {//If Request all relationships
       $query->with(['files','translations']);
