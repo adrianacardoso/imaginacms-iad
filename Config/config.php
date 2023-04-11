@@ -331,7 +331,12 @@ return [
       //Optional: if you don't use the statuses configuration but you need to configure the cancelled when elapsed time status you can use this extra config:
       "statusToSetWhenElapsedTime" => 4,
     ]
+  ],
+  /*Translate keys of each entity. Based on the permission string*/
+  'documentation' => [
+    'ads' => "iad::cms.documentation.ads",
+    'categories' => "iad::cms.documentation.categories",
+    'ups' => "iad::cms.documentation.ups",
   ]
-
 ];
 

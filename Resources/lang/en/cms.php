@@ -71,6 +71,15 @@ return [
     "noRequested" => "Your ad is not verified yet, you must create a request for it to be reviewed",
     "requested" => "Just a little more, we are verifying your ad",
     "rejected" => "Your ad could not be verified, check your information and recreate the request for it to be reviewed"
+  ],
+  "documentation" => [
+    'ads' => "Ads are published on your WEB site. They are used to promote or boost
+     some external product to the application",
+    "categories" => "It is possible to create categories, with a name, description and organize them in tree mode
+     (parent categories and child categories) in order to categorize all your plans.",
+    'ups' => "When an announcement is published, it is put on a list that constantly grows with each new
+     ad, with this functionality of Uploads it is possible to tell your application to improve the position of
+     each ad with some definite rules,"
   ]
 ];
 

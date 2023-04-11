@@ -70,6 +70,15 @@ return [
     "noRequested" => "Tu anuncio aún no está verificado, debes crear una petición para que sea revisado",
     "requested" => "Solo un poco más, estamos verificando tu anuncio",
     "rejected" => "Tu anuncio no pudo ser verificado, revisa tu información y vuelve a crear la petición para que sea revisado"
+  ],
+  "documentation" => [
+    'ads' => "Los anuncios son publicados en tu sitio WEB. Son usados para promover o impulsar
+    algún producto externo a la aplicación",
+    "categories" => "Es posible crear categories, con un nombre, descripción y organizarlas en modo de árbol
+    (categorías padres y categorías hijas) con el fin de categorizar todos tus planes.",
+    'ups' => "Cuando un anunció es publicado, se pone en una lista que crece constantemente con cada nuevo
+    anuncio, con está funcionalidad de Subidas es posible decirle a tu aplicación que mejore la posición de
+    cada anunció con algunas reglas definidas",
   ]
 ];
 
