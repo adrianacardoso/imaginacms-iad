@@ -15,9 +15,11 @@ use Modules\Ilocations\Entities\Locality;
 use Modules\Ilocations\Entities\Neighborhood;
 use Modules\Iad\Entities\AdStatus;
 
+use Modules\Core\Support\Traits\AuditTrait;
+
 class Ad extends Model
 {
-  use Translatable, MediaRelation;
+  use Translatable, MediaRelation, AuditTrait;
 
   protected $table = 'iad__ads';
   public $translatedAttributes = ['title', 'description', 'slug'];

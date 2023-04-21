@@ -8,9 +8,11 @@ use Kalnoy\Nestedset\NodeTrait;
 use Modules\Media\Support\Traits\MediaRelation;
 use Illuminate\Support\Str;
 
+use Modules\Core\Support\Traits\AuditTrait;
+
 class Category extends Model
 {
-  use Translatable, NodeTrait, MediaRelation;
+  use Translatable, NodeTrait, MediaRelation, AuditTrait;
 
   protected $table = 'iad__categories';
   public $translatedAttributes = ['title', 'description', 'slug'];
