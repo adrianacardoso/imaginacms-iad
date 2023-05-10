@@ -4,6 +4,7 @@ namespace Modules\Iad\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Modules\Isite\Transformers\RevisionTransformer;
 
 class CategoryTransformer extends JsonResource
 {
@@ -23,6 +24,7 @@ class CategoryTransformer extends JsonResource
       'mediaFiles' => $this->mediaFiles(),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
+      'revisions' => RevisionTransformer::collection($this->whenLoaded('revisions')),
     ];
 
     // Return data with available translations

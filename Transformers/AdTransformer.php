@@ -13,6 +13,7 @@ use Modules\Ilocations\Transformers\NeighborhoodTransformer;
 use Modules\Iad\Transformers\CategoryTransformer;
 use Modules\Iad\Transformers\FieldTransformer;
 use Modules\Iad\Transformers\ScheduleTransformer;
+use Modules\Isite\Transformers\RevisionTransformer;
 
 class AdTransformer extends JsonResource
 {
@@ -51,6 +52,7 @@ class AdTransformer extends JsonResource
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
       'defaultPrice' => $this->defaultPrice,
+      'revisions' => RevisionTransformer::collection($this->whenLoaded('revisions')),
     ];
 
     // Return data with available translations
