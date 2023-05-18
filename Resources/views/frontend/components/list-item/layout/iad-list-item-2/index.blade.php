@@ -15,7 +15,7 @@
     @if(!empty($item->defaultPrice))
       <p class="item text-muted">
       <div class="d-inline-block price">
-        ${{iSiteFormatMoney($item->defaultPrice)}}
+        ${{isiteFormatMoney($item->defaultPrice)}}
       </div>
       <span class="register"></span>COP
       </p>
