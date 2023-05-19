@@ -48,6 +48,7 @@ class AdTransformer extends JsonResource
       'adUps' => AdUpTransformer::collection($this->whenLoaded('adUps')),
       'mediaFiles' => $this->mediaFiles(),
       'checked' => $this->checked ? '1' : '0',
+      'sortOrder' => $this->sort_order ?? 0,
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
       'defaultPrice' => $this->defaultPrice,
