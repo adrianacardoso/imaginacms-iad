@@ -290,6 +290,11 @@ class EloquentAdRepository extends EloquentBaseRepository implements AdRepositor
       if(isset($filter->userId)){
         $query->where('user_id', $filter->userId);
       }
+
+      if (isset($filter->id)) {
+        !is_array($filter->id) ? $filter->id = [$filter->id] : false;
+        $query->where('id', $filter->id);
+      }
     }
 
     //Order by "Sort order"

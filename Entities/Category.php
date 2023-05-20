@@ -7,14 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 use Modules\Media\Support\Traits\MediaRelation;
 use Illuminate\Support\Str;
+use Modules\Isite\Traits\RevisionableTrait;
 
 use Modules\Core\Support\Traits\AuditTrait;
 
 class Category extends Model
 {
-  use Translatable, NodeTrait, MediaRelation, AuditTrait;
+  use Translatable, NodeTrait, MediaRelation, AuditTrait, RevisionableTrait;
+
+  public $transformer = 'Modules\Iad\Transformers\CategoryTransformer';
+  public $entity = 'Modules\Iad\Entities\Category';
+  public $repository = 'Modules\Iad\Repositories\CategoryRepository';
 
   protected $table = 'iad__categories';
+
   public $translatedAttributes = ['title', 'description', 'slug'];
   protected $fillable = [
     'parent_id',
