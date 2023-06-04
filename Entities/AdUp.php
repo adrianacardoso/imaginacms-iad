@@ -4,10 +4,17 @@ namespace Modules\Iad\Entities;
 
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Icrud\Entities\CrudModel;
 
-class AdUp extends Model
+class AdUp extends CrudModel
 {
-
+  public $transformer = 'Modules\Iad\Transformers\AdUpTransformer';
+  public $entity = 'Modules\Iad\Entities\AdUp';
+  public $repository = 'Modules\Iad\Repositories\AdUpRepository';
+  public $requestValidation = [
+    'create' => 'Modules\Iad\Http\Requests\CreateAdUpRequest',
+    'update' => 'Modules\Iad\Http\Requests\UpdateAdUpRequest',
+  ];
     protected $table = 'iad__ad_up';
     protected $fillable = [
       'ad_id',

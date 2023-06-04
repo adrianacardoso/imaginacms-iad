@@ -2,126 +2,60 @@
 
 namespace Modules\Iad\Repositories\Eloquent;
 
+use Modules\Core\Icrud\Repositories\Eloquent\EloquentCrudRepository;
 use Modules\Iad\Repositories\ScheduleRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
-class EloquentScheduleRepository extends EloquentBaseRepository implements ScheduleRepository
+class EloquentScheduleRepository extends EloquentCrudRepository implements ScheduleRepository
 {
-  public function getItemsBy($params = false)
+  /**
+   * Filter names to replace
+   * @var array
+   */
+  protected $replaceFilters = [];
+  
+  /**
+   * Relation names to replace
+   * @var array
+   */
+  protected $replaceSyncModelRelations = [];
+  
+  /**
+   * Filter query
+   *
+   * @param $query
+   * @param $filter
+   * @return mixed
+   */
+  public function filterQuery($query, $filter)
   {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
-    } else {//Especific relationships
-      $includeDefault = [];//Default relationships
-      if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include);
-      $query->with($includeDefault);//Add Relationships to query
-    }
-
-    /*== FILTERS ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;//Short filter
-
-      //Filter by date
-      if (isset($filter->date)) {
-        $date = $filter->date;//Short filter date
-        $date->field = $date->field ?? 'created_at';
-        if (isset($date->from))//From a date
-          $query->whereDate($date->field, '>=', $date->from);
-        if (isset($date->to))//to a date
-          $query->whereDate($date->field, '<=', $date->to);
-      }
-
-      //Order by
-      if (isset($filter->order)) {
-        $orderByField = $filter->order->field ?? 'created_at';//Default field
-        $orderWay = $filter->order->way ?? 'desc';//Default way
-        $query->orderBy($orderByField, $orderWay);//Add order to query
-      }
-    }
-
-    /*== FIELDS ==*/
-    if (isset($params->fields) && count($params->fields))
-      $query->select($params->fields);
-
-    /*== REQUEST ==*/
-    if (isset($params->page) && $params->page) {
-      return $query->paginate($params->take);
-    } else {
-      $params->take ? $query->take($params->take) : false;//Take
-      return $query->get();
-    }
+    
+    //Response
+    return $query;
   }
-
-  public function getItem($criteria, $params = false)
+  
+  /**
+   * Method to sync Model Relations
+   *
+   * @param $model ,$data
+   * @return $model
+   */
+  public function syncModelRelations($model, $data)
   {
-    //Initialize query
-    $query = $this->model->query();
-
-    /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
-    } else {//Especific relationships
-      $includeDefault = [];//Default relationships
-      if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include);
-      $query->with($includeDefault);//Add Relationships to query
-    }
-
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      if (isset($filter->field))//Filter by specific field
-        $field = $filter->field;
-    }
-
-    /*== FIELDS ==*/
-    if (isset($params->fields) && count($params->fields))
-      $query->select($params->fields);
-
-    /*== REQUEST ==*/
-    return $query->where($field ?? 'id', $criteria)->first();
-  }
-
-  public function updateBy($criteria, $data, $params = false)
-  {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      //Update by field
-      if (isset($filter->field))
-        $field = $filter->field;
-    }
-
-    /*== REQUEST ==*/
-    $model = $query->where($field ?? 'id', $criteria)->first();
-    return $model ? $model->update((array)$data) : false;
-  }
-
-  public function deleteBy($criteria, $params = false)
-  {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      if (isset($filter->field))//Where field
-        $field = $filter->field;
-    }
-
-    /*== REQUEST ==*/
-    $model = $query->where($field ?? 'id', $criteria)->first();
-    $model ? $model->delete() : false;
+    //Get model relations data from attribute of model
+    $modelRelationsData = ($model->modelRelations ?? []);
+    
+    /**
+     * Note: Add relation name to replaceSyncModelRelations attribute before replace it
+     *
+     * Example to sync relations
+     * if (array_key_exists(<relationName>, $data)){
+     *    $model->setRelation(<relationName>, $model-><relationName>()->sync($data[<relationName>]));
+     * }
+     *
+     */
+    
+    //Response
+    return $model;
   }
 }

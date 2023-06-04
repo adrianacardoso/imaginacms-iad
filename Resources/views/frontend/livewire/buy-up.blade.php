@@ -142,3 +142,97 @@
     </section>
   
   </div>
+  @once
+    <style>
+      .buy-up-pin #pin .pin-main-image {
+        width: auto;
+        margin: 0 auto;
+      }
+      .buy-up-pin #pin .pin-description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .buy-up-pin #ups .card-plan {
+        border: 1px solid var(--primary);
+        border-radius: 20px;
+        padding: 5%;
+        width: 100%;
+      }
+      @media (max-width: 576px) {
+        .buy-up-pin #ups .card-plan {
+          width: 95%;
+        }
+      }
+      .buy-up-pin #ups .card-plan .title {
+        color: var(--primary);
+        font-weight: 600;
+        position: relative;
+      }
+      .buy-up-pin #ups .card-plan .custom-html {
+        color: #444444;
+      }
+      .buy-up-pin #ups .card-plan .custom-html p, .buy-up-pin #ups .card-plan .custom-html h1, .buy-up-pin #ups .card-plan .custom-html h2, .buy-up-pin #ups .card-plan .custom-html h3, .buy-up-pin #ups .card-plan .custom-html h4, .buy-up-pin #ups .card-plan .custom-html h5, .buy-up-pin #ups .card-plan .custom-html h6 {
+        font-size: 0.875rem;
+        margin-bottom: 20px;
+      }
+      .buy-up-pin #ups .card-plan .price {
+        font-size: 1.563rem;
+        color: var(--primary);
+        text-align: center;
+      }
+      .buy-up-pin #ups .card-plan .price del {
+        font-size: 18px;
+      }
+      .buy-up-pin #ups .card-plan hr {
+        border-top: 1px solid var(--primary);
+      }
+      .buy-up-pin #ups .custom-control-plan {
+        padding-left: 0;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-label {
+        padding-top: 50px;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-label:before {
+        border: var(--primary) solid 1px;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-label:before, .buy-up-pin #ups .custom-control-plan .custom-control-label:after {
+        width: 27px;
+        height: 27px;
+        transform: translateX(-50%);
+        left: 50%;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label .card-plan {
+        background-color: var(--primary);
+        color: #fff;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label .card-plan .title {
+        color: #fff;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label .card-plan .price {
+        color: #fff;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label .card-plan hr {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label .custom-html {
+        color: #fff;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label::after {
+        background-image: none;
+        font-family: 'FontAwesome';
+        content: "\f00c";
+        color: #fff;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        font-size: 15px;
+        padding-left: 5px;
+      }
+      .buy-up-pin #ups .custom-control-plan .custom-control-input:checked ~ .custom-control-label::before {
+        color: #fff;
+        border-color: var(--primary);
+        background-color: var(--primary);
+      }
+
+    </style>
+  @endonce

@@ -6,84 +6,24 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Core\Icrud\Controllers\BaseCrudController;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Iad\Transformers\FieldTransformer;
 use Modules\Iad\Http\Requests\CreateFieldRequest;
 use Modules\Iad\Http\Requests\UpdateFieldRequest;
 use Modules\Iad\Repositories\FieldRepository;
 
-class FieldController extends BaseApiController
+class FieldController extends BaseCrudController
 {
-  private $field;
+  public $model;
+  public $modelRepository;
 
-  public function __construct(FieldRepository $field)
+  public function __construct(Field $model, FieldRepository $modelRepository)
   {
-    $this->field = $field;
+    $this->model = $model;
+    $this->modelRepository = $modelRepository;
   }
-
-  /**
-   * GET ITEMS
-   *
-   * @return mixed
-   */
-  public function index(Request $request)
-  {
-    try {
-      //Get Parameters from URL.
-      $params = $this->getParamsRequest($request);
-
-      //Request to Repository
-      $fields = $this->field->getItemsBy($params);
-
-      //Response
-      $response = [
-        "data" => FieldTransformer::collection($fields)
-      ];
-
-      //If request pagination add meta-page
-      $params->page ? $response["meta"] = ["page" => $this->pageTransformer($fields)] : false;
-    } catch (\Exception $e) {
-      $status = $this->getStatusError($e->getCode());
-      $response = ["errors" => $e->getMessage()];
-    }
-
-    //Return response
-    return response()->json($response, $status ?? 200);
-  }
-
-  /**
-   * GET A ITEM
-   *
-   * @param $criteria
-   * @return mixed
-   */
-  public function show($criteria, Request $request)
-  {
-    try {
-      //Get Parameters from URL.
-      $params = $this->getParamsRequest($request);
-
-
-      //Request to Repository
-      $field = $this->field->getItem($criteria, $params);
-
-      //Break if no found item
-      if (!$field) throw new \Exception('Item not found', 404);
-
-      //Response
-      $response = ["data" => new FieldTransformer($field)];
-
-      //If request pagination add meta-page
-      $params->page ? $response["meta"] = ["page" => $this->pageTransformer($field)] : false;
-    } catch (\Exception $e) {
-      $status = $this->getStatusError($e->getCode());
-      $response = ["errors" => $this->getErrorMessage($e)];
-    }
-
-    //Return response
-    return response()->json($response, $status ?? 200);
-  }
-
+  
   /**
    * CREATE A ITEM
    *
@@ -109,7 +49,7 @@ class FieldController extends BaseApiController
               $data['value'] = saveImage($data['value'], "assets/Iad/" . $data['user_id'] . ".jpg");
             }
             //Create item
-            $field=$this->field->create($data);
+            $field=$this->modelRepository->create($data);
 
           }
         }
@@ -156,7 +96,7 @@ class FieldController extends BaseApiController
 
       //Request to Repository
 
-      $entity=$this->field->updateBy($criteria, $data, $params);
+      $entity=$this->modelRepository->updateBy($criteria, $data, $params);
 
       //Response
       $response = ["data" => $entity];
@@ -175,33 +115,5 @@ class FieldController extends BaseApiController
     //Return response
     return response()->json($response, $status ?? 200);
   }
-
-  /**
-   * DELETE A ITEM
-   *
-   * @param $criteria
-   * @return mixed
-   */
-  public function delete($criteria, Request $request)
-  {
-    \DB::beginTransaction();
-    try {
-      //Get params
-      $params = $this->getParamsRequest($request);
-
-      //call Method delete
-      $this->field->deleteBy($criteria, $params);
-
-      //Response
-      $response = ["data" => ""];
-      \DB::commit();//Commit to Data Base
-    } catch (\Exception $e) {
-      \DB::rollback();//Rollback to Data Base
-      $status = $this->getStatusError($e->getCode());
-      $response = ["errors" => $e->getMessage()];
-    }
-
-    //Return response
-    return response()->json($response, $status ?? 200);
-  }
+  
 }
