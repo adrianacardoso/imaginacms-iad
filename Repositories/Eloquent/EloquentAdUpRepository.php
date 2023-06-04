@@ -28,7 +28,7 @@ class EloquentAdUpRepository extends EloquentCrudRepository implements AdUpRepos
    * @param $filter
    * @return mixed
    */
-  public function filterQuery($query, $filter)
+  public function filterQuery($query, $filter, $params)
   {
     
     /**

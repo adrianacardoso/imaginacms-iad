@@ -6,6 +6,7 @@ namespace Modules\Iad\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Log;
 use Mockery\CountValidator\Exception;
+use Modules\Core\Icrud\Controllers\BaseCrudController;
 use Modules\Iad\Entities\Ad;
 use Modules\Iad\Entities\Up;
 use Modules\Iad\Events\AdIsUpdating;
@@ -21,7 +22,7 @@ use Modules\Iad\Transformers\AdTransformer;
 use Route;
 use Modules\Iad\Entities\AdStatus;
 
-class UpApiController extends BaseApiController
+class UpApiController extends BaseCrudController
 {
   public $model;
   public $modelRepository;

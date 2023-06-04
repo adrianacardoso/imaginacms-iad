@@ -30,7 +30,7 @@ class EloquentUpRepository extends EloquentCrudRepository implements UpRepositor
    * @param $filter
    * @return mixed
    */
-  public function filterQuery($query, $filter)
+  public function filterQuery($query, $filter, $params)
   {
     //add filter by search
     if (isset($filter->search)) {

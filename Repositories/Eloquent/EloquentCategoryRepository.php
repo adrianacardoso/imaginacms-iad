@@ -46,7 +46,7 @@ class EloquentCategoryRepository extends EloquentCrudRepository implements Categ
    * @param $filter
    * @return mixed
    */
-  public function filterQuery($query, $filter)
+  public function filterQuery($query, $filter, $params)
   {
     //Filter search
     if (isset($filter->search)) {

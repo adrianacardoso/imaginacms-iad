@@ -26,7 +26,7 @@ class EloquentFieldRepository extends EloquentBaseRepository implements FieldRep
    * @param $filter
    * @return mixed
    */
-  public function filterQuery($query, $filter)
+  public function filterQuery($query, $filter, $params)
   {
   
     //Response
