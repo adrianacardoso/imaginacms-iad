@@ -8,11 +8,16 @@ use Modules\Iad\Entities\Ad;
 class HandleAdStatuses
 {
 
+    private $log = "Iad:: Events|Handlers|HandleAdStatuses";
+
     public function handle($event){
+
+        \Log::info($this->log);
+
         $userDriver = config('asgard.user.config.driver');
         $model = $event->model;
 
-        if($model->entity === "Modules\\User\\Entities\\{$userDriver}\\User") {
+        if($model->entity === "Modules\\User\\Entities\\{$userDriver}\\User" &&  \Schema::hasTable('iad__ads')) {
 
             $adsToChange = 0;
 
