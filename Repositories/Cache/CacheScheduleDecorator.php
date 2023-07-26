@@ -2,10 +2,11 @@
 
 namespace Modules\Iad\Repositories\Cache;
 
+use Modules\Core\Icrud\Repositories\Cache\BaseCacheCrudDecorator;
 use Modules\Iad\Repositories\ScheduleRepository;
 use Modules\Core\Repositories\Cache\BaseCacheDecorator;
 
-class CacheScheduleDecorator extends BaseCacheDecorator implements ScheduleRepository
+class CacheScheduleDecorator extends BaseCacheCrudDecorator implements ScheduleRepository
 {
     public function __construct(ScheduleRepository $schedule)
     {

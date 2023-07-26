@@ -14,14 +14,24 @@ use Modules\Ilocations\Entities\City;
 use Modules\Ilocations\Entities\Locality;
 use Modules\Ilocations\Entities\Neighborhood;
 use Modules\Iad\Entities\AdStatus;
+use Modules\Core\Icrud\Entities\CrudModel;
+use Modules\Isite\Traits\RevisionableTrait;
 
 use Modules\Core\Support\Traits\AuditTrait;
 
-class Ad extends Model
+class Ad extends CrudModel
 {
-  use Translatable, MediaRelation, AuditTrait;
+  use Translatable, MediaRelation;
 
+  public $transformer = 'Modules\Iad\Transformers\AdTransformer';
+  public $entity = 'Modules\Iad\Entities\Ad';
+  public $repository = 'Modules\Iad\Repositories\AdRepository';
+  public $requestValidation = [
+    'create' => 'Modules\Iad\Http\Requests\CreateAdRequest',
+    'update' => 'Modules\Iad\Http\Requests\UpdateAdRequest',
+  ];
   protected $table = 'iad__ads';
+
   public $translatedAttributes = ['title', 'description', 'slug'];
   protected $fillable = [
     'user_id',

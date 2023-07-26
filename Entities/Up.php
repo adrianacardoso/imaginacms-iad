@@ -4,11 +4,20 @@ namespace Modules\Iad\Entities;
 
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Icrud\Entities\CrudModel;
+use Modules\Isite\Traits\WithProduct;
 
-class Up extends Model
+class Up extends CrudModel
 {
-  use Translatable;
+  use Translatable, WithProduct;
   
+  public $transformer = 'Modules\Iad\Transformers\UpTransformer';
+  public $entity = 'Modules\Iad\Entities\Up';
+  public $repository = 'Modules\Iad\Repositories\UpRepository';
+  public $requestValidation = [
+    'create' => 'Modules\Iad\Http\Requests\CreateUpRequest',
+    'update' => 'Modules\Iad\Http\Requests\UpdateUpRequest',
+  ];
   protected $table = 'iad__ups';
   
   public $translatedAttributes = [
@@ -21,8 +30,4 @@ class Up extends Model
     'status',
   ];
   
-  public function product()
-  {
-    return $this->morphOne(\Modules\Icommerce\Entities\Product::class,'entity');
-  }
 }

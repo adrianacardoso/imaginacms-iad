@@ -5,16 +5,26 @@ namespace Modules\Iad\Entities;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
+use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Media\Support\Traits\MediaRelation;
 use Illuminate\Support\Str;
+use Modules\Isite\Traits\RevisionableTrait;
 
 use Modules\Core\Support\Traits\AuditTrait;
 
-class Category extends Model
+class Category extends CrudModel
 {
-  use Translatable, NodeTrait, MediaRelation, AuditTrait;
+  use Translatable, NodeTrait, MediaRelation;
 
+  public $transformer = 'Modules\Iad\Transformers\CategoryTransformer';
+  public $entity = 'Modules\Iad\Entities\Category';
+  public $repository = 'Modules\Iad\Repositories\CategoryRepository';
+  public $requestValidation = [
+    'create' => 'Modules\Iad\Http\Requests\CreateCategoryRequest',
+    'update' => 'Modules\Iad\Http\Requests\UpdateCategoryRequest',
+  ];
   protected $table = 'iad__categories';
+
   public $translatedAttributes = ['title', 'description', 'slug'];
   protected $fillable = [
     'parent_id',
