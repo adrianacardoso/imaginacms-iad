@@ -311,15 +311,21 @@ class EloquentAdRepository extends EloquentCrudRepository implements AdRepositor
 
     if (isset($params->filter->order)) $params->filter->order = false;
     isset($params->filter) ? empty($params->filter) ? $params->filter = (object)["noSortOrder" => true] : $params->filter->noSortOrder = true : false;
-    $params->onlyQuery = true;
+    $params->returnAsQuery = true;
     $params->order = false;
 
     $query = $this->getItemsBy($params);
+
+    //Fix
+    $query->select("status");
 
     $query->select(
       \DB::raw("MIN(iad__ads.min_price) AS minPrice"),
       \DB::raw("MAX(iad__ads.max_price) AS maxPrice")
     );
+
+    //strict mode, set it to the MYSQL 5.7
+    $query->groupBy('status');
 
     return $query->first();
   }
