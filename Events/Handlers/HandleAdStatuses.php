@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Modules\Iad\Events\Handlers;
 
 use Modules\Iad\Entities\Ad;
@@ -36,10 +35,7 @@ class HandleAdStatuses
                 ->orderBy('updated_at', 'asc')
                 ->update(['status' => $adStatus]);
 
-
-
             \Log::info("Ad changed from user: {$model->entityData->email} > {$adsToChange} to status: {$adStatus}");
         }
-
     }
 }
