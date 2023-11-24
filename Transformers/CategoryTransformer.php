@@ -17,7 +17,7 @@ class CategoryTransformer extends CrudResource
   public function modelAttributes($request)
   {
     return [
-      'url' => $this->when($this->url, $this->url),
+      'url' => $this->url,
     ];
   }
   

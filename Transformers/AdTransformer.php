@@ -30,7 +30,8 @@ class AdTransformer extends CrudResource
       'statusName' => $this->when(isset($this->statusName), $this->statusName),
       'checked' => $this->checked ? '1' : '0',
       'sortOrder' => $this->sort_order ?? 0,
-      'defaultPrice' => $this->defaultPrice
+      'defaultPrice' => $this->defaultPrice,
+      'url' => $this->url,
     ];
   }
   
