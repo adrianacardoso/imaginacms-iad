@@ -11,10 +11,11 @@ use Illuminate\Support\Str;
 use Modules\Isite\Traits\RevisionableTrait;
 
 use Modules\Core\Support\Traits\AuditTrait;
+use Modules\Iqreable\Traits\IsQreable;
 
 class Category extends CrudModel
 {
-  use Translatable, NodeTrait, MediaRelation;
+  use Translatable, NodeTrait, MediaRelation, IsQreable;
 
   public $transformer = 'Modules\Iad\Transformers\CategoryTransformer';
   public $entity = 'Modules\Iad\Entities\Category';
@@ -59,7 +60,7 @@ class Category extends CrudModel
   
     $currentLocale = \LaravelLocalization::getCurrentLocale();
  
-    if (!(request()->wantsJson() || Str::startsWith(request()->path(), 'api'))) {
+    if (!request()->wantsJson() || Str::startsWith(request()->path(), 'api')) {
   
       $url = tenant_route(request()->getHost(), $currentLocale . '.iad.ad.index.category',[$this->slug]);
       

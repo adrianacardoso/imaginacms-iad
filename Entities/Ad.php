@@ -18,10 +18,11 @@ use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\RevisionableTrait;
 
 use Modules\Core\Support\Traits\AuditTrait;
+use Modules\Iqreable\Traits\IsQreable;
 
 class Ad extends CrudModel
 {
-  use Translatable, MediaRelation;
+  use Translatable, MediaRelation, IsQreable;
 
   public $transformer = 'Modules\Iad\Transformers\AdTransformer';
   public $entity = 'Modules\Iad\Entities\Ad';
