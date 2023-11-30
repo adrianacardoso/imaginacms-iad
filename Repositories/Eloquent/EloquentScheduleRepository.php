@@ -21,6 +21,12 @@ class EloquentScheduleRepository extends EloquentCrudRepository implements Sched
   protected $replaceSyncModelRelations = [];
   
   /**
+   * Attribute to customize relations by default
+   * @var array
+   */
+  protected $includeToQuery = [];
+  
+  /**
    * Filter query
    *
    * @param $query

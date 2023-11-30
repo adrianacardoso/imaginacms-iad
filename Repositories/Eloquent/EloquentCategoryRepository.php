@@ -23,21 +23,12 @@ class EloquentCategoryRepository extends EloquentCrudRepository implements Categ
    */
   protected $replaceSyncModelRelations = [];
   
-  
   /**
-   * Method to include relations to query
-   * @param $query
-   * @param $relations
+   * Attribute to customize relations by default
+   * @var array
    */
-  public function includeToQuery($query, $relations)
-  {
-    //request all categories instances in the "relations" attribute in the entity model
-    if (in_array('*', $relations)) $relations = $this->model->getRelations() ?? ['files','translations'];
-    //Instance relations in query
-    $query->with($relations);
-    //Response
-    return $query;
-  }
+  protected $includeToQuery = ['files', 'translations'];
+  
   
   /**
    * Filter query
@@ -56,9 +47,8 @@ class EloquentCategoryRepository extends EloquentCrudRepository implements Categ
         });
       })->orWhere('id', 'like', "%{$filter->search}%");
     }
-  
-  
-  
+    
+    
     //Filter by parent ID
     if (isset($filter->parentId)) {
       if ($filter->parentId == 0) {
@@ -67,11 +57,26 @@ class EloquentCategoryRepository extends EloquentCrudRepository implements Categ
         $query->where("parent_id", $filter->parentId);
       }
     }
-  
+    
     //Filter by  IDs
     if (isset($filter->ids)) {
       is_array($filter->ids) ? true : $filter->ids = [$filter->ids];
       $query->whereIn('iad__categories.id', $filter->ids);
+    }
+    
+    if (isset($params->setting) && isset($params->setting->fromAdmin) && $params->setting->fromAdmin) {
+    
+    } else {
+      
+      //Pre filters by default
+      //pre-filter date_available
+      //Pre filters by default
+      $this->defaultPreFilters($query, $params);
+    }
+  
+    //Order by "Sort order"
+    if (!isset($params->filter->noSortOrder) || !$params->filter->noSortOrder) {
+      $query->orderBy('sort_order', 'desc');//Add order to query
     }
     
     //Response
@@ -126,5 +131,13 @@ class EloquentCategoryRepository extends EloquentCrudRepository implements Categ
     }
     
     return $query->first();
+  }
+  
+  public function defaultPreFilters($query, $params)
+  {
+    
+    //Pre filters by default
+    $query->where("status", 1);
+    
   }
 }
