@@ -18,7 +18,8 @@ use Modules\Isite\Transformers\RevisionTransformer;
 
 class AdTransformer extends CrudResource
 {
-  
+
+
   /**
    * Method to merge values with response
    *
@@ -32,7 +33,8 @@ class AdTransformer extends CrudResource
       'sortOrder' => $this->sort_order ?? 0,
       'defaultPrice' => $this->defaultPrice,
       'url' => $this->url,
+      'fields' => $this->fields
     ];
   }
-  
+
 }
