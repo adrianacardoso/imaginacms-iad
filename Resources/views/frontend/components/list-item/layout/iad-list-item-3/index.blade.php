@@ -1,6 +1,8 @@
 <div class="pins">
   <div class="card-pin {{$item->featured ? 'featured' : ''}}">
-
+    <div class="card-pin-id">
+      {{$item->id}}
+    </div>
     <figure class="figure">
       <x-media::single-image :alt="$item->title ?? $item->name"
                              :title="$item->title ?? $item->name"
