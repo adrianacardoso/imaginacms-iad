@@ -231,10 +231,23 @@ class EloquentAdRepository extends EloquentCrudRepository implements AdRepositor
     //  $query->where("iad__ads.city_id", $filter->cityId);
     //}
 
+    // filter by fields
+    $extraFields = config('asgard.iad.config.adExtraFields') ?? [];
+    $filterFields = array_intersect(array_keys((array)$filter), $extraFields);
+    if (count($filterFields)) {
+      $query->whereHas('fields', function ($query) use ($filter, $filterFields) {
+        foreach ($filterFields as $fieldName) {
+          $query->where(function ($query) use ($filter, $fieldName) {
+            $query->where('iad__fields.name', $fieldName)
+              ->where('iad__fields.value', $filter->$fieldName);
+          });
+        }
+      });
+    }
+
     //Filter Search
     if (isset($filter->search) && !empty($filter->search)) {
       $criterion = $filter->search;
-
       $query->whereHas('translations', function (Builder $q) use ($criterion) {
         $q->where('title', 'like', "%{$criterion}%");
         $q->orWhere('description', 'like', "%{$criterion}%");
