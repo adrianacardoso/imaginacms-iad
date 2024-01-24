@@ -33,12 +33,18 @@
         @endif
         @endforeach
         <div class="col col-extra">
-          @if(!empty($item->options->bpni))
-            <div class="card-pin-title">BPIN</div>
-            <div class="card-pin-text">{{$item->options->bpni}}</div>
-          @endif
+          @foreach($item->fields as $field)
+            @if(isset($field->name) && ($field->name == 'bpin'))
+                <div class="card-pin-title">
+                  {{ trans('icustom::common.crudFields.bpni') }}
+                </div>
+                <div class="card-pin-text">
+                  {{$field->value}}
+                </div>
+            @endif
+          @endforeach
           @if(!empty($item->min_price))
-            <div class="card-pin-title">VALOR</div>
+            <div class="card-pin-title">{{ trans('icustom::common.crudFields.worth') }}</div>
             <div class="card-pin-text text-color">{{"$" . number_format($item->min_price, 0, ",", ".")}}</div>
           @endif
         </div>
