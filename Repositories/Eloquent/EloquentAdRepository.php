@@ -257,10 +257,6 @@ class EloquentAdRepository extends EloquentCrudRepository implements AdRepositor
 
     $this->validateIndexAllPermission($query, $params);
 
-    //Order by "Sort order"
-    if (!isset($params->filter->noSortOrder) || !$params->filter->noSortOrder) {
-      $query->orderBy('sort_order', 'desc');//Add order to query
-    }
     if (isset($params->setting) && isset($params->setting->fromAdmin) && $params->setting->fromAdmin) {
 
     } else {
