@@ -12,8 +12,8 @@
     </figure>
     <a href="{{$item->url}}" class="d-block">
     <div class="card-pin-body p-0">
-      <div class="card-pin-description">
-        {{$item->description}}
+      <div class="card-pin-title-main">
+        {{$item->title}}
       </div>
       <div class="row no-gutters">
         @if(isset($item->city->name))
