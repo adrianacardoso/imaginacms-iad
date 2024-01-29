@@ -27,18 +27,38 @@
         @foreach($item->categories as $category)
         @if($category->parent_id == 2)
           <div class="col-auto mr-2">
-            <i class="fa-solid fa-road icon"></i>
-            <div class="card-pin-category"> {{$category->title}}</div>
+            <div class="icon">
+              @if(isset($category->mediaFiles()->mainimage) &&
+                      !empty($category->mediaFiles()->mainimage) &&
+                       strpos($category->mediaFiles()->mainimage->extraLargeThumb, 'default.jpg') == false)
+                  <x-media::single-image
+                          imgClasses="icon"
+                          :mediaFiles="$category->mediaFiles()"
+                          :isMedia="true" :alt="$category->title"
+                  />
+              @else
+                  <x-media::single-image
+                          imgClasses="icon"
+                          setting="icustom::imageDefault"/>
+              @endif
+            </div>
+            <div class="card-pin-category" > {{$category->title}}</div>
           </div>
         @endif
         @endforeach
         <div class="col col-extra">
-          @if(!empty($item->options->bpni))
-            <div class="card-pin-title">BPIN</div>
-            <div class="card-pin-text">{{$item->options->bpni}}</div>
-          @endif
+          @foreach($item->fields as $field)
+            @if(isset($field->name) && ($field->name == 'bpin'))
+                <div class="card-pin-title">
+                  {{ trans('icustom::common.crudFields.bpni') }}
+                </div>
+                <div class="card-pin-text" title="{{$field->value}}">
+                  {{$field->value}}
+                </div>
+            @endif
+          @endforeach
           @if(!empty($item->min_price))
-            <div class="card-pin-title">VALOR</div>
+            <div class="card-pin-title">{{ trans('icustom::common.crudFields.worth') }}</div>
             <div class="card-pin-text text-color">{{"$" . number_format($item->min_price, 0, ",", ".")}}</div>
           @endif
         </div>
