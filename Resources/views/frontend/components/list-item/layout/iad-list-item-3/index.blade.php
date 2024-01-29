@@ -27,8 +27,22 @@
         @foreach($item->categories as $category)
         @if($category->parent_id == 2)
           <div class="col-auto mr-2">
-            <i class="fa-solid fa-road icon"></i>
-            <div class="card-pin-category"> {{$category->title}}</div>
+            <div class="icon">
+              @if(isset($category->mediaFiles()->mainimage) &&
+                      !empty($category->mediaFiles()->mainimage) &&
+                       strpos($category->mediaFiles()->mainimage->extraLargeThumb, 'default.jpg') == false)
+                  <x-media::single-image
+                          imgClasses="icon"
+                          :mediaFiles="$category->mediaFiles()"
+                          :isMedia="true" :alt="$category->title"
+                  />
+              @else
+                  <x-media::single-image
+                          imgClasses="icon"
+                          setting="icustom::imageDefault"/>
+              @endif
+            </div>
+            <div class="card-pin-category" > {{$category->title}}</div>
           </div>
         @endif
         @endforeach
@@ -38,7 +52,7 @@
                 <div class="card-pin-title">
                   {{ trans('icustom::common.crudFields.bpni') }}
                 </div>
-                <div class="card-pin-text">
+                <div class="card-pin-text" title="{{$field->value}}">
                   {{$field->value}}
                 </div>
             @endif
