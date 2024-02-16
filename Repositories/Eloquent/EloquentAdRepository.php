@@ -73,6 +73,15 @@ class EloquentAdRepository extends EloquentCrudRepository implements AdRepositor
       });
 
     }
+  
+    // add filter by Categories Intersected 1 or more than 1, in array
+    if (isset($filter->categoriesIntersected) && !empty($filter->categoriesIntersected)) {
+      is_array($filter->categoriesIntersected) ? true : $filter->categoriesIntersected = [$filter->categoriesIntersected];
+      $query->where(function ($query) use ($filter) {
+        foreach ($filter->categoriesIntersected as $categoryId)
+          $query->whereRaw("iad__ads.id IN (SELECT ad_id from iad__ad_category where category_id = $categoryId)");
+      });
+    }
 
     // add filter by Price Range
     if (isset($filter->priceRange) && !empty($filter->priceRange)) {
