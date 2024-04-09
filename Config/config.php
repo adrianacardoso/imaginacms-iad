@@ -295,7 +295,7 @@ return [
       //Required: this is the identificator of the request, must be unique with respect to other requestable types
       "type" => "requestCheckAd",
       // Title can be trantaled or not, the language take the config app.locale
-      "title" => "iad::iad.requestable.requestCheckAd",
+      "title" => "requestCheckAd",
       /*
        Optional: Path of the Entity related to the requestable
        The requestable Id can be saved in the requestable
