@@ -15,7 +15,7 @@ class UpTransformer extends CrudResource
         if (is_module_enabled('Icommerce')) {
             $productTransformer = 'Modules\\Icommerce\\Transformers\\ProductTransformer';
             $data['productId'] = $this->product->id ?? '';
-            $data['product'] = new $productTransformer($this->when($this->product->id, $this->product));
+            $data['product'] = new $productTransformer($this->whenLoaded('product'));
         }
 
         return $data;
