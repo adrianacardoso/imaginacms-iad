@@ -16,6 +16,7 @@ use Modules\Ilocations\Entities\Neighborhood;
 use Modules\Iad\Entities\AdStatus;
 use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\RevisionableTrait;
+use Modules\Requestable\Entities\Requestable;
 
 use Modules\Core\Support\Traits\AuditTrait;
 use Modules\Iqreable\Traits\IsQreable;
@@ -123,6 +124,14 @@ class Ad extends CrudModel
     public function setOptionsAttribute($value)
     {
         $this->attributes['options'] = json_encode($value);
+    }
+
+    public function requestable()
+    {
+      $requestableTable = (new Requestable())->getTable();
+      return $this->hasOne(Requestable::class, 'requestable_id')
+        ->where("$requestableTable.requestable_type", self::class)
+        ->where("$requestableTable.type", 'requestCheckAd');
     }
 
     /**
