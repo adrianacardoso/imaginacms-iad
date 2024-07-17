@@ -102,7 +102,7 @@
                   </a>
                 @endif
                 <a class="btn btn-like"
-                   onClick="window.livewire.emit('addToWishList',{{json_encode(["entityName" => "Modules\\Iad\\Entities\\Ad", "entityId" => $item->id])}})">
+                   onClick="window.livewire.dispatch('addToWishList',{{json_encode(["entityName" => "Modules\\Iad\\Entities\\Ad", "entityId" => $item->id])}})">
                   <i class="fa fa-heart"></i>
                 </a>
               </div>
