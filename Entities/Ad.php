@@ -153,4 +153,14 @@ class Ad extends CrudModel
     return $defaultPrice ? $defaultPrice->value : $this->min_price;
   }
 
+    public function getCacheClearableData()
+    {
+        return [
+            'urls' => array_merge(
+                [config("app.url"),
+                    $this->url],
+                $this->categories->pluck('url')->toArray())
+        ];
+    }
+
 }

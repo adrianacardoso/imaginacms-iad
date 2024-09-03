@@ -87,4 +87,15 @@ class Category extends CrudModel
   {
     return 'parent_id';
   }
+
+    public function getCacheClearableData()
+    {
+        return [
+            'urls' => [
+                config("app.url"),
+                $this->url
+            ]
+        ];
+    }
+
 }
