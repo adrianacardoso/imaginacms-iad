@@ -7,4 +7,7 @@ use Modules\Core\Repositories\BaseRepository;
 
 interface AdRepository extends BaseCrudRepository
 {
+
+  public function getPriceRange($params);
+
 }
