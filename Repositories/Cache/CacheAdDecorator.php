@@ -14,4 +14,17 @@ class CacheAdDecorator extends BaseCacheCrudDecorator implements AdRepository
         $this->entityName = 'iad.ads';
         $this->repository = $ad;
     }
+
+  /**
+   * Min and Max Price
+   *
+   * @return collection
+   */
+  public function getPriceRange($params)
+  {
+    return $this->remember(function () use ($params) {
+      return $this->repository->getPriceRange($params);
+    });
+  }
+
 }
