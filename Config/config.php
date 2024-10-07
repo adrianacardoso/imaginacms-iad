@@ -337,6 +337,9 @@ return [
     'ads' => "iad::cms.documentation.ads",
     'categories' => "iad::cms.documentation.categories",
     'ups' => "iad::cms.documentation.ups",
-  ]
+  ],
+  'adExtraFields' => [],
+  'searchExtraFields' => [],
+  'searchInRelation' => [],
 ];
 
