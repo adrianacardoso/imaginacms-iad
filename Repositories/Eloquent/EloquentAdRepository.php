@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 class EloquentAdRepository extends EloquentCrudRepository implements AdRepository
 {
-    /**
-     * Filter names to replace
-     *
-     * @var array
-     */
-    protected $replaceFilters = [];
+  /**
+   * Filter names to replace
+   *
+   * @var array
+   */
+  protected $replaceFilters = [];
 
-    /**
-     * Relation names to replace
-     *
-     * @var array
-     */
-    protected $replaceSyncModelRelations = [];
+  /**
+   * Relation names to replace
+   *
+   * @var array
+   */
+  protected $replaceSyncModelRelations = [];
 
 
   /**
@@ -258,11 +258,35 @@ class EloquentAdRepository extends EloquentCrudRepository implements AdRepositor
     //Filter Search
     if (isset($filter->search) && !empty($filter->search)) {
       $criterion = $filter->search;
-      $query->whereHas('translations', function (Builder $q) use ($criterion) {
-        $q->where('title', 'like', "%{$criterion}%");
-        $q->orWhere('description', 'like', "%{$criterion}%");
+      $query->where(function ($query) use ($criterion) {
+        $query->whereHas('translations', function (Builder $q) use ($criterion) {
+          $q->where('title', 'like', "%{$criterion}%");
+          $q->orWhere('description', 'like', "%{$criterion}%");
+        });
+        $searchExtraFields = config('asgard.iad.config.searchExtraFields') ?? [];
+        if (!empty($searchExtraFields)) {
+          $query->orWhereHas('fields', function ($query) use ($searchExtraFields, $criterion) {
+            foreach ($searchExtraFields as $fieldName) {
+              $query->where(function ($query) use ($fieldName, $criterion) {
+                $query->where('iad__fields.name', $fieldName)
+                  ->where('iad__fields.value', 'like', "%{$criterion}%");
+              });
+            }
+          });
+        }
+        $searchInRelation = config('asgard.iad.config.searchInRelation') ?? [];
+        if (!empty($searchInRelation)) {
+          foreach ($searchInRelation as $fieldName) {
+            $query->orWhereHas($fieldName, function ($query) use ($criterion, $fieldName) {
+              $query->whereHas('translations', function (Builder $q) use ($criterion, $fieldName) {
+                $q->where(function ($query) use ($criterion) {
+                  $query->where('name', 'like', "%{$criterion}%");
+                });
+              });
+            });
+          }
+        }
       });
-
     }
 
     $this->validateIndexAllPermission($query, $params);
