@@ -53,21 +53,21 @@ class Category extends CrudModel
   {
     return $this->belongsToMany(Ad::class, 'iad__ad_category');
   }
-  
+
   public function getUrlAttribute()
   {
     $url = "";
-  
+
     $currentLocale = \LaravelLocalization::getCurrentLocale();
- 
+
     if (!request()->wantsJson() || Str::startsWith(request()->path(), 'api')) {
-  
-      $url = tenant_route(request()->getHost(), $currentLocale . '.iad.ad.index.category',[$this->slug]);
-      
+
+      $url = tenant_route(request()->getHost(), $currentLocale . '.iad.ad.index.category', [$this->slug]);
+
     }
     return $url;
   }
-  
+
   public function getLftName()
   {
     return 'lft';
@@ -88,14 +88,15 @@ class Category extends CrudModel
     return 'parent_id';
   }
 
-    public function getCacheClearableData()
-    {
-        return [
-            'urls' => [
-                config("app.url"),
-                $this->url
-            ]
-        ];
-    }
+  public function getCacheClearableData()
+  {
+    $baseUrls = [config("app.url")];
 
+    if (!$this->wasRecentlyCreated) {
+      $baseUrls[] = $this->url;
+    }
+    $urls = ['urls' => $baseUrls];
+
+    return $urls;
+  }
 }
