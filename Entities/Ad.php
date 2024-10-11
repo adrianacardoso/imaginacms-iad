@@ -23,146 +23,159 @@ use Modules\Iqreable\Traits\IsQreable;
 
 class Ad extends CrudModel
 {
-    use Translatable, MediaRelation, IsQreable;
+  use Translatable, MediaRelation, IsQreable;
 
-    public $transformer = 'Modules\Iad\Transformers\AdTransformer';
+  public $transformer = 'Modules\Iad\Transformers\AdTransformer';
 
-    public $entity = 'Modules\Iad\Entities\Ad';
+  public $entity = 'Modules\Iad\Entities\Ad';
 
-    public $repository = 'Modules\Iad\Repositories\AdRepository';
+  public $repository = 'Modules\Iad\Repositories\AdRepository';
 
-    public $requestValidation = [
-        'create' => 'Modules\Iad\Http\Requests\CreateAdRequest',
-        'update' => 'Modules\Iad\Http\Requests\UpdateAdRequest',
-    ];
+  public $requestValidation = [
+    'create' => 'Modules\Iad\Http\Requests\CreateAdRequest',
+    'update' => 'Modules\Iad\Http\Requests\UpdateAdRequest',
+  ];
 
-    protected $table = 'iad__ads';
+  protected $table = 'iad__ads';
 
-    public $translatedAttributes = ['title', 'description', 'slug'];
+  public $translatedAttributes = ['title', 'description', 'slug'];
 
-    protected $fillable = [
-        'user_id',
-        'status',
-        'min_price',
-        'max_price',
-        'country_id',
-        'province_id',
-        'city_id',
-        'neighborhood_id',
-        'lat',
-        'lng',
-        'featured',
-        'sort_order',
-        'options',
-        'uploaded_at',
-        'checked',
-    ];
+  protected $fillable = [
+    'user_id',
+    'status',
+    'min_price',
+    'max_price',
+    'country_id',
+    'province_id',
+    'city_id',
+    'neighborhood_id',
+    'lat',
+    'lng',
+    'featured',
+    'sort_order',
+    'options',
+    'uploaded_at',
+    'checked',
+  ];
 
-    protected $fakeColumns = ['options'];
+  protected $fakeColumns = ['options'];
 
-    protected $casts = ['options' => 'array'];
+  protected $casts = ['options' => 'array'];
 
-    public function user()
-    {
-        $driver = config('asgard.user.config.driver');
+  public function user()
+  {
+    $driver = config('asgard.user.config.driver');
 
-        return $this->belongsTo("Modules\\User\\Entities\\{$driver}\\User");
+    return $this->belongsTo("Modules\\User\\Entities\\{$driver}\\User");
+  }
+
+  public function categories()
+  {
+    return $this->belongsToMany(Category::class, 'iad__ad_category');
+  }
+
+  public function adUps()
+  {
+    return $this->hasMany(AdUp::class);
+  }
+
+  public function fields()
+  {
+    return $this->hasMany(Field::class);
+  }
+
+  public function schedule()
+  {
+    return $this->hasMany(Schedule::class);
+  }
+
+  public function country()
+  {
+    return $this->belongsTo(Country::class);
+  }
+
+  public function province()
+  {
+    return $this->belongsTo(Province::class);
+  }
+
+  public function city()
+  {
+    return $this->belongsTo(City::class);
+  }
+
+  public function locality()
+  {
+    return $this->belongsTo(Locality::class);
+  }
+
+  public function neighborhood()
+  {
+    return $this->belongsTo(Neighborhood::class);
+  }
+
+  public function getStatusNameAttribute()
+  {
+    $adStatuses = new AdStatus();
+
+    return collect($adStatuses->get())->where('id', $this->status)->pluck('name')->first();
+  }
+
+  public function setOptionsAttribute($value)
+  {
+    $this->attributes['options'] = json_encode($value);
+  }
+
+  public function requestable()
+  {
+    $requestableTable = (new Requestable())->getTable();
+    return $this->hasOne(Requestable::class, 'requestable_id')
+      ->where("$requestableTable.requestable_type", self::class)
+      ->where("$requestableTable.type", 'requestCheckAd');
+  }
+
+  /**
+   * URL product
+   */
+  public function getUrlAttribute()
+  {
+    return \URL::route(\LaravelLocalization::getCurrentLocale() . '.iad.ad.show', $this->slug);
+  }
+
+  public function getOptionsAttribute($value)
+  {
+    return json_decode($value);
+  }
+
+  public function getEntityTitleAttribute()
+  {
+    return trans('Test entity name');
+  }
+
+  public function getDefaultPriceAttribute()
+  {
+    //instance default price
+    $defaultPrice = 0;
+
+    //Search default price in list price
+    if (isset($this->options->prices) && is_array($this->options->prices)) {
+      $defaultPrice = collect($this->options->prices)->where('default', '1')->first();
     }
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'iad__ad_category');
+    //response
+    return $defaultPrice ? $defaultPrice->value : $this->min_price;
+  }
+
+  public function getCacheClearableData()
+  {
+    $baseUrls = [config("app.url")];
+    $categoryUrls = $this->categories->pluck('url')->toArray();
+    if (!$this->wasRecentlyCreated) {
+      $baseUrls[] = $this->url;
     }
+    $urls = ['urls' => array_merge($baseUrls, $categoryUrls)];
 
-    public function adUps()
-    {
-        return $this->hasMany(AdUp::class);
-    }
+    return $urls;
+  }
 
-    public function fields()
-    {
-        return $this->hasMany(Field::class);
-    }
-
-    public function schedule()
-    {
-        return $this->hasMany(Schedule::class);
-    }
-
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
-
-    public function province()
-    {
-        return $this->belongsTo(Province::class);
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
-
-    public function locality()
-    {
-        return $this->belongsTo(Locality::class);
-    }
-
-    public function neighborhood()
-    {
-        return $this->belongsTo(Neighborhood::class);
-    }
-
-    public function getStatusNameAttribute()
-    {
-        $adStatuses = new AdStatus();
-
-        return collect($adStatuses->get())->where('id', $this->status)->pluck('name')->first();
-    }
-
-    public function setOptionsAttribute($value)
-    {
-        $this->attributes['options'] = json_encode($value);
-    }
-
-    public function requestable()
-    {
-      $requestableTable = (new Requestable())->getTable();
-      return $this->hasOne(Requestable::class, 'requestable_id')
-        ->where("$requestableTable.requestable_type", self::class)
-        ->where("$requestableTable.type", 'requestCheckAd');
-    }
-
-    /**
-     * URL product
-     */
-    public function getUrlAttribute()
-    {
-        return \URL::route(\LaravelLocalization::getCurrentLocale().'.iad.ad.show', $this->slug);
-    }
-
-    public function getOptionsAttribute($value)
-    {
-        return json_decode($value);
-    }
-
-    public function getEntityTitleAttribute()
-    {
-        return trans('Test entity name');
-    }
-
-    public function getDefaultPriceAttribute()
-    {
-        //instance default price
-        $defaultPrice = 0;
-
-        //Search default price in list price
-        if (isset($this->options->prices) && is_array($this->options->prices)) {
-            $defaultPrice = collect($this->options->prices)->where('default', '1')->first();
-        }
-
-        //response
-        return $defaultPrice ? $defaultPrice->value : $this->min_price;
-    }
 }
