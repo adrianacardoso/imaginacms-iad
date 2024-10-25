@@ -50,4 +50,11 @@ return [
         'destroy' => 'iad::uplog.destroy resource',
         'manage' => 'iad::uplog.manage resource',
     ],
+    'iad.bids' => [
+        'manage' => 'iad::bids.manage resource',
+        'index' => 'iad::bids.list resource',
+        'create' => 'iad::bids.create resource',
+        'edit' => 'iad::bids.edit resource',
+        'destroy' => 'iad::bids.destroy resource',
+    ],
 ];

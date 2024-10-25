@@ -154,7 +154,20 @@ class IadServiceProvider extends ServiceProvider
                 return new \Modules\Iad\Repositories\Cache\CacheUpLogDecorator($repository);
             }
         );
-        // add bindings
+        $this->app->bind(
+            'Modules\Iad\Repositories\BidRepository',
+            function () {
+                $repository = new \Modules\Iad\Repositories\Eloquent\EloquentBidRepository(new \Modules\Iad\Entities\Bid());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iad\Repositories\Cache\CacheBidDecorator($repository);
+            }
+        );
+// add bindings
+
     }
 
     /**

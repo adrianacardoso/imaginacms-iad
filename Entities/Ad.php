@@ -89,6 +89,11 @@ class Ad extends CrudModel
     return $this->hasMany(Schedule::class);
   }
 
+  public function bids()
+  {
+    return $this->hasMany(Bid::class);
+  }
+
   public function country()
   {
     return $this->belongsTo(Country::class);

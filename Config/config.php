@@ -223,6 +223,9 @@ return [
       'mainimage' => 'single',
       'secondaryimage' => 'single',
     ],
+    'bid' => [
+      'documents' => 'multiple'
+    ]
   ],
 
   //DEfine entities allowed to limit with Iplan Module
