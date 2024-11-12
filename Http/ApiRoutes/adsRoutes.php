@@ -11,7 +11,7 @@ Route::prefix('pins')->group(function (Router $router) {
     $router->get('/', [
         'as' => 'api.iad.ads.index',
         'uses' => 'AdApiController@index',
-        'middleware' => ['auth:api'],
+        'middleware' => ['optional-auth'],
     ]);
     $router->get('/status', [
         'as' => 'api.iad.ads.status.index',
@@ -21,7 +21,7 @@ Route::prefix('pins')->group(function (Router $router) {
     $router->get('/{criteria}', [
         'as' => 'api.iad.ads.show',
         'uses' => 'AdApiController@show',
-        'middleware' => ['auth:api'],
+        'middleware' => ['optional-auth'],
     ]);
     $router->put('/{criteria}', [
         'as' => 'api.iad.ads.update',
